@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting started -- AnyVM docs</title>
+<meta name="description" content="Install AnyVM, boot your first guest, run a command inside it, share a directory, and forward a port.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://anyvm.org/docs/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/style.css">
+<script>try{var d=document.documentElement,t=localStorage.getItem('anyvm-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t);var l=localStorage.getItem('anyvm-lang');if(!l)l=/^zh/i.test(navigator.language||'')?'zh':'en';if(l==='zh'){d.setAttribute('data-lang','zh');d.setAttribute('lang','zh-Hans');}d.className+='js';}catch(e){}</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/" aria-label="AnyVM.org home">
+      <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+           stroke="currentColor">
+        <rect x="7.2" y="2.6" width="14.2" height="14.2" rx="3.4" stroke-width="1.6" opacity=".42"/>
+        <rect x="2.6" y="7.2" width="14.2" height="14.2" rx="3.4" stroke-width="1.8"/>
+      </svg>
+      <span class="wordmark">AnyVM.org</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/#install">Install</a>
+      <a href="/#coverage">Guests</a>
+      <a href="/#org" class="opt">Ecosystem</a>
+      <a href="/docs/" class="on">Docs</a>
+      <a href="https://github.com/anyvm-org/anyvm">GitHub</a>
+    </nav>
+      <button class="lang-toggle" type="button" aria-label="切换到中文">
+        <span class="when-en">中文</span>
+        <span class="when-zh">EN</span>
+      </button>      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 13.1A8.5 8.5 0 1 1 10.9 3.2a6.6 6.6 0 0 0 9.9 9.9z"/>
+        </svg>
+        <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"/>
+          <path d="M12 2.3v2.4M12 19.3v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.3 12h2.4M19.3 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/>
+        </svg>
+      </button>  </div>
+</header>
+
+<div class="wrap docs" id="main">
+
+<aside class="side">
+  <h4 lang="en">Documentation</h4><h4 lang="zh">文档</h4>
+  <ul>
+    <li><a href="/docs/" class="on"><span lang="en">Getting started</span><span lang="zh">快速上手</span></a></li>
+    <li><a href="/docs/guests.html"><span lang="en">Guest notes</span><span lang="zh">系统说明</span></a></li>
+    <li><a href="/docs/cli.html"><span lang="en">CLI reference</span><span lang="zh">CLI 参考</span></a></li>
+    <li><a href="/docs/faq.html"><span lang="en">Troubleshooting</span><span lang="zh">故障排查</span></a></li>
+  </ul>
+  <h4 lang="en">On this page</h4><h4 lang="zh">本页目录</h4>
+  <ul>
+    <li><a href="#install"><span lang="en">Install AnyVM</span><span lang="zh">安装 AnyVM</span></a></li>
+    <li><a href="#qemu"><span lang="en">Install QEMU</span><span lang="zh">安装 QEMU</span></a></li>
+    <li><a href="#first"><span lang="en">Your first VM</span><span lang="zh">开第一台虚拟机</span></a></li>
+    <li><a href="#run"><span lang="en">Run a command</span><span lang="zh">直接跑命令</span></a></li>
+    <li><a href="#release"><span lang="en">Releases and architectures</span><span lang="zh">版本和架构</span></a></li>
+    <li><a href="#share"><span lang="en">Share a directory</span><span lang="zh">共享目录</span></a></li>
+    <li><a href="#ports"><span lang="en">Forward a port</span><span lang="zh">端口转发</span></a></li>
+    <li><a href="#desktop"><span lang="en">Desktops and VNC</span><span lang="zh">桌面和 VNC</span></a></li>
+    <li><a href="#hosts"><span lang="en">Host support</span><span lang="zh">宿主支持</span></a></li>
+    <li><a href="#cloud"><span lang="en">Try it without installing</span><span lang="zh">不装也能试</span></a></li>
+  </ul>
+</aside>
+
+<article class="doc">
+  <p class="crumbs" lang="en">Docs</p><p class="crumbs" lang="zh">文档</p>
+  <h1 lang="en">Getting started</h1><h1 lang="zh">快速上手</h1>
+  <p class="lede" lang="en">
+    Install AnyVM, boot a guest, and run something inside it. Five minutes,
+    most of which is the image download.
+  </p>
+  <p class="lede" lang="zh">
+    装上 AnyVM，开一台虚拟机，在里面跑点东西。五分钟，其中大部分时间是在下载镜像。
+  </p>
+
+  <h2 id="install" lang="en">Install AnyVM</h2><h2 lang="zh">安装 AnyVM</h2>
+
+  <p lang="en">
+    AnyVM is one Python file. Any of these gets you the <code>anyvm</code>
+    command; they differ only in how the file lands on your machine.
+  </p>
+  <p lang="zh">
+    AnyVM 就是一个 Python 文件。下面几种装法结果都一样，最后都给你
+    <code>anyvm</code> 命令，区别只在于这个文件怎么到你机器上。
+  </p>
+
+  <h3>pip</h3>
+  <div class="code">
+<pre><span class="s">$</span> pip install anyvm.py</pre>
+  </div>
+  <p lang="en">
+    This installs both an <code>anyvm</code> and an <code>anyvm.py</code>
+    command.
+  </p>
+  <p lang="zh">
+    这会同时装上 <code>anyvm</code> 和 <code>anyvm.py</code> 两条命令。
+  </p>
+
+  <div class="note">
+    <span lang="en"><strong>Debian and Ubuntu:</strong> the system Python refuses
+    <code>pip install</code> with an
+    <code>externally-managed-environment</code> error (PEP&nbsp;668). Use pipx:</span>
+    <span lang="zh"><strong>Debian 和 Ubuntu：</strong>系统自带的 Python 会拒绝
+    <code>pip install</code>，报 <code>externally-managed-environment</code>
+    错误（PEP&nbsp;668）。改用 pipx：</span>
+    <div class="code">
+<pre><span class="s">$</span> sudo apt-get install -y pipx
+<span class="s">$</span> pipx install anyvm.py
+<span class="s">$</span> pipx ensurepath   <span class="cm"># first time only, then reopen the shell</span></pre>
+    </div>
+    <span lang="en">Or a virtualenv:</span><span lang="zh">或者用虚拟环境：</span>
+    <code>python3 -m venv ~/.venvs/anyvm &amp;&amp; ~/.venvs/anyvm/bin/pip install anyvm.py</code>
+  </div>
+
+  <h3 lang="en">Homebrew (macOS)</h3><h3 lang="zh">Homebrew（macOS）</h3>
+  <div class="code">
+<pre><span class="s">$</span> brew install anyvm-org/tap/anyvm</pre>
+  </div>
+  <p lang="en">
+    The tap installs <code>qemu</code> and <code>zstd</code> as dependencies,
+    so you can skip the <a href="#qemu">next section</a> entirely.
+  </p>
+  <p lang="zh">
+    这个 tap 会把 <code>qemu</code> 和 <code>zstd</code> 一起装上，所以
+    <a href="#qemu">下一节</a>可以整个跳过。
+  </p>
+
+  <h3 lang="en">winget (Windows)</h3><h3 lang="zh">winget（Windows）</h3>
+  <div class="code">
+<pre><span class="s">$</span> winget install anyvm-org.anyvm</pre>
+  </div>
+  <p lang="en">
+    This one is a self-contained build with Python bundled in, so the machine
+    needs nothing else except <a href="#qemu">QEMU</a>.
+  </p>
+  <p lang="zh">
+    这个版本打包了 Python，机器上除了 <a href="#qemu">QEMU</a> 什么都不用另装。
+  </p>
+
+  <h3 lang="en">Docker</h3><h3 lang="zh">Docker</h3>
+  <div class="code">
+<pre><span class="s">$</span> docker run --rm -it ghcr.io/anyvm-org/anyvm:latest --os freebsd</pre>
+  </div>
+  <p lang="en">
+    A container with QEMU already set up. More tags and examples in
+    <a href="https://github.com/anyvm-org/docker">anyvm-org/docker</a>.
+  </p>
+  <p lang="zh">
+    QEMU 都配好了的容器。更多标签和用法见
+    <a href="https://github.com/anyvm-org/docker">anyvm-org/docker</a>。
+  </p>
+
+  <h3 lang="en">The single file</h3><h3 lang="zh">直接下那个文件</h3>
+  <div class="code">
+<pre><span class="s">$</span> curl -O https://raw.githubusercontent.com/anyvm-org/anyvm/main/anyvm.py
+<span class="s">$</span> python3 anyvm.py --os freebsd</pre>
+  </div>
+  <p lang="en">
+    <code>anyvm.py</code> imports nothing outside the Python standard library,
+    so this one file is the entire program. Commit it to a repo, bake it into
+    a CI image, or scp it to a jump host -- it runs the same everywhere.
+  </p>
+  <p lang="zh">
+    <code>anyvm.py</code> 不 import 标准库以外的任何东西，所以这一个文件就是全部。
+    提交进仓库、打进 CI 镜像、scp 到跳板机都行，到哪跑起来都一样。
+  </p>
+
+  <h2 id="qemu" lang="en">Install QEMU</h2><h2 lang="zh">安装 QEMU</h2>
+
+  <p lang="en">
+    AnyVM drives QEMU; it does not bundle it. Install it once for your host.
+  </p>
+  <p lang="zh">
+    AnyVM 是去驱动 QEMU，本身不带 QEMU。按你的宿主装一次就行。
+  </p>
+
+  <h3 lang="en">Linux (apt-based)</h3><h3 lang="zh">Linux（apt 系）</h3>
+  <div class="code">
+<pre><span class="s">$</span> sudo apt-get --no-install-recommends -y install \
+    zstd ovmf xz-utils qemu-utils ca-certificates \
+    qemu-system-x86 qemu-system-arm qemu-efi-aarch64 \
+    qemu-efi-riscv64 qemu-system-riscv64 qemu-system-misc u-boot-qemu \
+    qemu-system-ppc qemu-system-s390x qemu-system-sparc \
+    openssh-client</pre>
+  </div>
+  <p lang="en">
+    That list covers every guest architecture. If you only care about x86_64
+    guests, <code>qemu-system-x86</code>, <code>qemu-utils</code>,
+    <code>ovmf</code> and <code>zstd</code> are enough.
+  </p>
+  <p lang="zh">
+    这一串覆盖了所有客户机架构。如果你只跑 x86_64，装
+    <code>qemu-system-x86</code>、<code>qemu-utils</code>、<code>ovmf</code>
+    和 <code>zstd</code> 就够了。
+  </p>
+
+  <h3 lang="en">macOS</h3><h3 lang="zh">macOS</h3>
+  <div class="code">
+<pre><span class="s">$</span> brew install qemu</pre>
+  </div>
+
+  <h3 lang="en">Windows</h3><h3 lang="zh">Windows</h3>
+  <p lang="en">
+    Download an installer from
+    <a href="https://www.qemu.org/download/#windows">qemu.org</a>, or use a
+    package manager:
+  </p>
+  <p lang="zh">
+    从 <a href="https://www.qemu.org/download/#windows">qemu.org</a>
+    下安装包，或者用包管理器：
+  </p>
+  <div class="code">
+<pre><span class="cm"># winget</span>
+<span class="s">$</span> winget install SoftwareFreedomConservancy.QEMU
+
+<span class="cm"># MSYS2</span>
+<span class="s">$</span> pacman.exe -S --noconfirm mingw-w64-ucrt-x86_64-qemu
+
+<span class="cm"># Chocolatey</span>
+<span class="s">$</span> choco install qemu</pre>
+  </div>
+
+  <div class="note">
+    <span lang="en">Some guests and architectures need a newer QEMU than your distribution
+    ships. On Linux x86_64 hosts AnyVM notices and downloads a pinned QEMU
+    build for those specific cases by itself -- see
+    <a href="/docs/guests.html">guest notes</a> for which ones.</span>
+    <span lang="zh">有些系统和架构需要比你发行版更新的 QEMU。在 Linux x86_64 宿主上，
+    AnyVM 会自己发现并下载一个固定版本的 QEMU，只在这些情况下用 ——
+    具体是哪些见<a href="/docs/guests.html">系统说明</a>。</span>
+  </div>
+
+  <h2 id="first" lang="en">Your first VM</h2><h2 lang="zh">开第一台虚拟机</h2>
+
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os freebsd</pre>
+  </div>
+
+  <p lang="en">
+    AnyVM picks the newest FreeBSD release it publishes, downloads the image,
+    boots it under QEMU with settings known to work for that guest, waits for
+    SSH, and drops you into a shell inside the VM. Type <code>exit</code> to
+    leave.
+  </p>
+  <p lang="zh">
+    AnyVM 会挑它发布过的最新 FreeBSD 版本，下载镜像，用这个系统已知能跑通的参数
+    在 QEMU 里启动，等 SSH 起来，然后把你送进虚拟机的 shell。敲
+    <code>exit</code> 退出。
+  </p>
+  <p lang="en">
+    Images are cached, so the second boot of the same guest skips the
+    download. Everything lives under <code>./output</code> by default; change
+    it with <code>--data-dir</code>.
+  </p>
+  <p lang="zh">
+    镜像会缓存，所以同一个系统第二次启动就不用再下了。东西默认都放在
+    <code>./output</code> 下，用 <code>--data-dir</code> 可以改。
+  </p>
+
+  <h2 id="run" lang="en">Run a command instead of a shell</h2><h2 lang="zh">不进 shell，直接跑命令</h2>
+
+  <p lang="en">
+    Everything after <code>--</code> runs inside the guest, and AnyVM exits
+    with that command's status. This is the shape you want in scripts and CI.
+  </p>
+  <p lang="zh">
+    <code>--</code> 后面的东西都在虚拟机里执行，AnyVM 用那条命令的退出码退出。
+    写脚本和 CI 的时候就该用这种形式。
+  </p>
+
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os freebsd -- uname -a
+<span class="s">$</span> anyvm --os openbsd -- sh -lc "id; sysctl hw.model"
+<span class="s">$</span> anyvm --os ubuntu -- ./run-tests.sh</pre>
+  </div>
+
+  <p lang="en">
+    Combine it with <code>-v</code> below and you have a portable way to build
+    and test your working tree on an operating system you do not run.
+  </p>
+  <p lang="zh">
+    再配上下面的 <code>-v</code>，你就有了一个便携的办法：把手头的代码拿到一个
+    自己根本没装的系统上去编译和测试。
+  </p>
+
+  <h2 id="release" lang="en">Releases and architectures</h2><h2 lang="zh">版本和架构</h2>
+
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os freebsd --release 14.4
+<span class="s">$</span> anyvm --os freebsd --release 15.1 --arch riscv64
+<span class="s">$</span> anyvm --os netbsd  --release 11.0 --arch sparc64
+<span class="s">$</span> anyvm --os ubuntu  --release 24.04 --arch s390x</pre>
+  </div>
+
+  <p lang="en">
+    Omit <code>--release</code> and AnyVM picks an available one for you.
+    Release names are matched case-insensitively, so
+    <code>--release 24.03-lts-sp4</code> finds OpenEuler's
+    <code>24.03-LTS-SP4</code>.
+  </p>
+  <p lang="zh">
+    不写 <code>--release</code> 的话，AnyVM 会自己挑一个可用版本。版本名不区分
+    大小写，所以 <code>--release 24.03-lts-sp4</code> 能匹配到 OpenEuler 的
+    <code>24.03-LTS-SP4</code>。
+  </p>
+  <p lang="en">
+    Each builder repository owns the authoritative release list for its guest
+    -- <a href="/docs/guests.html">guest notes</a> links to all of them.
+  </p>
+  <p lang="zh">
+    每个系统支持哪些版本，以它自己的 builder 仓库为准 ——
+    <a href="/docs/guests.html">系统说明</a>里有全部链接。
+  </p>
+
+  <div class="note">
+    <span lang="en">Anything other than the host's own architecture runs under TCG software
+    emulation, which is roughly 10-50x slower than hardware acceleration. It
+    works, but give it time -- AnyVM already raises its own boot timeout when
+    it detects TCG.</span>
+    <span lang="zh">只要不是宿主自己的架构，都得靠 TCG 软件模拟，比硬件加速慢大约
+    10 到 50 倍。能跑，但要给它时间 —— AnyVM 检测到 TCG 时已经自动把启动超时调长了。</span>
+  </div>
+
+  <h2 id="share" lang="en">Share a directory</h2><h2 lang="zh">共享目录</h2>
+
+  <div class="code">
+<pre><span class="cm"># Linux and macOS</span>
+<span class="s">$</span> anyvm --os freebsd -v "$PWD:/data"
+
+<span class="cm"># Windows</span>
+<span class="s">$</span> anyvm --os freebsd -v D:\data:/data</pre>
+  </div>
+
+  <p lang="en">
+    <code>-v</code> is repeatable. The mechanism behind it is selectable with
+    <code>--sync</code>:
+  </p>
+  <p lang="zh">
+    <code>-v</code> 可以写多次。底下用什么机制，由 <code>--sync</code> 决定：
+  </p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th scope="col"><span lang="en">Mode</span><span lang="zh">模式</span></th><th scope="col"><span lang="en">What it does</span><span lang="zh">做什么</span></th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>rsync</code></td><td><span lang="en">The default. A one-shot copy in, and back out when the command finishes.</span><span lang="zh">默认。进去时拷一次，命令跑完再拷回来。</span></td></tr>
+        <tr><td><code>sshfs</code></td><td><span lang="en">A live mount inside the guest over SSH.</span><span lang="zh">通过 SSH 在虚拟机里做实时挂载。</span></td></tr>
+        <tr><td><code>nfs</code></td><td><span lang="en">The bundled user-space NFS server (<a href="https://github.com/anyvm-org/nfsd">nfsd</a>). No kernel nfsd, no root, works on Linux, macOS and Windows hosts.</span><span lang="zh">自带的用户态 NFS 服务器（<a href="https://github.com/anyvm-org/nfsd">nfsd</a>）。不用内核 nfsd，不用 root，Linux、macOS、Windows 宿主都能用。</span></td></tr>
+        <tr><td><code>sys-nfs</code></td><td><span lang="en">The host's kernel NFS server. Linux host with root only.</span><span lang="zh">宿主的内核 NFS 服务器。只能在有 root 的 Linux 宿主上用。</span></td></tr>
+        <tr><td><code>scp</code></td><td><span lang="en">A one-shot copy, for guests where a live mount is a bad idea.</span><span lang="zh">一次性拷贝，给那些不适合做实时挂载的系统用。</span></td></tr>
+        <tr><td><code>9p</code></td><td><span lang="en">Plan&nbsp;9 only, and its default there. Mounts the guest's 9P share on the host, so it needs a Linux host.</span><span lang="zh">只用于 Plan&nbsp;9，也是它的默认值。把虚拟机的 9P 共享挂到宿主上，所以需要 Linux 宿主。</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span lang="en"><strong>Picking between <code>nfs</code> and <code>sys-nfs</code>:</strong>
+    OpenBSD, NetBSD and DragonFly BSD guests are NFSv3-only and reach the
+    bundled server through its portmapper on port 111. That port is free on
+    Windows and macOS hosts, but usually owned by the system
+    <code>rpcbind</code> on Linux -- so use <code>sys-nfs</code> for those
+    three guests on a Linux host. There is no automatic fallback between the
+    two.</span>
+    <span lang="zh"><strong><code>nfs</code> 和 <code>sys-nfs</code> 怎么选：</strong>
+    OpenBSD、NetBSD、DragonFlyBSD 只支持 NFSv3，要通过 111 端口上的 portmapper
+    才能连到自带的服务器。这个端口在 Windows 和 macOS 上是空的，但在 Linux 上通常
+    被系统的 <code>rpcbind</code> 占着 —— 所以这三个系统在 Linux 宿主上要用
+    <code>sys-nfs</code>。两者之间不会自动切换。</span>
+  </div>
+
+  <h2 id="ports" lang="en">Forward a port</h2><h2 lang="zh">端口转发</h2>
+
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os ubuntu -p 8080:80
+<span class="s">$</span> anyvm --os ubuntu -p tcp:8443:443 -p udp:5353:5353</pre>
+  </div>
+
+  <p lang="en">
+    Forwards bind to <code>127.0.0.1</code>. Add <code>--public</code> to bind
+    <code>0.0.0.0</code> instead. Guest SSH is forwarded automatically to a
+    free port; pin it with <code>--ssh-port</code>.
+  </p>
+  <p lang="zh">
+    转发默认绑在 <code>127.0.0.1</code> 上，加 <code>--public</code> 改成绑
+    <code>0.0.0.0</code>。虚拟机的 SSH 会自动转发到一个空闲端口，想固定就用
+    <code>--ssh-port</code>。
+  </p>
+
+  <h2 id="desktop" lang="en">Desktops and the VNC web UI</h2><h2 lang="zh">桌面和 VNC 网页控制台</h2>
+
+  <p lang="en">
+    Several guests publish desktop images. Ask for one by release name:
+  </p>
+  <p lang="zh">
+    好几个系统都发布了桌面镜像，用版本名指定就行：
+  </p>
+
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os freebsd  --release 15.1-kde6
+<span class="s">$</span> anyvm --os openbsd  --release 7.9-xfce
+<span class="s">$</span> anyvm --os ghostbsd --release 26.1-gershwin</pre>
+  </div>
+
+  <p lang="en">
+    The VNC web UI starts by default at <code>http://localhost:6080</code>
+    (the next free port if 6080 is taken -- the actual URL is printed at
+    startup), so a desktop guest is one browser tab away. It supports
+    clipboard paste, fullscreen and a Ctrl+Alt+Del button.
+  </p>
+  <p lang="zh">
+    VNC 网页控制台默认开在 <code>http://localhost:6080</code>（6080 被占就往后顺延，
+    实际地址启动时会打印出来），所以桌面系统开个浏览器标签页就能用。支持粘贴剪贴板、
+    全屏，还有一个 Ctrl+Alt+Del 按钮。
+  </p>
+
+  <div class="code">
+<pre><span class="cm"># Password-protect it (any username, the password is what matters)</span>
+<span class="s">$</span> anyvm --os openbsd --release 7.9-xfce --vnc-password mysecret
+
+<span class="cm"># Put it on a public URL via a tunnel</span>
+<span class="s">$</span> anyvm --os openbsd --release 7.9-xfce --remote-vnc
+
+<span class="cm"># Turn it off</span>
+<span class="s">$</span> anyvm --os freebsd --vnc off</pre>
+  </div>
+
+  <h2 id="hosts" lang="en">Host support</h2><h2 lang="zh">宿主支持</h2>
+
+  <p lang="en">
+    Which guest architectures you can run depends on the host you are on. A
+    Linux x86_64 host -- including WSL -- covers everything.
+  </p>
+  <p lang="zh">
+    你能跑哪些客户机架构，取决于你用的宿主。一台 Linux x86_64（WSL 也算）全都能跑。
+  </p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"><span lang="en">Host</span><span lang="zh">宿主</span></th>
+          <th scope="col">x86_64</th>
+          <th scope="col">aarch64</th>
+          <th scope="col">riscv64</th>
+          <th scope="col">s390x</th>
+          <th scope="col">powerpc64</th>
+          <th scope="col">sparc64</th>
+          <th scope="col">loongarch64</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Linux x86_64</th>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+        </tr>
+        <tr>
+          <th scope="row">Linux aarch64</th>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+        </tr>
+        <tr>
+          <th scope="row">Linux s390x (IBM Z)</th>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported via KVM"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+        </tr>
+        <tr>
+          <th scope="row"><span lang="en">macOS Apple silicon</span><span lang="zh">macOS Apple 芯片</span></th>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+        </tr>
+        <tr>
+          <th scope="row"><span lang="en">Windows x86_64, native</span><span lang="zh">Windows x86_64 原生</span></th>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+        </tr>
+        <tr>
+          <th scope="row"><span lang="en">Windows x86_64, WSL</span><span lang="zh">Windows x86_64 WSL</span></th>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p lang="en">
+    Hardware acceleration -- KVM, HVF or WHPX -- is detected and enabled
+    automatically for same-architecture guests. Everything else runs under
+    TCG.
+  </p>
+  <p lang="zh">
+    同架构的客户机会自动检测并启用硬件加速 —— KVM、HVF 或 WHPX。其余的都走 TCG。
+  </p>
+
+  <h2 id="cloud" lang="en">Try it without installing anything</h2><h2 lang="zh">什么都不装也能试</h2>
+
+  <p lang="en">
+    Both of these give you a machine with nested virtualization and drop you
+    straight into the repository:
+  </p>
+  <p lang="zh">
+    下面两个都会给你一台支持嵌套虚拟化的机器，并直接把仓库打开：
+  </p>
+
+  <p>
+    <a href="https://codespaces.new/anyvm-org/anyvm">
+      <img src="https://github.com/codespaces/badge.svg" alt="Open in GitHub Codespaces" height="28">
+    </a>
+    <a href="https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fanyvm-org%2Fanyvm&amp;cloudshell_tutorial=.cloudshell%2Ftutorial.md&amp;show=terminal&amp;ephemeral=true&amp;cloudshell_print=.cloudshell%2Fconsole.md">
+      <img src="https://gstatic.com/cloudssh/images/open-btn.svg" alt="Try it now in Cloud Shell" height="28">
+    </a>
+  </p>
+
+  <p lang="en">In Codespaces, enable KVM first:</p><p lang="zh">在 Codespaces 里要先打开 KVM：</p>
+  <div class="code">
+<pre><span class="s">$</span> sudo chmod o+rw /dev/kvm
+<span class="s">$</span> sudo apt-get update
+<span class="s">$</span> sudo apt-get --no-install-recommends -y install \
+    zstd ovmf xz-utils qemu-utils ca-certificates \
+    qemu-system-x86 qemu-system-arm qemu-efi-aarch64 \
+    qemu-efi-riscv64 qemu-system-riscv64 qemu-system-misc u-boot-qemu \
+    qemu-system-ppc qemu-system-s390x qemu-system-sparc \
+    openssh-client</pre>
+  </div>
+
+  <nav class="pagenav">
+    <span></span>
+    <a href="/docs/guests.html"><span lang="en">Guest notes &rarr;</span><span lang="zh">系统说明 &rarr;</span></a>
+  </nav>
+</article>
+
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-base">
+      <span>MIT licensed.</span>
+      <a href="https://github.com/anyvm-org/anyvm">anyvm on GitHub</a>
+      <a href="https://github.com/anyvm-org">anyvm-org</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

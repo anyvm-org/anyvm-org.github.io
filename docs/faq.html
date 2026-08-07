@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting -- AnyVM docs</title>
+<meta name="description" content="What to do when a guest will not boot, a download stalls, a port is taken, or acceleration misbehaves.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://anyvm.org/docs/faq.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/style.css">
+<script>try{var d=document.documentElement,t=localStorage.getItem('anyvm-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t);var l=localStorage.getItem('anyvm-lang');if(!l)l=/^zh/i.test(navigator.language||'')?'zh':'en';if(l==='zh'){d.setAttribute('data-lang','zh');d.setAttribute('lang','zh-Hans');}d.className+='js';}catch(e){}</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/" aria-label="AnyVM.org home">
+      <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+           stroke="currentColor">
+        <rect x="7.2" y="2.6" width="14.2" height="14.2" rx="3.4" stroke-width="1.6" opacity=".42"/>
+        <rect x="2.6" y="7.2" width="14.2" height="14.2" rx="3.4" stroke-width="1.8"/>
+      </svg>
+      <span class="wordmark">AnyVM.org</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/#install">Install</a>
+      <a href="/#coverage">Guests</a>
+      <a href="/#org" class="opt">Ecosystem</a>
+      <a href="/docs/" class="on">Docs</a>
+      <a href="https://github.com/anyvm-org/anyvm">GitHub</a>
+    </nav>
+      <button class="lang-toggle" type="button" aria-label="切换到中文">
+        <span class="when-en">中文</span>
+        <span class="when-zh">EN</span>
+      </button>      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 13.1A8.5 8.5 0 1 1 10.9 3.2a6.6 6.6 0 0 0 9.9 9.9z"/>
+        </svg>
+        <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"/>
+          <path d="M12 2.3v2.4M12 19.3v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.3 12h2.4M19.3 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/>
+        </svg>
+      </button>  </div>
+</header>
+
+<div class="wrap docs" id="main">
+
+<aside class="side">
+  <h4 lang="en">Documentation</h4><h4 lang="zh">文档</h4>
+  <ul>
+    <li><a href="/docs/"><span lang="en">Getting started</span><span lang="zh">快速上手</span></a></li>
+    <li><a href="/docs/guests.html"><span lang="en">Guest notes</span><span lang="zh">系统说明</span></a></li>
+    <li><a href="/docs/cli.html"><span lang="en">CLI reference</span><span lang="zh">CLI 参考</span></a></li>
+    <li><a href="/docs/faq.html" class="on"><span lang="en">Troubleshooting</span><span lang="zh">故障排查</span></a></li>
+  </ul>
+  <h4 lang="en">Install</h4><h4 lang="zh">安装</h4>
+  <ul>
+    <li><a href="#pep668"><span lang="en">pip refuses to install</span><span lang="zh">pip 拒绝安装</span></a></li>
+    <li><a href="#qemu-old"><span lang="en">QEMU is too old</span><span lang="zh">QEMU 太旧</span></a></li>
+  </ul>
+  <h4 lang="en">Boot</h4><h4 lang="zh">启动</h4>
+  <ul>
+    <li><a href="#timeout"><span lang="en">The boot times out</span><span lang="zh">启动超时</span></a></li>
+    <li><a href="#slow"><span lang="en">Everything is slow</span><span lang="zh">整体很慢</span></a></li>
+    <li><a href="#whpx"><span lang="en">Windows: QEMU aborts</span><span lang="zh">Windows：QEMU 中止</span></a></li>
+    <li><a href="#avx512"><span lang="en">Random guest segfaults</span><span lang="zh">虚拟机随机段错误</span></a></li>
+  </ul>
+  <h4 lang="en">Runtime</h4><h4 lang="zh">运行时</h4>
+  <ul>
+    <li><a href="#nfs111"><span lang="en">NFS port 111 is taken</span><span lang="zh">NFS 111 端口被占</span></a></li>
+    <li><a href="#sync-hang"><span lang="en">Sync wedges the guest</span><span lang="zh">共享目录把虚拟机卡死</span></a></li>
+    <li><a href="#vnc-port"><span lang="en">VNC port is busy</span><span lang="zh">VNC 端口被占</span></a></li>
+    <li><a href="#proxy"><span lang="en">Behind a proxy</span><span lang="zh">在代理后面</span></a></li>
+    <li><a href="#plan9-v"><span lang="en">Plan 9 ignores -v</span><span lang="zh">Plan 9 忽略 -v</span></a></li>
+  </ul>
+  <h4 lang="en">Reporting</h4><h4 lang="zh">反馈</h4>
+  <ul>
+    <li><a href="#report"><span lang="en">Filing a bug</span><span lang="zh">提交问题</span></a></li>
+  </ul>
+</aside>
+
+<article class="doc">
+  <p class="crumbs" lang="en">Docs / Troubleshooting</p><p class="crumbs" lang="zh">文档 / 故障排查</p>
+  <h1 lang="en">Troubleshooting</h1><h1 lang="zh">故障排查</h1>
+  <p class="lede">
+    The failures people actually hit, what causes them, and what to do. When
+    in doubt, re-run with <code>--debug</code> first -- it usually names the
+    problem outright.
+  </p>
+
+  <h2 id="pep668" lang="en">pip refuses to install: externally-managed-environment</h2>
+  <h2 lang="zh">pip 拒绝安装：externally-managed-environment</h2>
+  <p>
+    <span lang="en">Debian and Ubuntu mark the system Python as managed by the distribution
+    (PEP&nbsp;668), so <code>pip install</code> into it is blocked. This is the
+    distribution's rule, not AnyVM's. Use pipx:</span>
+    <span lang="zh">Debian 和 Ubuntu 把系统 Python 标记为由发行版管理（PEP&nbsp;668），
+    所以往里面 <code>pip install</code> 会被拦住。这是发行版的规矩，不是 AnyVM 的。
+    改用 pipx：</span>
+  </p>
+  <div class="code">
+<pre><span class="s">$</span> sudo apt-get install -y pipx
+<span class="s">$</span> pipx install anyvm.py
+<span class="s">$</span> pipx ensurepath   <span class="cm"># first time only, then reopen the shell</span></pre>
+  </div>
+  <p lang="en">Or a virtualenv, or just run the single file directly:</p>
+  <p lang="zh">或者用虚拟环境，再或者直接跑那个单文件：</p>
+  <div class="code">
+<pre><span class="s">$</span> curl -O https://raw.githubusercontent.com/anyvm-org/anyvm/main/anyvm.py
+<span class="s">$</span> python3 anyvm.py --os freebsd</pre>
+  </div>
+
+  <h2 id="qemu-old" lang="en">The guest needs a newer QEMU than my distro ships</h2>
+  <h2 lang="zh">这个系统需要比发行版更新的 QEMU</h2>
+  <p>
+    <span lang="en">Several guest and architecture combinations do not run on QEMU 8.2, which
+    is what current LTS distributions ship. On a Linux x86_64 host AnyVM
+    handles this itself: it detects the too-old system QEMU and downloads a
+    pinned QEMU 10.2.3 for exactly those cases -- Ubuntu on riscv64 26.04,
+    s390x and ppc64le 22.04, and OpenEuler on loongarch64. Nothing to
+    configure.</span>
+    <span lang="zh">有几个系统和架构的组合在 QEMU 8.2 上跑不起来，而目前各家 LTS 发行版
+    自带的正是这个版本。在 Linux x86_64 宿主上 AnyVM 自己会处理：检测到系统 QEMU
+    太旧，就为这些特定组合下载固定版本的 QEMU 10.2.3 —— 具体是 Ubuntu 的 riscv64
+    26.04、s390x 和 ppc64le 22.04，以及 OpenEuler 的 loongarch64。你不用配置什么。</span>
+  </p>
+  <p>
+    <span lang="en">On other hosts you need a newer QEMU yourself. The full list of which
+    combination needs what is in <a href="/docs/guests.html">guest notes</a>.</span>
+    <span lang="zh">其他宿主上就得你自己装新版 QEMU。哪个组合需要什么，完整清单在
+    <a href="/docs/guests.html">系统说明</a>里。</span>
+  </p>
+
+  <h2 id="timeout" lang="en">The boot times out and gets killed</h2>
+  <h2 lang="zh">启动超时被杀掉了</h2>
+  <p>
+    <span lang="en">AnyVM kills QEMU and retries once when a guest does not come up in time.
+    The default window is 600 seconds, already raised to 1200 for OpenBSD on
+    aarch64 and to 1800 whenever no hardware acceleration is available. If you
+    are on a slow host or an emulated architecture, give it more:</span>
+    <span lang="zh">虚拟机没能按时起来时，AnyVM 会杀掉 QEMU 并重试一次。默认窗口是
+    600 秒，OpenBSD aarch64 已经提到 1200 秒，没有硬件加速时提到 1800 秒。如果你的
+    机器慢，或者跑的是模拟架构，就再给它多一点：</span>
+  </p>
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os solaris --boot-timeout-sec 2400 --debug</pre>
+  </div>
+  <p>
+    <span lang="en">An explicit value always overrides the automatic ones. If the guest is
+    genuinely stuck rather than slow, <code>--debug</code> plus
+    <code>--serial</code> will show you where it stopped.</span>
+    <span lang="zh">你写死的值永远盖过自动值。如果虚拟机不是慢，而是真的卡住了，
+    <code>--debug</code> 配上 <code>--serial</code> 能让你看到它停在哪。</span>
+  </p>
+
+  <h2 id="slow" lang="en">Everything is slow</h2><h2 lang="zh">整体都很慢</h2>
+  <p>
+    <span lang="en">Check whether you are on TCG. Any architecture that is not your host's runs
+    under software emulation, which is roughly 10-50x slower than hardware
+    acceleration -- that is inherent to emulating a foreign CPU, not something
+    to tune away.</span>
+    <span lang="zh">先看是不是在跑 TCG。只要不是宿主自己的架构，都得靠软件模拟，比
+    硬件加速慢 10 到 50 倍 —— 这是模拟异构 CPU 的固有代价，不是调参能解决的。</span>
+  </p>
+  <p>
+    <span lang="en">For a same-architecture guest that is still slow, acceleration is probably
+    not being used. On Linux confirm <code>/dev/kvm</code> exists and is
+    readable, on macOS that HVF is available, on Windows that the Windows
+    Hypervisor Platform is on. <code>--debug</code> reports which accelerator
+    was selected.</span>
+    <span lang="zh">如果是同架构的虚拟机还这么慢，多半是加速没用上。Linux 上确认
+    <code>/dev/kvm</code> 存在且可读，macOS 上确认 HVF 可用，Windows 上确认
+    Windows Hypervisor Platform 已开启。<code>--debug</code> 会告诉你最后选中的是
+    哪个加速器。</span>
+  </p>
+
+  <h2 id="whpx" lang="en">Windows: QEMU aborts partway through boot</h2>
+  <h2 lang="zh">Windows：QEMU 启动到一半中止</h2>
+  <p>
+    <span lang="en">Some guests hit instructions the WHPX emulator cannot decode. AnyVM already
+    handles this in two ways: it relaunches the VM under TCG when QEMU aborts
+    mid-boot under auto-enabled WHPX, and it skips WHPX entirely for GhostBSD,
+    which reliably fails with <code>failed to decode instruction f 10</code>.</span>
+    <span lang="zh">有些系统会碰到 WHPX 模拟器解不了的指令。AnyVM 已经从两方面处理：
+    自动启用 WHPX 后 QEMU 若在启动中途中止，就改用 TCG 重开一次；而 GhostBSD 一定会
+    以 <code>failed to decode instruction f 10</code> 失败，所以直接跳过 WHPX。</span>
+  </p>
+  <p>
+    <span lang="en">Passing <code>--whpx</code> explicitly disables both safety nets. To rule
+    out the accelerator by hand, use <code>--tcg</code>.</span>
+    <span lang="zh">显式写 <code>--whpx</code> 会把这两道保险都关掉。想手动排除加速器
+    的嫌疑，用 <code>--tcg</code>。</span>
+  </p>
+
+  <h2 id="avx512" lang="en">Guests segfault randomly on a nested AMD host</h2>
+  <h2 lang="zh">嵌套 AMD 宿主上虚拟机随机段错误</h2>
+  <p>
+    <span lang="en">On a nested AMD KVM host -- KVM running inside WSL2 or Hyper-V -- nested
+    AMD-V corrupts the guest's AVX512 state, which makes modern guests such as
+    Ubuntu 26.04 segfault at random. AnyVM detects this and drops AVX512 from
+    <code>-cpu host</code> automatically. Bare-metal hosts keep the full
+    feature set. Override with <code>--cpu-type</code> if you need to.</span>
+    <span lang="zh">在嵌套的 AMD KVM 宿主上 —— 也就是 KVM 跑在 WSL2 或 Hyper-V 里面
+    —— 嵌套的 AMD-V 会破坏虚拟机的 AVX512 状态，导致 Ubuntu 26.04 这类较新的系统随机
+    段错误。AnyVM 检测到这种情况会自动从 <code>-cpu host</code> 里去掉 AVX512。裸机
+    宿主保留完整特性。需要的话用 <code>--cpu-type</code> 覆盖。</span>
+  </p>
+
+  <h2 id="nfs111" lang="en">NFS fails on a Linux host: port 111 is already in use</h2>
+  <h2 lang="zh">Linux 宿主上 NFS 失败：111 端口已被占用</h2>
+  <p>
+    <span lang="en">OpenBSD, NetBSD and DragonFly BSD guests are NFSv3-only, so they reach the
+    bundled server through its portmapper on port 111. On Windows and macOS
+    hosts that port is free and unprivileged. On Linux it is usually owned by
+    the system <code>rpcbind</code>, or restricted to root.</span>
+    <span lang="zh">OpenBSD、NetBSD、DragonFlyBSD 只支持 NFSv3，所以要通过 111 端口上的
+    portmapper 才能连到自带的服务器。在 Windows 和 macOS 上这个端口是空的，也不需要
+    特权。在 Linux 上它通常被系统的 <code>rpcbind</code> 占着，或者只有 root 能用。</span>
+  </p>
+  <p lang="en">Use the host's kernel NFS server for those three guests on Linux:</p>
+  <p lang="zh">在 Linux 上，这三个系统改用宿主的内核 NFS 服务器：</p>
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os openbsd --sync sys-nfs -v "$PWD:/data"</pre>
+  </div>
+  <p>
+    <span lang="en">There is deliberately no automatic fallback between <code>nfs</code> and
+    <code>sys-nfs</code> -- silently switching backends would hide which one
+    you are actually running.</span>
+    <span lang="zh"><code>nfs</code> 和 <code>sys-nfs</code> 之间故意不做自动切换 ——
+    悄悄换后端会让你搞不清自己实际在用哪个。</span>
+  </p>
+
+  <h2 id="sync-hang" lang="en">The guest wedges when I share a directory</h2>
+  <h2 lang="zh">一共享目录，虚拟机就卡死</h2>
+  <p>
+    <span lang="en">Most likely NetBSD on sparc64. The QEMU sun4u machine boots only off the
+    CMD646 PCI IDE controller, whose TCG emulation loses interrupts under
+    sustained concurrent network and disk DMA -- which is exactly what a live
+    <code>sshfs</code> or <code>nfs</code> mount produces. That is why
+    <code>-v</code> defaults to <code>scp</code> there. If you overrode
+    <code>--sync</code>, put it back.</span>
+    <span lang="zh">多半是 sparc64 上的 NetBSD。QEMU 的 sun4u 机器只能从 CMD646 这块
+    PCI IDE 控制器启动，而它的 TCG 模拟在网络和磁盘 DMA 持续并发时会丢中断 —— 实时的
+    <code>sshfs</code> 或 <code>nfs</code> 挂载制造的正是这种压力。所以那里的
+    <code>-v</code> 默认走 <code>scp</code>。你要是改过 <code>--sync</code>，改回去。</span>
+  </p>
+  <p>
+    <span lang="en">More generally: if a live mount destabilises a guest, a one-shot
+    <code>rsync</code> or <code>scp</code> copies the data in without holding
+    a connection open for the whole session.</span>
+    <span lang="zh">更一般地说：只要实时挂载会让某个虚拟机不稳定，就改用一次性的
+    <code>rsync</code> 或 <code>scp</code> 把数据拷进去 —— 不用整个会话都挂着连接。</span>
+  </p>
+
+  <h2 id="vnc-port" lang="en">The VNC web UI is not on port 6080</h2>
+  <h2 lang="zh">VNC 网页控制台不在 6080 端口</h2>
+  <p>
+    <span lang="en">It auto-increments when the port is taken -- 6081, 6082 and so on. The
+    actual URL is printed at startup. <code>--vnc off</code> disables the web
+    UI entirely if you do not want it.</span>
+    <span lang="zh">端口被占就自动往后顺延 —— 6081、6082 这样。实际地址在启动时会打印
+    出来。不想要的话，<code>--vnc off</code> 可以把网页控制台整个关掉。</span>
+  </p>
+
+  <h2 id="proxy" lang="en">Downloads fail behind a corporate proxy</h2>
+  <h2 lang="zh">在公司代理后面下载失败</h2>
+  <p>
+    <span lang="en">AnyVM reads <code>http_proxy</code>, <code>https_proxy</code> and
+    <code>all_proxy</code> from the environment (upper case too) and downloads
+    images and tools through them. Both HTTP proxies and SOCKS5 are supported
+    natively:</span>
+    <span lang="zh">AnyVM 会从环境变量里读 <code>http_proxy</code>、
+    <code>https_proxy</code> 和 <code>all_proxy</code>（大写形式也认），并通过它们
+    下载镜像和工具。HTTP 代理和 SOCKS5 都原生支持：</span>
+  </p>
+  <ul>
+    <li><code>http://host:port</code></li>
+    <li><code>socks5://host:port</code><span lang="en"> -- DNS resolved locally</span><span lang="zh"> —— DNS 在本地解析</span></li>
+    <li><code>socks5h://host:port</code><span lang="en"> -- DNS resolved by the proxy</span><span lang="zh"> —— DNS 交给代理解析</span></li>
+    <li><span lang="en">credentials as</span><span lang="zh">带认证信息写作</span> <code>user:pass@host:port</code></li>
+  </ul>
+  <p>
+    <span lang="en"><code>no_proxy</code> is honoured. SOCKS4 is not supported.</span>
+    <span lang="zh"><code>no_proxy</code> 会被遵守。SOCKS4 不支持。</span>
+  </p>
+
+  <h2 id="plan9-v" lang="en">Plan 9 boots but ignores -v</h2>
+  <h2 lang="zh">Plan 9 能启动，但 -v 没反应</h2>
+  <p>
+    <span lang="en">Expected on a Windows or macOS host. Plan 9's sync backend is 9P: the host
+    mounts the guest's <code>exportfs</code> share through the Linux kernel
+    v9fs client (<code>mount -t 9p</code>, needs root or sudo), so it only
+    works from a Linux host. Everything else about the guest -- booting,
+    running commands -- works everywhere; only directory sync is skipped.</span>
+    <span lang="zh">在 Windows 或 macOS 宿主上这是预期行为。Plan 9 的同步后端是 9P：
+    由宿主通过 Linux 内核的 v9fs 客户端去挂载虚拟机的 <code>exportfs</code> 共享
+    （<code>mount -t 9p</code>，需要 root 或 sudo），所以只有 Linux 宿主能用。这个
+    系统的其他部分 —— 启动、跑命令 —— 在哪都正常，只是跳过了目录共享。</span>
+  </p>
+
+  <h2 id="report" lang="en">Filing a bug</h2><h2 lang="zh">提交问题</h2>
+  <p>
+    <span lang="en">Issues go to
+    <a href="https://github.com/anyvm-org/anyvm/issues">anyvm-org/anyvm</a>.
+    Include the full command, the host OS and architecture, your QEMU version,
+    and the output with <code>--debug</code>. If the guest boots but
+    misbehaves afterwards, the serial log is the useful part:</span>
+    <span lang="zh">issue 提到
+    <a href="https://github.com/anyvm-org/anyvm/issues">anyvm-org/anyvm</a>。
+    请附上完整命令、宿主系统和架构、QEMU 版本，以及加了 <code>--debug</code> 的输出。
+    如果虚拟机能起来但之后行为异常，串口日志才是有用的那部分：</span>
+  </p>
+  <div class="code">
+<pre><span class="s">$</span> anyvm --os netbsd --arch sparc64 --debug --serial 7000</pre>
+  </div>
+  <p>
+    <span lang="en">If the problem is in the image rather than the launcher -- a package
+    missing, a service not starting -- the builder repository for that guest is
+    the better place. <a href="/docs/guests.html">Guest notes</a> links each
+    one.</span>
+    <span lang="zh">如果问题出在镜像而不是启动器 —— 比如少了某个包、某个服务没起来
+    —— 那更适合去对应系统的 builder 仓库提。<a href="/docs/guests.html">系统说明</a>
+    里有每一个的链接。</span>
+  </p>
+
+  <nav class="pagenav">
+    <a href="/docs/cli.html"><span lang="en">&larr; CLI reference</span><span lang="zh">&larr; CLI 参考</span></a>
+    <span></span>
+  </nav>
+</article>
+
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-base">
+      <span>MIT licensed.</span>
+      <a href="https://github.com/anyvm-org/anyvm">anyvm on GitHub</a>
+      <a href="https://github.com/anyvm-org">anyvm-org</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guest notes -- AnyVM docs</title>
+<meta name="description" content="Per-guest architecture support, desktop images, and the specific quirks each operating system has under QEMU.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://anyvm.org/docs/guests.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/style.css">
+<script>try{var d=document.documentElement,t=localStorage.getItem('anyvm-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t);var l=localStorage.getItem('anyvm-lang');if(!l)l=/^zh/i.test(navigator.language||'')?'zh':'en';if(l==='zh'){d.setAttribute('data-lang','zh');d.setAttribute('lang','zh-Hans');}d.className+='js';}catch(e){}</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/" aria-label="AnyVM.org home">
+      <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+           stroke="currentColor">
+        <rect x="7.2" y="2.6" width="14.2" height="14.2" rx="3.4" stroke-width="1.6" opacity=".42"/>
+        <rect x="2.6" y="7.2" width="14.2" height="14.2" rx="3.4" stroke-width="1.8"/>
+      </svg>
+      <span class="wordmark">AnyVM.org</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/#install">Install</a>
+      <a href="/#coverage">Guests</a>
+      <a href="/#org" class="opt">Ecosystem</a>
+      <a href="/docs/" class="on">Docs</a>
+      <a href="https://github.com/anyvm-org/anyvm">GitHub</a>
+    </nav>
+      <button class="lang-toggle" type="button" aria-label="切换到中文">
+        <span class="when-en">中文</span>
+        <span class="when-zh">EN</span>
+      </button>      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 13.1A8.5 8.5 0 1 1 10.9 3.2a6.6 6.6 0 0 0 9.9 9.9z"/>
+        </svg>
+        <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"/>
+          <path d="M12 2.3v2.4M12 19.3v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.3 12h2.4M19.3 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/>
+        </svg>
+      </button>  </div>
+</header>
+
+<div class="wrap docs" id="main">
+
+<aside class="side">
+  <h4 lang="en">Documentation</h4><h4 lang="zh">文档</h4>
+  <ul>
+    <li><a href="/docs/"><span lang="en">Getting started</span><span lang="zh">快速上手</span></a></li>
+    <li><a href="/docs/guests.html" class="on"><span lang="en">Guest notes</span><span lang="zh">系统说明</span></a></li>
+    <li><a href="/docs/cli.html"><span lang="en">CLI reference</span><span lang="zh">CLI 参考</span></a></li>
+    <li><a href="/docs/faq.html"><span lang="en">Troubleshooting</span><span lang="zh">故障排查</span></a></li>
+  </ul>
+  <h4>BSD</h4>
+  <ul>
+    <li><a href="#freebsd">FreeBSD</a></li>
+    <li><a href="#openbsd">OpenBSD</a></li>
+    <li><a href="#netbsd">NetBSD</a></li>
+    <li><a href="#dragonflybsd">DragonFlyBSD</a></li>
+    <li><a href="#midnightbsd">MidnightBSD</a></li>
+    <li><a href="#ghostbsd">GhostBSD</a></li>
+    <li><a href="#nextbsd">NextBSD</a></li>
+  </ul>
+  <h4>illumos</h4>
+  <ul>
+    <li><a href="#solaris">Solaris</a></li>
+    <li><a href="#omnios">OmniOS</a></li>
+    <li><a href="#openindiana">OpenIndiana</a></li>
+    <li><a href="#tribblix">Tribblix</a></li>
+  </ul>
+  <h4>Linux</h4>
+  <ul>
+    <li><a href="#ubuntu">Ubuntu</a></li>
+    <li><a href="#openeuler">OpenEuler</a></li>
+    <li><a href="#blissos">BlissOS</a></li>
+  </ul>
+  <h4 lang="en">Research</h4><h4 lang="zh">研究系</h4>
+  <ul>
+    <li><a href="#haiku">HaikuOS</a></li>
+    <li><a href="#hurd">GNU Hurd</a></li>
+    <li><a href="#plan9">Plan 9</a></li>
+  </ul>
+</aside>
+
+<article class="doc">
+  <p class="crumbs" lang="en">Docs / Guests</p><p class="crumbs" lang="zh">文档 / 系统</p>
+  <h1 lang="en">Guest notes</h1><h1 lang="zh">系统说明</h1>
+  <p class="lede" lang="en">
+    What each guest supports, and the specific things it does differently.
+    Most of these you never have to think about -- AnyVM already applies them
+    -- but when something behaves oddly, the reason is usually on this page.
+  </p>
+  <p class="lede" lang="zh">
+    每个系统支持什么，以及它有哪些跟别人不一样的地方。这些绝大多数你都不用操心，
+    AnyVM 已经替你处理了 —— 但真出现什么奇怪现象时，原因通常就在这一页上。
+  </p>
+
+  <div class="note">
+    <span lang="en"><strong>Release lists live in the builders.</strong> Each builder
+    repository publishes the authoritative list of releases it currently
+    ships, and updates it as upstream cuts new ones. This page covers
+    behaviour, not versions.</span>
+    <span lang="zh"><strong>版本列表在 builder 那边。</strong>每个 builder 仓库都会公布
+    它当前提供的版本清单，上游发新版就跟着更新。这一页讲的是行为，不是版本号。</span>
+  </div>
+
+  <!-- ================= BSD ================= -->
+
+  <h2 id="freebsd" data-fam="bsd">FreeBSD</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; riscv64 &middot; powerpc64</span>
+    <span><a href="https://github.com/anyvm-org/freebsd-builder">freebsd-builder</a></span>
+  </p>
+  <p lang="en">
+    The broadest architecture coverage of any guest here, and the one to reach
+    for first if you just want a BSD to test on. UEFI boot is enabled
+    implicitly, so <code>--uefi</code> is unnecessary.
+  </p>
+  <p lang="zh">
+    这里架构覆盖最广的一个系统。只是想随便找个 BSD 测东西的话，先用它。UEFI
+    启动是隐式打开的，不用再写 <code>--uefi</code>。
+  </p>
+  <p lang="en">
+    Desktop images ship for XFCE, GNOME and KDE:
+    <code>--release 15.1-xfce</code>, <code>15.1-gnome</code>,
+    <code>15.1-kde6</code>.
+  </p>
+  <p lang="zh">
+    桌面镜像有 XFCE、GNOME 和 KDE 三种：<code>--release 15.1-xfce</code>、
+    <code>15.1-gnome</code>、<code>15.1-kde6</code>。
+  </p>
+
+  <h2 id="openbsd" data-fam="bsd">OpenBSD</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; riscv64 &middot; sparc64</span>
+    <span><a href="https://github.com/anyvm-org/openbsd-builder">openbsd-builder</a></span>
+  </p>
+  <p lang="en">
+    Seven desktop environments are published --
+    <code>7.9-xfce</code>, <code>-gnome</code>, <code>-kde6</code>,
+    <code>-mate</code>, <code>-lxqt</code>, <code>-lumina</code>,
+    <code>-enlightenment</code> -- more than any other guest.
+  </p>
+  <p lang="zh">
+    一共发布了七种桌面环境 —— <code>7.9-xfce</code>、<code>-gnome</code>、
+    <code>-kde6</code>、<code>-mate</code>、<code>-lxqt</code>、<code>-lumina</code>、
+    <code>-enlightenment</code> —— 比任何其他系统都多。
+  </p>
+  <ul>
+    <li>
+      <span lang="en"><strong>sparc64 needs patched firmware.</strong> The OpenBIOS that QEMU
+      bundles crashes every OpenBSD 7.3-and-later sparc64 kernel on cold boot.
+      AnyVM downloads a rebuilt OpenBIOS and passes it via <code>-bios</code>
+      automatically; the builder compiles it from source and publishes it as a
+      release asset. sparc64 is console-only, no graphics.</span>
+      <span lang="zh"><strong>sparc64 需要打过补丁的固件。</strong>QEMU 自带的 OpenBIOS
+      会让 7.3 及以后的每一个 OpenBSD sparc64 内核在冷启动时崩溃。AnyVM 会自动下载
+      重新编译过的 OpenBIOS，通过 <code>-bios</code> 传进去；这个固件由 builder 从
+      源码编译并作为 release 附件发布。sparc64 只有控制台，没有图形界面。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>aarch64 boots slowly.</strong> The boot timeout defaults to 1200
+      seconds instead of the usual 600, because OpenBSD arm64 takes that long
+      under emulation. An explicit <code>--boot-timeout-sec</code> always wins.</span>
+      <span lang="zh"><strong>aarch64 启动很慢。</strong>启动超时默认给到 1200 秒而不是
+      通常的 600 秒，因为 OpenBSD arm64 在模拟下确实要这么久。你自己写的
+      <code>--boot-timeout-sec</code> 永远优先。</span>
+    </li>
+  </ul>
+
+  <h2 id="netbsd" data-fam="bsd">NetBSD</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; riscv64 &middot; sparc64</span>
+    <span><a href="https://github.com/anyvm-org/netbsd-builder">netbsd-builder</a></span>
+  </p>
+  <ul>
+    <li>
+      <span lang="en"><strong>sparc64 syncs with <code>scp</code>, not <code>rsync</code>.</strong>
+      The QEMU sun4u machine boots only off the CMD646 PCI IDE controller,
+      whose TCG emulation loses interrupts under sustained concurrent network
+      and disk DMA. A live <code>sshfs</code> or <code>nfs</code> mount drives
+      exactly that pattern and wedges the guest, and the base image ships no
+      <code>rsync</code>. A one-shot <code>scp</code> avoids both. Override
+      with <code>--sync</code> if you know what you are doing.</span>
+      <span lang="zh"><strong>sparc64 用 <code>scp</code> 同步，不用 <code>rsync</code>。</strong>
+      QEMU 的 sun4u 机器只能从 CMD646 这块 PCI IDE 控制器启动，而它的 TCG 模拟在
+      网络和磁盘 DMA 持续并发时会丢中断。<code>sshfs</code> 或 <code>nfs</code>
+      的实时挂载正好制造这种压力，会把虚拟机卡死；而基础镜像里又没有
+      <code>rsync</code>。一次性的 <code>scp</code> 两个问题都避开了。你确实清楚
+      自己在做什么的话，可以用 <code>--sync</code> 覆盖。</span>
+    </li>
+    <li>
+      <span lang="en">sparc64 is console-only here too.</span><span lang="zh">这里的 sparc64 同样只有控制台。</span>
+    </li>
+  </ul>
+
+  <h2 id="dragonflybsd" data-fam="bsd">DragonFlyBSD</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/dragonflybsd-builder">dragonflybsd-builder</a></span>
+  </p>
+  <p lang="en">
+    The guest most sensitive to the host PMU. Exposing hardware performance
+    counters through <code>-cpu host</code> can trigger intermittent
+    general-protection faults in <code>wrmsr</code> during early boot, which
+    showed up as random boot failures across CI runners with different Intel
+    generations. The PMU is therefore off by default for every guest; pass
+    <code>--enable-pmu</code> only if you need <code>perf</code>-style
+    profiling inside the VM.
+  </p>
+  <p lang="zh">
+    对宿主 PMU 最敏感的一个系统。通过 <code>-cpu host</code> 把硬件性能计数器暴露
+    进去，可能让早期启动阶段的 <code>wrmsr</code> 偶发触发一般保护错误 —— 表现出来
+    就是在不同代 Intel 的 CI 机器上随机启动失败。所以 PMU 对所有系统默认关闭；
+    只有你确实要在虚拟机里做 <code>perf</code> 那类性能分析时，才加
+    <code>--enable-pmu</code>。
+  </p>
+
+  <h2 id="midnightbsd" data-fam="bsd">MidnightBSD</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/midnightbsd-builder">midnightbsd-builder</a></span>
+  </p>
+  <p lang="en">
+    A FreeBSD derivative with the <code>mport</code> package system. Nothing
+    special is needed to run it.
+  </p>
+  <p lang="zh">
+    FreeBSD 的衍生版，用自己的 <code>mport</code> 包管理系统。跑它不需要任何特殊处理。
+  </p>
+
+  <h2 id="ghostbsd" data-fam="bsd">GhostBSD</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/ghostbsd-builder">ghostbsd-builder</a></span>
+  </p>
+  <p lang="en">
+    A desktop-first FreeBSD derivative -- MATE is the default image, with
+    <code>26.1-xfce</code> and <code>26.1-gershwin</code> also published.
+  </p>
+  <p lang="zh">
+    以桌面为先的 FreeBSD 衍生版 —— 默认镜像是 MATE，另外还发布了
+    <code>26.1-xfce</code> 和 <code>26.1-gershwin</code>。
+  </p>
+  <p>
+    <span lang="en"><strong>Skips WHPX on Windows hosts.</strong> Its boot aborts under the
+    Windows Hypervisor Platform with <code>failed to decode instruction f
+    10</code>, so AnyVM runs it under TCG there rather than letting it fail.
+    Slower, but it boots.</span>
+    <span lang="zh"><strong>在 Windows 宿主上跳过 WHPX。</strong>它在 Windows Hypervisor
+    Platform 下启动会中止，报 <code>failed to decode instruction f 10</code>，所以
+    AnyVM 在那儿直接让它走 TCG，而不是眼看着它失败。慢一些，但能起来。</span>
+  </p>
+
+  <h2 id="nextbsd" data-fam="bsd">NextBSD</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/nextbsd-builder">nextbsd-builder</a></span>
+  </p>
+  <p lang="en">
+    FreeBSD with Mach IPC and <code>launchd</code> as PID 1 -- there is no
+    <code>rc.d</code>. Built from a rolling upstream tag, so the release you
+    get is resolved at build time.
+  </p>
+  <p lang="zh">
+    带 Mach IPC 的 FreeBSD，PID 1 是 <code>launchd</code> —— 没有
+    <code>rc.d</code>。它从上游的滚动标签构建，所以你拿到的是哪个版本，在构建时才定。
+  </p>
+
+  <!-- ================= illumos ================= -->
+
+  <h2 id="solaris" data-fam="illumos">Solaris</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/solaris-builder">solaris-builder</a></span>
+  </p>
+  <p lang="en">
+    Oracle Solaris 11. A heavy guest: under TCG it needs a long boot window,
+    which AnyVM already allows for by raising the default timeout to 1800
+    seconds whenever no hardware acceleration is available.
+  </p>
+  <p lang="zh">
+    Oracle Solaris 11。比较重的一个系统：在 TCG 下启动要等很久，AnyVM 已经考虑到了
+    —— 只要没有硬件加速可用，默认超时就自动提到 1800 秒。
+  </p>
+
+  <h2 id="omnios" data-fam="illumos">OmniOS</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/omnios-builder">omnios-builder</a></span>
+  </p>
+  <p lang="en">
+    An illumos distribution aimed at servers and storage. Stable LTS releases
+    alongside the rolling <code>bloody</code> line, depending on what the
+    builder currently publishes.
+  </p>
+  <p lang="zh">
+    面向服务器和存储的 illumos 发行版。有稳定的 LTS 版本，也有滚动的
+    <code>bloody</code> 线，具体看 builder 当前发布了哪些。
+  </p>
+
+  <h2 id="openindiana" data-fam="illumos">OpenIndiana</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/openindiana-builder">openindiana-builder</a></span>
+  </p>
+  <p lang="en">
+    The community continuation of OpenSolaris, with a full package repository
+    and a desktop available.
+  </p>
+  <p lang="zh">
+    OpenSolaris 的社区续作，有完整的软件仓库，也有桌面可用。
+  </p>
+
+  <h2 id="tribblix" data-fam="illumos">Tribblix</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/tribblix-builder">tribblix-builder</a></span>
+  </p>
+  <p lang="en">
+    A lightweight illumos distribution with its own <code>zap</code> package
+    manager and a retro window manager.
+  </p>
+  <p lang="zh">
+    轻量级 illumos 发行版，有自己的 <code>zap</code> 包管理器和一个复古风窗口管理器。
+  </p>
+  <p>
+    <span lang="en"><strong>Historical note.</strong> Images before <code>v2.0.3</code> froze a
+    CPU-vendor-specific <code>libc_hwcap</code> variant into
+    <code>/lib/libc.so.1</code> at build time, which crash-looped under KVM on
+    the other vendor's CPU. Current images ship the capability-neutral libc
+    that boots on both Intel and AMD and re-optimises per CPU on first boot.
+    Only reach for <code>--tcg</code> if you must run a pre-2.0.3 image on a
+    mismatched host.</span>
+    <span lang="zh"><strong>历史遗留问题。</strong><code>v2.0.3</code> 之前的镜像在构建时
+    把某一家 CPU 专用的 <code>libc_hwcap</code> 变体固化进了
+    <code>/lib/libc.so.1</code>，换到另一家的 CPU 上用 KVM 跑就会崩溃重启循环。
+    现在的镜像装的是不挑 CPU 特性的通用 libc，Intel 和 AMD 都能起来，首次启动时再
+    按当前 CPU 重新优化。只有当你非得在不匹配的宿主上跑 2.0.3 之前的镜像时，才需要
+    动用 <code>--tcg</code>。</span>
+  </p>
+
+  <!-- ================= Linux ================= -->
+
+  <h2 id="ubuntu" data-fam="linux">Ubuntu</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; riscv64 &middot; ppc64le &middot; s390x</span>
+    <span><a href="https://github.com/anyvm-org/ubuntu-builder">ubuntu-builder</a></span>
+  </p>
+  <p lang="en">
+    The widest spread of emulated architectures, and consequently the guest
+    with the most QEMU-version sensitivity. Every case below is handled for
+    you on a Linux x86_64 host: when the system QEMU is too old, AnyVM
+    downloads and uses a pinned QEMU 10.2.3 for exactly that combination.
+  </p>
+  <p lang="zh">
+    模拟架构铺得最开的一个系统，因此也是对 QEMU 版本最挑剔的一个。下面这些情况在
+    Linux x86_64 宿主上都替你处理好了：系统自带的 QEMU 太旧时，AnyVM 会下载一个固定的
+    QEMU 10.2.3，只用在那一种组合上。
+  </p>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th scope="col"><span lang="en">Architecture</span><span lang="zh">架构</span></th><th scope="col"><span lang="en">What it needs, and why</span><span lang="zh">需要什么，为什么</span></th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">aarch64</th>
+          <td>
+            <span lang="en">Defaults to <code>-cpu cortex-a72</code>. Under <code>-cpu max</code>
+            the distro QEMU 8.2 aborts with a <code>regime_is_user</code>
+            assertion when the 26.04 kernel uses VHE.</span>
+            <span lang="zh">默认用 <code>-cpu cortex-a72</code>。用 <code>-cpu max</code>
+            时，26.04 的内核一旦启用 VHE，发行版自带的 QEMU 8.2 就会在
+            <code>regime_is_user</code> 断言处中止。</span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">riscv64</th>
+          <td>
+            <span lang="en">26.04 requires QEMU 9.1 or newer and selects
+            <code>-cpu rva23s64</code> automatically -- the RVA23 userspace
+            baseline and the 7.0 kernel do not run on QEMU 8.2. 22.04 and 24.04
+            are fine on stock QEMU.</span>
+            <span lang="zh">26.04 需要 QEMU 9.1 或更新，并会自动选
+            <code>-cpu rva23s64</code> —— RVA23 的用户态基线和 7.0 内核在 QEMU 8.2
+            上跑不起来。22.04 和 24.04 用系统自带的 QEMU 就行。</span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">s390x</th>
+          <td>
+            <span lang="en">Wants QEMU 10 or newer; the distro 8.2 intermittently freezes guest
+            systemd at startup, a TCG-only bug. On a real IBM Z host with
+            <code>/dev/kvm</code>, KVM is used automatically and stock QEMU is
+            fine.</span>
+            <span lang="zh">需要 QEMU 10 或更新；发行版的 8.2 会偶发地把虚拟机里的
+            systemd 冻在启动阶段，这是个只在 TCG 下出现的 bug。在真正的 IBM Z 机器上
+            （有 <code>/dev/kvm</code>）会自动走 KVM，系统自带的 QEMU 就够。</span>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">ppc64le</th>
+          <td>
+            <span lang="en">22.04 requires QEMU 10 or newer: under the distro 8.2 pseries TCG
+            the jammy python3.10 segfaults, so every cloud-init and apt run
+            crashes. 24.04 and 26.04 work on stock QEMU.</span>
+            <span lang="zh">22.04 需要 QEMU 10 或更新：在发行版 8.2 的 pseries TCG 下，
+            jammy 的 python3.10 会段错误，于是每次 cloud-init 和 apt 都崩。24.04 和
+            26.04 用自带的 QEMU 没问题。</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="openeuler" data-fam="linux">OpenEuler</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; riscv64 &middot; loongarch64</span>
+    <span><a href="https://github.com/anyvm-org/openeuler-builder">openeuler-builder</a></span>
+  </p>
+  <p lang="en">
+    The only guest with a loongarch64 image. That architecture needs the EDK2
+    LoongArch firmware (<code>edk2-loongarch64-code.fd</code>), which QEMU only
+    started bundling in 9.2 -- so on a Linux x86_64 host with an older system
+    QEMU, AnyVM fetches a pinned QEMU 10.2.3 for it. Always TCG, so expect it
+    to be slow.
+  </p>
+  <p lang="zh">
+    唯一有 loongarch64 镜像的系统。这个架构需要 EDK2 的 LoongArch 固件
+    （<code>edk2-loongarch64-code.fd</code>），而 QEMU 从 9.2 才开始自带 —— 所以在
+    系统 QEMU 较旧的 Linux x86_64 宿主上，AnyVM 会为它取一个固定的 QEMU 10.2.3。
+    它始终走 TCG，所以慢是正常的。
+  </p>
+  <p lang="en">
+    Release names carry their own capitalisation
+    (<code>24.03-LTS-SP4</code>), but <code>--release</code> matches
+    case-insensitively, so <code>24.03-lts-sp4</code> finds it.
+  </p>
+  <p lang="zh">
+    它的版本名自带大小写（<code>24.03-LTS-SP4</code>），不过 <code>--release</code>
+    匹配时不区分大小写，写 <code>24.03-lts-sp4</code> 也能找到。
+  </p>
+
+  <h2 id="blissos" data-fam="linux">BlissOS</h2>
+  <p class="meta">
+    <span>x86_64 &middot; Android x86</span>
+    <span><a href="https://github.com/anyvm-org/blissos-builder">blissos-builder</a></span>
+  </p>
+  <p lang="en">
+    Android on x86, with root SSH and the Android desktop on the VNC console --
+    so this is one to open in the browser rather than drive from a shell.
+    Releases map to Android versions: <code>16</code> (Android 13),
+    <code>15</code> (12L), <code>14</code> (11).
+  </p>
+  <p lang="zh">
+    跑在 x86 上的 Android，带 root 权限的 SSH，Android 桌面在 VNC 控制台上 ——
+    所以这个更适合用浏览器打开看，而不是从 shell 里操作。版本号对应 Android 版本：
+    <code>16</code> 是 Android 13，<code>15</code> 是 12L，<code>14</code> 是 11。
+  </p>
+  <p>
+    <span lang="en"><strong>Directory sync uses <code>scp</code>.</strong> It is the only
+    backend the Android userspace supports.</span>
+    <span lang="zh"><strong>目录共享走 <code>scp</code>。</strong>这是 Android 用户态
+    唯一支持的后端。</span>
+  </p>
+
+  <!-- ================= Research ================= -->
+
+  <h2 id="haiku" data-fam="research">HaikuOS</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/haiku-builder">haiku-builder</a></span>
+  </p>
+  <p lang="en">
+    The BeOS successor -- a complete graphical desktop operating system that is
+    neither Unix nor Linux. Worth opening on the VNC console rather than
+    treating as a headless build target.
+  </p>
+  <p lang="zh">
+    BeOS 的继承者 —— 一个完整的图形桌面操作系统，既不是 Unix 也不是 Linux。
+    值得用 VNC 控制台打开看看，而不是只把它当成一个无头的构建目标。
+  </p>
+
+  <h2 id="hurd" data-fam="research">GNU Hurd</h2>
+  <p class="meta">
+    <span>x86_64 &middot; i386</span>
+    <span><a href="https://github.com/anyvm-org/hurd-builder">hurd-builder</a></span>
+  </p>
+  <p lang="en">
+    Debian GNU/Hurd, the only guest that ships a 32-bit image as well:
+    <code>--arch i386</code>.
+  </p>
+  <p lang="zh">
+    Debian GNU/Hurd，唯一一个同时提供 32 位镜像的系统：<code>--arch i386</code>。
+  </p>
+  <p lang="en">
+    Hurd has no virtio drivers, so it runs on emulated legacy hardware. The
+    amd64 image needs a q35 machine with AHCI, which AnyVM selects for you.
+  </p>
+  <p lang="zh">
+    Hurd 没有 virtio 驱动，只能跑在模拟的老式硬件上。amd64 镜像需要带 AHCI 的 q35
+    机型，AnyVM 会替你选好。
+  </p>
+
+  <h2 id="plan9" data-fam="research">Plan 9</h2>
+  <p class="meta">
+    <span>x86_64 &middot; 9front</span>
+    <span><a href="https://github.com/anyvm-org/plan9-builder">plan9-builder</a></span>
+  </p>
+  <p>
+    9front, the maintained Plan 9 fork. Not a Unix: there is no SSH daemon in
+    the usual sense, and AnyVM talks to it over its own transport.
+  </p>
+  <p>
+    <strong>Directory sync is 9P, and Linux-host only.</strong>
+    <code>--sync 9p</code> is the default here: the host mounts the guest's
+    <code>exportfs</code> share through the Linux kernel v9fs client
+    (<code>mount -t 9p</code>, needs root or sudo). On Windows and macOS hosts
+    a Plan 9 guest still boots and still runs commands -- only <code>-v</code>
+    folder sync is skipped.
+  </p>
+
+  <nav class="pagenav">
+    <a href="/docs/">&larr; Getting started</a>
+    <a href="/docs/cli.html">CLI reference &rarr;</a>
+  </nav>
+</article>
+
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-base">
+      <span>MIT licensed.</span>
+      <a href="https://github.com/anyvm-org/anyvm">anyvm on GitHub</a>
+      <a href="https://github.com/anyvm-org">anyvm-org</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

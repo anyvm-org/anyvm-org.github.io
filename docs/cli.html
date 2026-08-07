@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLI reference -- AnyVM docs</title>
+<meta name="description" content="Every AnyVM command-line option, grouped by what it controls, with examples.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://anyvm.org/docs/cli.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/style.css">
+<script>try{var d=document.documentElement,t=localStorage.getItem('anyvm-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t);var l=localStorage.getItem('anyvm-lang');if(!l)l=/^zh/i.test(navigator.language||'')?'zh':'en';if(l==='zh'){d.setAttribute('data-lang','zh');d.setAttribute('lang','zh-Hans');}d.className+='js';}catch(e){}</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/" aria-label="AnyVM.org home">
+      <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+           stroke="currentColor">
+        <rect x="7.2" y="2.6" width="14.2" height="14.2" rx="3.4" stroke-width="1.6" opacity=".42"/>
+        <rect x="2.6" y="7.2" width="14.2" height="14.2" rx="3.4" stroke-width="1.8"/>
+      </svg>
+      <span class="wordmark">AnyVM.org</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/#install">Install</a>
+      <a href="/#coverage">Guests</a>
+      <a href="/#org" class="opt">Ecosystem</a>
+      <a href="/docs/" class="on">Docs</a>
+      <a href="https://github.com/anyvm-org/anyvm">GitHub</a>
+    </nav>
+      <button class="lang-toggle" type="button" aria-label="切换到中文">
+        <span class="when-en">中文</span>
+        <span class="when-zh">EN</span>
+      </button>      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 13.1A8.5 8.5 0 1 1 10.9 3.2a6.6 6.6 0 0 0 9.9 9.9z"/>
+        </svg>
+        <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"/>
+          <path d="M12 2.3v2.4M12 19.3v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.3 12h2.4M19.3 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/>
+        </svg>
+      </button>  </div>
+</header>
+
+<div class="wrap docs" id="main">
+
+<aside class="side">
+  <h4 lang="en">Documentation</h4><h4 lang="zh">文档</h4>
+  <ul>
+    <li><a href="/docs/"><span lang="en">Getting started</span><span lang="zh">快速上手</span></a></li>
+    <li><a href="/docs/guests.html"><span lang="en">Guest notes</span><span lang="zh">系统说明</span></a></li>
+    <li><a href="/docs/cli.html" class="on"><span lang="en">CLI reference</span><span lang="zh">CLI 参考</span></a></li>
+    <li><a href="/docs/faq.html"><span lang="en">Troubleshooting</span><span lang="zh">故障排查</span></a></li>
+  </ul>
+  <h4 lang="en">On this page</h4><h4 lang="zh">本页目录</h4>
+  <ul>
+    <li><a href="#target"><span lang="en">Target</span><span lang="zh">目标</span></a></li>
+    <li><a href="#resources"><span lang="en">Resources</span><span lang="zh">资源</span></a></li>
+    <li><a href="#images"><span lang="en">Images and storage</span><span lang="zh">镜像和存储</span></a></li>
+    <li><a href="#network"><span lang="en">Networking</span><span lang="zh">网络</span></a></li>
+    <li><a href="#sync"><span lang="en">Shared directories</span><span lang="zh">共享目录</span></a></li>
+    <li><a href="#display"><span lang="en">Console and display</span><span lang="zh">控制台和显示</span></a></li>
+    <li><a href="#boot"><span lang="en">Boot and platform</span><span lang="zh">启动和平台</span></a></li>
+    <li><a href="#exec"><span lang="en">Running a command</span><span lang="zh">直接跑命令</span></a></li>
+  </ul>
+</aside>
+
+<article class="doc">
+  <p class="crumbs" lang="en">Docs / CLI</p><p class="crumbs" lang="zh">文档 / CLI</p>
+  <h1 lang="en">CLI reference</h1><h1 lang="zh">CLI 参考</h1>
+  <p class="lede" lang="en">
+    Every option, grouped by what it controls. Examples use
+    <code>anyvm</code>; <code>python3 anyvm.py</code> takes exactly the same
+    arguments. <code>anyvm --help</code> prints the built-in version of this.
+  </p>
+  <p class="lede" lang="zh">
+    全部选项，按管什么分组。例子里写的是 <code>anyvm</code>；
+    <code>python3 anyvm.py</code> 接受完全一样的参数。<code>anyvm --help</code>
+    会打印内置的这份说明。
+  </p>
+
+  <h2 id="target" lang="en">Target</h2><h2 lang="zh">目标</h2>
+
+  <dl class="dl">
+    <dt>--os &lt;name&gt;</dt>
+    <dd lang="en">
+      The guest operating system. This is the only required option.
+      One of <code>freebsd</code>, <code>ghostbsd</code>, <code>openbsd</code>,
+      <code>netbsd</code>, <code>dragonflybsd</code>, <code>midnightbsd</code>,
+      <code>nextbsd</code>, <code>solaris</code>, <code>omnios</code>,
+      <code>openindiana</code>, <code>tribblix</code>, <code>haiku</code>,
+      <code>ubuntu</code>, <code>openeuler</code>, <code>blissos</code>,
+      <code>hurd</code>, <code>plan9</code>.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd</pre></div>
+    </dd>
+    <dd lang="zh">
+      要跑哪个客户机系统。这是唯一必填的选项。可选：<code>freebsd</code>、<code>ghostbsd</code>、<code>openbsd</code>、<code>netbsd</code>、<code>dragonflybsd</code>、<code>midnightbsd</code>、<code>nextbsd</code>、<code>solaris</code>、<code>omnios</code>、<code>openindiana</code>、<code>tribblix</code>、<code>haiku</code>、<code>ubuntu</code>、<code>openeuler</code>、<code>blissos</code>、<code>hurd</code>、<code>plan9</code>。
+    </dd>
+
+    <dt>--release &lt;ver&gt;</dt>
+    <dd lang="en">
+      Which release to boot. Omit it and AnyVM picks an available one.
+      Matched case-insensitively, so <code>24.03-lts-sp4</code> finds
+      OpenEuler's <code>24.03-LTS-SP4</code>; the published spelling is used
+      from then on. Desktop variants are releases too --
+      <code>15.1-kde6</code>, <code>7.9-xfce</code>.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --release 14.4
+<span class="s">$</span> anyvm --os openbsd --release 7.9-xfce</pre></div>
+    </dd>
+    <dd lang="zh">
+      启动哪个版本。不写的话 AnyVM 自己挑一个可用的。匹配不区分大小写，所以 <code>24.03-lts-sp4</code> 能找到 OpenEuler 的 <code>24.03-LTS-SP4</code>，之后一律按官方写法显示。桌面版也算版本 —— <code>15.1-kde6</code>、<code>7.9-xfce</code>。
+    </dd>
+
+    <dt>--arch &lt;arch&gt;</dt>
+    <dd lang="en">
+      Guest CPU architecture: <code>x86_64</code>, <code>aarch64</code>,
+      <code>riscv64</code>, <code>s390x</code>, <code>powerpc64</code>,
+      <code>ppc64le</code>, <code>sparc64</code>, <code>loongarch64</code>,
+      <code>i386</code>. Availability varies per guest -- see
+      <a href="/docs/guests.html">guest notes</a>.
+      <div class="code"><pre><span class="s">$</span> anyvm --os netbsd --release 11.0 --arch sparc64</pre></div>
+    </dd>
+    <dd lang="zh">
+      客户机 CPU 架构：<code>x86_64</code>、<code>aarch64</code>、<code>riscv64</code>、<code>s390x</code>、<code>powerpc64</code>、<code>ppc64le</code>、<code>sparc64</code>、<code>loongarch64</code>、<code>i386</code>。每个系统支持哪些不一样，见<a href="/docs/guests.html">系统说明</a>。
+    </dd>
+  </dl>
+
+  <h2 id="resources" lang="en">Resources</h2><h2 lang="zh">资源</h2>
+
+  <dl class="dl">
+    <dt>--mem &lt;MB&gt;</dt>
+    <dd lang="en">
+      Memory in megabytes. Defaults to 4096 when the host has more than 4 GB
+      of RAM, otherwise 2048.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --mem 8192</pre></div>
+    </dd>
+    <dd lang="zh">
+      内存大小，单位 MB。宿主内存超过 4 GB 时默认 4096，否则 2048。
+    </dd>
+
+    <dt>--cpu &lt;num&gt;</dt>
+    <dd lang="en">
+      vCPU count. Defaults to the host core count, capped at 8 with hardware
+      acceleration and at 2 under TCG. Pass it explicitly to go higher.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --cpu 4</pre></div>
+    </dd>
+    <dd lang="zh">
+      vCPU 数量。默认取宿主核心数，有硬件加速时封顶 8，TCG 下封顶 2。想要更多就显式写。
+    </dd>
+
+    <dt>--cpu-type &lt;type&gt;</dt>
+    <dd lang="en">
+      The QEMU CPU model, when the automatic choice is wrong for you.
+      <div class="code"><pre><span class="s">$</span> anyvm --os openbsd --arch aarch64 --cpu-type cortex-a72</pre></div>
+    </dd>
+    <dd lang="zh">
+      QEMU 的 CPU 型号，用在自动选的那个不合适的时候。
+    </dd>
+  </dl>
+
+  <h2 id="images" lang="en">Images and storage</h2><h2 lang="zh">镜像和存储</h2>
+
+  <dl class="dl">
+    <dt>--builder &lt;ver&gt;</dt>
+    <dd lang="en">
+      Pin a specific builder version, so you get the images from that release
+      rather than the newest.
+      <div class="code"><pre><span class="s">$</span> anyvm --os netbsd --builder 2.0.1</pre></div>
+    </dd>
+    <dd lang="zh">
+      锁定某个 builder 版本，这样拿到的是那一次发布的镜像，而不是最新的。
+    </dd>
+
+    <dt>--qcow2 &lt;path&gt;</dt>
+    <dd lang="en">
+      Boot a local qcow2 image and skip downloading entirely.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --qcow2 ./output/freebsd/freebsd-14.4.qcow2</pre></div>
+    </dd>
+    <dd lang="zh">
+      直接启动本地的 qcow2 镜像，完全跳过下载。
+    </dd>
+
+    <dt>--snapshot</dt>
+    <dd lang="en">
+      QEMU snapshot mode: disk writes are discarded on shutdown. Combined with
+      a cache directory it can run straight from the cache without copying.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --snapshot</pre></div>
+    </dd>
+    <dd lang="zh">
+      QEMU 快照模式：关机时丢弃所有磁盘写入。配合缓存目录，可以直接从缓存里跑，不用先复制一份。
+    </dd>
+
+    <dt>--data-dir &lt;dir&gt;</dt>
+    <dd lang="en">
+      Where images and caches are stored. Defaults to <code>./output</code>.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --data-dir /var/lib/anyvm</pre></div>
+    </dd>
+    <dd lang="zh">
+      镜像和缓存放在哪。默认 <code>./output</code>。
+    </dd>
+  </dl>
+
+  <h2 id="network" lang="en">Networking</h2><h2 lang="zh">网络</h2>
+
+  <p lang="en">
+    Networking is QEMU user-mode (slirp). Forwards bind to
+    <code>127.0.0.1</code> unless you ask otherwise.
+  </p>
+  <p lang="zh">
+    网络走的是 QEMU 用户态（slirp）。除非你另外指定，转发都绑在
+    <code>127.0.0.1</code> 上。
+  </p>
+
+  <dl class="dl">
+    <dt>-p &lt;mapping&gt;</dt>
+    <dd lang="en">
+      Forward a host port to a guest port. Repeatable. Three forms:
+      <code>host:guest</code> (TCP), <code>tcp:host:guest</code>,
+      <code>udp:host:guest</code>.
+      <div class="code"><pre><span class="s">$</span> anyvm --os ubuntu -p 8080:80
+<span class="s">$</span> anyvm --os ubuntu -p tcp:8443:443 -p udp:5353:5353</pre></div>
+    </dd>
+    <dd lang="zh">
+      把宿主端口转发到客户机端口，可以写多次。三种写法：<code>host:guest</code>（TCP）、<code>tcp:host:guest</code>、<code>udp:host:guest</code>。
+    </dd>
+
+    <dt>--ssh-port &lt;port&gt;</dt>
+    <dd lang="en">
+      Host port forwarded to the guest's SSH. Auto-picked from the free ports
+      if omitted. <code>--sshport</code> is accepted as an alias.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --ssh-port 10022</pre></div>
+    </dd>
+    <dd lang="zh">
+      转发到客户机 SSH 的宿主端口。不写就从空闲端口里自动挑一个。<code>--sshport</code> 是它的别名。
+    </dd>
+
+    <dt>--ssh-name &lt;name&gt;</dt>
+    <dd lang="en">
+      Add an SSH alias for the guest, so you can reach it as
+      <code>ssh &lt;name&gt;</code> from another terminal.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --ssh-name myvm</pre></div>
+    </dd>
+    <dd lang="zh">
+      给客户机加一个 SSH 别名，这样在别的终端里可以直接 <code>ssh &lt;name&gt;</code>。
+    </dd>
+
+    <dt>--host-ssh-port &lt;port&gt;</dt>
+    <dd lang="en">
+      The host's own SSH port as reachable from inside the guest, used to
+      generate a <code>Host host</code> entry there. Defaults to 22.
+    </dd>
+    <dd lang="zh">
+      从客户机里能连回来的宿主 SSH 端口，用来在客户机里生成 <code>Host host</code> 那条配置。默认 22。
+    </dd>
+
+    <dt>--public</dt>
+    <dd lang="en">
+      Bind forwarded ports on <code>0.0.0.0</code> instead of loopback, so
+      other machines can reach them.
+      <div class="code"><pre><span class="s">$</span> anyvm --os ubuntu --public -p 8080:80</pre></div>
+    </dd>
+    <dd lang="zh">
+      把转发端口绑到 <code>0.0.0.0</code> 而不是回环地址，这样别的机器也连得上。
+    </dd>
+
+    <dt>--enable-ipv6</dt>
+    <dd lang="en">
+      Turn IPv6 on in QEMU user networking. It is off by default.
+    </dd>
+    <dd lang="zh">
+      在 QEMU 用户态网络里打开 IPv6。默认是关的。
+    </dd>
+  </dl>
+
+  <h2 id="sync" lang="en">Shared directories</h2><h2 lang="zh">共享目录</h2>
+
+  <dl class="dl">
+    <dt>-v &lt;host:guest&gt;</dt>
+    <dd lang="en">
+      Share a host directory with the guest. Repeatable.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd -v "$PWD:/data"
+<span class="s">$</span> anyvm --os freebsd -v D:\data:/data</pre></div>
+    </dd>
+    <dd lang="zh">
+      把宿主的一个目录共享给客户机，可以写多次。
+    </dd>
+
+    <dt>--sync &lt;mode&gt;</dt>
+    <dd lang="en">
+      Which mechanism backs <code>-v</code>. Strictly validated -- an
+      unrecognised value is an error, not a fallback.
+      <code>rsync</code> (default), <code>sshfs</code>, <code>nfs</code>,
+      <code>sys-nfs</code>, <code>scp</code>, <code>9p</code>.
+    </dd>
+    <dd lang="zh">
+      <code>-v</code> 底下用什么机制。严格校验 —— 值不认识就直接报错，不会悄悄退回默认。可选 <code>rsync</code>（默认）、<code>sshfs</code>、<code>nfs</code>、<code>sys-nfs</code>、<code>scp</code>、<code>9p</code>。
+    </dd>
+    <dd lang="en">
+      <code>nfs</code> runs the bundled user-space NFS server
+      (<a href="https://github.com/anyvm-org/nfsd">nfsd</a>, a single pure
+      Python file downloaded on demand, serving NFSv3 and v4 plus a
+      portmapper). No kernel nfsd and no root, on any host.
+      <code>mynfs</code> is accepted as an alias.
+    </dd>
+    <dd lang="zh">
+      <code>nfs</code> 跑的是自带的用户态 NFS 服务器（<a href="https://github.com/anyvm-org/nfsd">nfsd</a>，一个纯 Python 单文件，按需下载，提供 NFSv3、v4 和一个 portmapper）。不用内核 nfsd，不用 root，什么宿主都能跑。<code>mynfs</code> 也是它的别名。
+    </dd>
+    <dd lang="en">
+      <code>sys-nfs</code> forces the host's kernel NFS server instead. Linux
+      host with root, and the kernel NFS server installed.
+    </dd>
+    <dd lang="zh">
+      <code>sys-nfs</code> 强制改用宿主的内核 NFS 服务器。需要 Linux 宿主、root 权限，并且装了内核 NFS 服务。
+    </dd>
+    <dd lang="en">
+      <code>9p</code> is Plan 9's backend and its default there; it needs a
+      Linux host.
+      <div class="code"><pre><span class="s">$</span> anyvm --os solaris --sync scp -v D:\data:/data
+<span class="s">$</span> anyvm --os freebsd --sync nfs -v "$PWD:/data"
+<span class="s">$</span> anyvm --os plan9 --sync 9p -v "$PWD:/usr/glenda/work"</pre></div>
+    </dd>
+    <dd lang="zh">
+      <code>9p</code> 是 Plan 9 的后端，也是它那里的默认值；需要 Linux 宿主。
+    </dd>
+  </dl>
+
+  <div class="note">
+    <span lang="en">OpenBSD, NetBSD and DragonFly BSD guests are NFSv3-only and reach the
+    bundled server through its portmapper on port 111 -- free on Windows and
+    macOS hosts, but usually owned by the system <code>rpcbind</code> on Linux.
+    Use <code>sys-nfs</code> for those three on a Linux host. There is no
+    automatic fallback between the two backends.</span>
+    <span lang="zh">OpenBSD、NetBSD、DragonFlyBSD 只支持 NFSv3，要通过 111 端口上的
+    portmapper 连到自带的服务器 —— 这个端口在 Windows 和 macOS 上是空的，但 Linux 上
+    通常被系统的 <code>rpcbind</code> 占着。这三个系统在 Linux 宿主上请用
+    <code>sys-nfs</code>。两个后端之间不会自动切换。</span>
+  </div>
+
+  <h2 id="display" lang="en">Console and display</h2><h2 lang="zh">控制台和显示</h2>
+
+  <dl class="dl">
+    <dt>--console, -c</dt>
+    <dd lang="en">Run in the foreground, attached to the guest console.</dd>
+    <dd lang="zh">
+      前台运行，直接连着客户机控制台。
+    </dd>
+
+    <dt>--detach, -d</dt>
+    <dd lang="en">Run in the background and do not enter SSH.</dd>
+    <dd lang="zh">
+      后台运行，不自动进 SSH。
+    </dd>
+
+    <dt>--serial &lt;port&gt;</dt>
+    <dd lang="en">
+      Expose the guest serial console on a host TCP port. Auto-selected from
+      7000 upward if omitted.
+    </dd>
+    <dd lang="zh">
+      把客户机的串口控制台开到宿主的某个 TCP 端口上。不写就从 7000 往上自动选。
+    </dd>
+
+    <dt>--vnc &lt;display&gt;</dt>
+    <dd lang="en">
+      Enable VNC on a specific display number (<code>0</code> means
+      <code>:0</code>, port 5900). The VNC web UI is on by default from port
+      6080 upward regardless; <code>--vnc off</code> disables the whole thing.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --vnc off</pre></div>
+    </dd>
+    <dd lang="zh">
+      在指定显示号上启用 VNC（<code>0</code> 表示 <code>:0</code>，端口 5900）。不管这个选项，VNC 网页控制台默认都从 6080 往上开；<code>--vnc off</code> 把整套关掉。
+    </dd>
+
+    <dt>--vnc-password &lt;pwd&gt;</dt>
+    <dd lang="en">
+      Require a password for the VNC web UI. On the login page the username can
+      be anything; only the password is checked.
+    </dd>
+    <dd lang="zh">
+      给 VNC 网页控制台设密码。登录页上用户名随便填，只校验密码。
+    </dd>
+
+    <dt>--remote-vnc [&lt;service&gt;]</dt>
+    <dd lang="en">
+      Put the VNC web UI behind a public tunnel via Cloudflare,
+      Localhost.run, Pinggy or Serveo. Name one with <code>cf</code>,
+      <code>lhr</code>, <code>pinggy</code> or <code>serveo</code>; use
+      <code>no</code> to disable it where it is on by default, as in Google
+      Cloud Shell.
+      <div class="code"><pre><span class="s">$</span> anyvm --os openbsd --release 7.9-xfce --remote-vnc cf</pre></div>
+    </dd>
+    <dd lang="zh">
+      通过 Cloudflare、Localhost.run、Pinggy 或 Serveo，把 VNC 网页控制台放到公网隧道后面。用 <code>cf</code>、<code>lhr</code>、<code>pinggy</code>、<code>serveo</code> 指定某一家；在默认开启的环境里（比如 Google Cloud Shell）用 <code>no</code> 关掉。
+    </dd>
+
+    <dt>--mon &lt;port&gt;</dt>
+    <dd lang="en">Expose the QEMU monitor over telnet on localhost.</dd>
+    <dd lang="zh">
+      在 localhost 上通过 telnet 暴露 QEMU monitor。
+    </dd>
+
+    <dt>--debug</dt>
+    <dd lang="en">Verbose logging. The first thing to reach for when a boot misbehaves.</dd>
+    <dd lang="zh">
+      详细日志。启动出问题时第一个该用的东西。
+    </dd>
+  </dl>
+
+  <h2 id="boot" lang="en">Boot and platform</h2><h2 lang="zh">启动和平台</h2>
+
+  <dl class="dl">
+    <dt>--uefi</dt>
+    <dd lang="en">Boot via UEFI. FreeBSD enables this implicitly.</dd>
+    <dd lang="zh">
+      用 UEFI 启动。FreeBSD 会隐式打开。
+    </dd>
+
+    <dt>--disktype &lt;type&gt;</dt>
+    <dd lang="en">
+      Disk interface, for example <code>virtio</code> or <code>ide</code>.
+      <div class="code"><pre><span class="s">$</span> anyvm --os dragonflybsd --disktype ide</pre></div>
+    </dd>
+    <dd lang="zh">
+      磁盘接口类型，比如 <code>virtio</code> 或 <code>ide</code>。
+    </dd>
+
+    <dt>--boot-timeout-sec &lt;n&gt;</dt>
+    <dd lang="en">
+      How long to wait before QEMU is killed and the boot retried once.
+      Default 600. Raised automatically to 1200 for OpenBSD on aarch64, and to
+      1800 whenever no hardware acceleration is available -- TCG is 10-50x
+      slower, and heavy guests need the room. An explicit value always wins
+      over both.
+      <div class="code"><pre><span class="s">$</span> anyvm --os openbsd --arch aarch64 --boot-timeout-sec 1800</pre></div>
+    </dd>
+    <dd lang="zh">
+      等多久之后杀掉 QEMU 并重试一次。默认 600 秒。OpenBSD 的 aarch64 自动提到 1200，没有硬件加速时自动提到 1800 —— TCG 慢 10 到 50 倍，重的系统需要这个余量。你自己写的值永远盖过这两者。
+    </dd>
+
+    <dt>--enable-pmu</dt>
+    <dd lang="en">
+      Expose the host performance monitoring unit to the guest. Off by default:
+      passing PMU MSRs through <code>-cpu host</code> triggers intermittent
+      general-protection faults during early boot on some host CPU
+      generations, DragonFly BSD worst of all. Turn it on if you need
+      <code>perf</code>, <code>pmcstat</code> or a profiler inside the VM.
+      Only affects x86_64 with hardware acceleration.
+      <div class="code"><pre><span class="s">$</span> anyvm --os ubuntu --enable-pmu -- perf stat ls</pre></div>
+    </dd>
+    <dd lang="zh">
+      把宿主的性能监控单元暴露给客户机。默认关闭：通过 <code>-cpu host</code> 传 PMU MSR，会在某些代宿主 CPU 上让早期启动偶发一般保护错误，DragonFlyBSD 受影响最重。只有你确实要在虚拟机里用 <code>perf</code>、<code>pmcstat</code> 或别的性能分析器时才打开。只对有硬件加速的 x86_64 有影响。
+    </dd>
+
+    <dt>--tcg</dt>
+    <dd lang="en">
+      Force pure software emulation, ignoring KVM, HVF and WHPX. Slow, but it
+      works for any guest when acceleration misbehaves.
+      <div class="code"><pre><span class="s">$</span> anyvm --os tribblix --tcg</pre></div>
+    </dd>
+    <dd lang="zh">
+      强制纯软件模拟，忽略 KVM、HVF 和 WHPX。慢，但加速出问题时任何系统都能靠它跑起来。
+    </dd>
+  </dl>
+
+  <div class="note">
+    <strong>On Windows,</strong> WHPX is enabled automatically when the Windows
+    Hypervisor Platform is running, so there is nothing to pass. Under WHPX
+    AnyVM also picks a vendor-matched named CPU model rather than
+    <code>-cpu host</code>, because QEMU's WHPX host-passthrough path can hang
+    on recent CPUs -- the guest still sees the real host features, since CPUID
+    comes from Hyper-V. If QEMU aborts mid-boot under auto-enabled WHPX, AnyVM
+    relaunches under TCG by itself.
+  </div>
+
+  <h2 id="exec" lang="en">Running a command</h2><h2 lang="zh">直接跑命令</h2>
+
+  <dl class="dl">
+    <dt>-- &lt;cmd...&gt;</dt>
+    <dd lang="en">
+      Everything after <code>--</code> is executed inside the guest, and AnyVM
+      exits with that command's status. This is the form to use in scripts and
+      CI.
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd -- uname -a
+<span class="s">$</span> anyvm --os freebsd -- sh -lc "id; uname -a"
+<span class="s">$</span> anyvm --os ubuntu -v "$PWD:/src" -- sh -lc "cd /src &amp;&amp; make test"</pre></div>
+    </dd>
+    <dd lang="zh">
+      <code>--</code> 后面的一切都在客户机里执行，AnyVM 用那条命令的退出码退出。写脚本和 CI 时就该用这种形式。
+    </dd>
+  </dl>
+
+  <nav class="pagenav">
+    <a href="/docs/guests.html"><span lang="en">&larr; Guest notes</span><span lang="zh">&larr; 系统说明</span></a>
+    <a href="/docs/faq.html"><span lang="en">Troubleshooting &rarr;</span><span lang="zh">故障排查 &rarr;</span></a>
+  </nav>
+</article>
+
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-base">
+      <span>MIT licensed.</span>
+      <a href="https://github.com/anyvm-org/anyvm">anyvm on GitHub</a>
+      <a href="https://github.com/anyvm-org">anyvm-org</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

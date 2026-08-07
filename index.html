@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AnyVM -- run any VM anywhere</title>
+<meta name="description" content="One Python file boots 17 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://anyvm.org/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/style.css">
+<script>try{var d=document.documentElement,t=localStorage.getItem('anyvm-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t);var l=localStorage.getItem('anyvm-lang');if(!l)l=/^zh/i.test(navigator.language||'')?'zh':'en';if(l==='zh'){d.setAttribute('data-lang','zh');d.setAttribute('lang','zh-Hans');}d.className+='js';}catch(e){}</script>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="AnyVM -- run any VM anywhere">
+<meta property="og:description" content="One Python file boots 17 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
+<meta property="og:url" content="https://anyvm.org/">
+<meta name="twitter:card" content="summary">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/" aria-label="AnyVM.org home">
+      <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+           stroke="currentColor">
+        <rect x="7.2" y="2.6" width="14.2" height="14.2" rx="3.4" stroke-width="1.6" opacity=".42"/>
+        <rect x="2.6" y="7.2" width="14.2" height="14.2" rx="3.4" stroke-width="1.8"/>
+      </svg>
+      <span class="wordmark">AnyVM.org</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#install"><span lang="en">Install</span><span lang="zh">安装</span></a>
+      <a href="#coverage"><span lang="en">Guests</span><span lang="zh">客户机</span></a>
+      <a href="#org" class="opt"><span lang="en">Ecosystem</span><span lang="zh">生态</span></a>
+      <a href="/docs/"><span lang="en">Docs</span><span lang="zh">文档</span></a>
+      <a href="https://github.com/anyvm-org/anyvm">GitHub</a>
+    </nav>
+      <button class="lang-toggle" type="button" aria-label="切换到中文">
+        <span class="when-en">中文</span>
+        <span class="when-zh">EN</span>
+      </button>      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 13.1A8.5 8.5 0 1 1 10.9 3.2a6.6 6.6 0 0 0 9.9 9.9z"/>
+        </svg>
+        <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+             aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"/>
+          <path d="M12 2.3v2.4M12 19.3v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.3 12h2.4M19.3 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/>
+        </svg>
+      </button>  </div>
+</header>
+
+<main id="main">
+
+<!-- ===================== HERO: the coverage matrix ===================== -->
+<section class="hero">
+
+  <!-- Decorative only: every one of these names is already in the matrix
+       below, so the screen reader does not need them twice. -->
+  <div class="hero-names" aria-hidden="true">
+    <span>FreeBSD</span>
+    <span>OmniOS</span>
+    <span>Plan 9</span>
+    <span>Tribblix</span>
+    <span>NetBSD</span>
+    <span>GNU Hurd</span>
+    <span>HaikuOS</span>
+    <span>OpenBSD</span>
+    <span>BlissOS</span>
+    <span>MidnightBSD</span>
+    <span>Solaris</span>
+    <span>DragonFlyBSD</span>
+    <span>OpenEuler</span>
+    <span>GhostBSD</span>
+    <span>OpenIndiana</span>
+    <span>NextBSD</span>
+    <span>Ubuntu</span>
+
+    <!-- Second layer: the architectures, set smaller so the guests stay the
+         primary read. Aliases are included on purpose -- aarch64 and arm64
+         are the same target under two names people actually type. -->
+    <span>x86_64</span>
+    <span>aarch64</span>
+    <span>riscv64</span>
+    <span>arm64</span>
+    <span>sparc64</span>
+    <span>s390x</span>
+    <span>loongarch64</span>
+    <span>ppc64le</span>
+    <span>amd64</span>
+    <span>powerpc64</span>
+    <span>i386</span>
+  </div>
+
+  <div class="hero-in">
+
+    <div>
+      <span class="eyebrow" lang="en">17 operating systems / 7 architectures / 1 file</span>
+      <span class="eyebrow" lang="zh">17 个操作系统 / 7 种架构 / 1 个文件</span>
+      <!-- Four rotating slots -- guest, architecture, host, accelerator --
+           each cycling its own list independently. The motion is decorative,
+           so the accessible name is the fixed claim rather than a moving
+           target. Fixed lines, not one wrapping line: a single line would
+           reflow as the words change length. Without JS it reads
+           "Run FreeBSD for aarch64 on Linux via KVM" -- one concrete,
+           genuinely supported combination.
+
+           NOTE: the slots advance independently, so the combination on
+           screen at any instant is not guaranteed to be a supported one.
+           It advertises four axes, not one tuple. -->
+      <h1 aria-label="Run any VM for any architecture on Windows, macOS, Linux or WSL2, accelerated by KVM, HVF or WHPX">
+        <span class="line"><span class="lead" lang="en">Run</span><span class="lead" lang="zh">运行</span><span
+          class="typer" aria-hidden="true"><span
+          class="typed" data-slot="guest">FreeBSD</span><span class="caret"></span></span></span>
+        <span class="line"><span class="lead" lang="en">for</span><span class="lead" lang="zh">架构</span><span
+          class="typer typer-arch" aria-hidden="true"><span
+          class="typed" data-slot="arch">aarch64</span><span class="caret"></span></span></span>
+        <span class="line"><span class="lead" lang="en">on</span><span class="lead" lang="zh">宿主</span><span
+          class="typer typer-host" aria-hidden="true"><span
+          class="typed" data-slot="host">Linux</span><span class="caret"></span></span></span>
+        <span class="line"><span class="lead" lang="en">via</span><span class="lead" lang="zh">加速</span><span
+          class="typer typer-accel" aria-hidden="true"><span
+          class="typed" data-slot="accel">KVM</span><span class="caret"></span></span></span>
+      </h1>
+
+      <pre class="hero-cmd"><span class="s">$</span> pip install anyvm.py
+<span class="s">$</span> brew install anyvm-org/tap/anyvm   <span class="o"># macOS</span>
+<span class="s">$</span> winget install anyvm-org.anyvm     <span class="o"># Windows</span>
+
+<span class="s">$</span> anyvm --os netbsd --arch sparc64 -- uname -sm
+<span class="o">NetBSD sparc64</span>
+
+<span class="s">$</span> python3 anyvm.py --os haiku   <span class="o" lang="en"># no install</span><span class="o" lang="zh"># 免安装</span></pre>
+
+      <div class="cta">
+        <a class="btn btn-solid" href="/docs/"><span lang="en">Get started</span><span lang="zh">开始使用</span></a>
+        <a class="btn" href="https://github.com/anyvm-org/anyvm">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                     0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                     -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                     .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+                     -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27
+                     c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                     0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2
+                     0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+
+      <p class="hero-foot">
+        <span lang="en">MIT licensed &middot; Python 3, standard library only &middot;</span>
+        <span lang="zh">MIT 许可 &middot; 只用 Python 3 标准库 &middot;</span>
+        <a href="https://pypi.org/project/anyvm.py/">pypi.org/project/anyvm.py</a>
+      </p>
+    </div>
+
+    <!-- Every filled cell is one guest booting on one architecture in CI.
+         The shape is the honest one: x86_64 dense, everything else earned. -->
+    <figure class="cov">
+      <figcaption class="cov-title">
+        <span lang="en">Verified coverage</span><span lang="zh">已验证覆盖</span>
+        <span lang="en">33 combinations</span><span lang="zh">33 种组合</span>
+      </figcaption>
+
+      <div class="cov-grid">
+        <span></span>
+        <span class="axis">x86_64</span>
+        <span class="axis">aarch64</span>
+        <span class="axis">riscv64</span>
+        <span class="axis">powerpc64</span>
+        <span class="axis">sparc64</span>
+        <span class="axis">s390x</span>
+        <span class="axis">loongarch64</span>
+
+        <div class="cov-band" data-os="freebsd">
+          <span class="cov-os">FreeBSD</span>
+          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="openbsd">
+          <span class="cov-os">OpenBSD</span>
+          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="netbsd">
+          <span class="cov-os">NetBSD</span>
+          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="dragonfly">
+          <span class="cov-os">DragonFlyBSD</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="midnightbsd">
+          <span class="cov-os">MidnightBSD</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="ghostbsd">
+          <span class="cov-os">GhostBSD</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="nextbsd">
+          <span class="cov-os">NextBSD</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+
+        <span class="cov-gap"></span>
+
+        <div class="cov-band" data-os="solaris">
+          <span class="cov-os">Solaris</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="omnios">
+          <span class="cov-os">OmniOS</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="openindiana">
+          <span class="cov-os">OpenIndiana</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="tribblix">
+          <span class="cov-os">Tribblix</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+
+        <span class="cov-gap"></span>
+
+        <div class="cov-band" data-os="ubuntu">
+          <span class="cov-os">Ubuntu</span>
+          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="openeuler">
+          <span class="cov-os">OpenEuler</span>
+          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell on"></span>
+        </div>
+        <div class="cov-band" data-os="blissos">
+          <span class="cov-os">BlissOS</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+
+        <span class="cov-gap"></span>
+
+        <div class="cov-band" data-os="haiku">
+          <span class="cov-os">HaikuOS</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="hurd">
+          <span class="cov-os">GNU Hurd</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="plan9">
+          <span class="cov-os">Plan 9</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+      </div>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ===================== INSTALL ===================== -->
+<section class="section" id="install">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag" lang="en">Install</span><span class="tag" lang="zh">安装</span>
+      <h2 lang="en">Five ways in, one command out</h2>
+      <h2 lang="zh">怎么装都行，用法就一条命令</h2>
+      <p lang="en">
+        <strong>anyvm.py</strong> is a single Python file with no third-party
+        dependencies. It fetches a prebuilt image, configures QEMU with
+        settings that actually work for that guest on that architecture, and
+        drops you into a shell -- or runs your command and exits.
+      </p>
+      <p lang="zh">
+        <strong>anyvm.py</strong> 就是一个 Python 文件，不依赖任何第三方库。它会下载预先构建好的镜像，
+        按这个系统在这个架构上真正跑得通的参数配好 QEMU，然后把你丢进 shell；
+        也可以直接跑完你给的命令就退出。
+      </p>
+      <p lang="en">
+        <strong>Windows, macOS and Linux</strong> hosts, the same command on
+        each -- no per-platform setup, no configuration file, nothing to
+        provision. Pick whichever way suits your machine; all five leave you
+        with <code>anyvm</code>, and QEMU is the only other thing you need.
+      </p>
+      <p lang="zh">
+        <strong>Windows、macOS、Linux</strong> 都能当宿主，命令一模一样：不用分平台配置，不用写配置文件，
+        不用预先准备任何东西。挑个顺手的装法就行，五种最后都是同一条
+        <code>anyvm</code> 命令，另外只要有 QEMU。
+      </p>
+    </div>
+
+    <div data-tabs>
+      <div class="tabs" role="tablist" aria-label="Installation method">
+        <button class="tab" role="tab" id="tab-pip" aria-controls="panel-pip" aria-selected="true">pip</button>
+        <button class="tab" role="tab" id="tab-brew" aria-controls="panel-brew" aria-selected="false" tabindex="-1">homebrew</button>
+        <button class="tab" role="tab" id="tab-winget" aria-controls="panel-winget" aria-selected="false" tabindex="-1">winget</button>
+        <button class="tab" role="tab" id="tab-docker" aria-controls="panel-docker" aria-selected="false" tabindex="-1">docker</button>
+        <button class="tab" role="tab" id="tab-file" aria-controls="panel-file" aria-selected="false" tabindex="-1">curl</button>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-pip" aria-labelledby="tab-pip">
+        <div class="code">
+<pre><span class="s">$</span> pip install anyvm.py
+<span class="s">$</span> anyvm --os freebsd</pre>
+        </div>
+        <p class="panel-note" lang="en">
+          Debian and Ubuntu block this under PEP&nbsp;668. Use
+          <code>pipx install anyvm.py</code> or a virtualenv --
+          <a href="/docs/#install">details</a>.
+        </p>
+        <p class="panel-note" lang="zh">
+          Debian 和 Ubuntu 会按 PEP&nbsp;668 把这条命令拦下来。改用
+          <code>pipx install anyvm.py</code> ，或者装进虚拟环境 ——
+          <a href="/docs/#install">详见文档</a>。
+        </p>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-brew" aria-labelledby="tab-brew" hidden>
+        <div class="code">
+<pre><span class="s">$</span> brew install anyvm-org/tap/anyvm
+<span class="s">$</span> anyvm --os freebsd</pre>
+        </div>
+        <p class="panel-note" lang="en">
+          The tap pulls in <code>qemu</code> and <code>zstd</code>, so there is
+          nothing else to install.
+        </p>
+        <p class="panel-note" lang="zh">
+          这个 tap 会顺带把 <code>qemu</code> 和 <code>zstd</code> 装上，不用再管别的。
+        </p>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-winget" aria-labelledby="tab-winget" hidden>
+        <div class="code">
+<pre><span class="s">$</span> winget install anyvm-org.anyvm
+<span class="s">$</span> anyvm --os freebsd</pre>
+        </div>
+        <p class="panel-note" lang="en">
+          A self-contained build with Python bundled in, so a Windows box needs
+          nothing on it but QEMU.
+        </p>
+        <p class="panel-note" lang="zh">
+          打包了 Python 的独立版本，Windows 上除了 QEMU 什么都不用装。
+        </p>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-docker" aria-labelledby="tab-docker" hidden>
+        <div class="code">
+<pre><span class="s">$</span> docker run --rm -it ghcr.io/anyvm-org/anyvm:latest --os freebsd</pre>
+        </div>
+        <p class="panel-note" lang="en">
+          A VM inside a container, QEMU already set up. More tags in
+          <a href="https://github.com/anyvm-org/docker">anyvm-org/docker</a>.
+        </p>
+        <p class="panel-note" lang="zh">
+          在容器里跑虚拟机，QEMU 都配好了。更多标签见
+          <a href="https://github.com/anyvm-org/docker">anyvm-org/docker</a>。
+        </p>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-file" aria-labelledby="tab-file" hidden>
+        <div class="code">
+<pre><span class="s">$</span> curl -O https://raw.githubusercontent.com/anyvm-org/anyvm/main/anyvm.py
+<span class="s">$</span> python3 anyvm.py --os freebsd</pre>
+        </div>
+        <p class="panel-note" lang="en">
+          Nothing outside the standard library is imported, so this one file is
+          the whole program. Commit it, bake it into a CI image, scp it to a
+          jump host.
+        </p>
+        <p class="panel-note" lang="zh">
+          它不 import 标准库以外的任何东西，所以这一个文件就是全部。可以直接提交进
+          仓库、打进 CI 镜像、scp 到跳板机。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHAT IT HANDLES ===================== -->
+<section class="section section-2" id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag" lang="en">What it takes care of</span><span class="tag" lang="zh">它替你省掉的麻烦</span>
+      <h2 lang="en">The part that usually costs you an afternoon</h2>
+      <h2 lang="zh">通常得搭进去一个下午的活</h2>
+      <p lang="en">
+        Getting an unfamiliar operating system to boot under QEMU is firmware
+        flags, installer prompts and disk-image surgery. That work is already
+        done, per guest and per architecture.
+      </p>
+      <p lang="zh">
+        让一个没碰过的系统在 QEMU 里跑起来，得调固件参数、过安装器、动磁盘镜像。
+        这些活已经干完了，每个系统、每个架构都干过一遍。
+      </p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3 lang="en">Images are built, booted and verified</h3><h3 lang="zh">镜像都真启动验证过</h3>
+        <p lang="en">
+          Every image comes from its own builder repository, which installs the
+          OS from scratch under QEMU and boots it in CI on each release. A
+          filled cell in the matrix means that guest really starts on that
+          architecture today.
+        </p>
+        <p lang="zh">
+          每个镜像都有自己的 builder 仓库，在 QEMU 里从零装好系统，每次发版都在 CI 里
+          真跑一遍。矩阵里填了色的格子，意思是这个系统今天确实能在这个架构上起来。
+        </p>
+      </div>
+      <div class="card">
+        <h3 lang="en">Acceleration resolves itself</h3><h3 lang="zh">加速不用你管</h3>
+        <p lang="en">
+          KVM on Linux, HVF on macOS, WHPX on Windows -- detected and used when
+          present, with a clean fall back to TCG when it is not. Emulated
+          architectures still work; they just take longer.
+        </p>
+        <p lang="zh">
+          Linux 上用 KVM，macOS 上用 HVF，Windows 上用 WHPX：有就自动用上，没有就退回
+          TCG。模拟架构照样能跑，就是慢一些。
+        </p>
+      </div>
+      <div class="card">
+        <h3 lang="en">Directory sync on every host</h3><h3 lang="zh">目录共享哪种宿主都能用</h3>
+        <p lang="en">
+          Six backends -- <code>rsync</code>, <code>sshfs</code>,
+          <code>nfs</code>, <code>sys-nfs</code>, <code>scp</code>,
+          <code>9p</code> -- including a bundled pure-Python NFS server, so a
+          Windows or macOS host can export a directory without root.
+        </p>
+        <p lang="zh">
+          六种后端：<code>rsync</code>、<code>sshfs</code>、<code>nfs</code>、
+          <code>sys-nfs</code>、<code>scp</code>、<code>9p</code>。其中的 NFS 服务器是
+          纯 Python 写的，一并打包在内，所以 Windows 和 macOS 上不用 root 也能共享目录。
+        </p>
+      </div>
+      <div class="card">
+        <h3 lang="en">A console in your browser</h3><h3 lang="zh">图形界面直接开在浏览器里</h3>
+        <p lang="en">
+          The VNC web UI starts by default on <code>localhost:6080</code>, with
+          clipboard paste, fullscreen and an optional password.
+          <code>--remote-vnc</code> puts it behind a public tunnel.
+        </p>
+        <p lang="zh">
+          VNC 网页控制台默认跑在 <code>localhost:6080</code>，能粘贴剪贴板、能全屏，
+          也能设密码。加上 <code>--remote-vnc</code> 就把它挂到公网隧道上。
+        </p>
+      </div>
+      <div class="card">
+        <h3 lang="en">Desktops, not just shells</h3><h3 lang="zh">不止命令行，还有完整桌面</h3>
+        <p lang="en">
+          XFCE, GNOME, KDE, MATE, LXQt, Lumina and Enlightenment ship as
+          bootable desktop images for several guests. Ask for
+          <code>--release 7.9-xfce</code> and you get a desktop.
+        </p>
+        <p lang="zh">
+          XFCE、GNOME、KDE、MATE、LXQt、Lumina、Enlightenment 都有现成的桌面镜像，
+          好几个系统都能用。写上 <code>--release 7.9-xfce</code>，开出来就是个桌面。
+        </p>
+      </div>
+      <div class="card">
+        <h3 lang="en">Awkward platforms handled quietly</h3><h3 lang="zh">冷门平台的坑都填过了</h3>
+        <p lang="en">
+          Where a guest needs a newer QEMU or patched firmware than your
+          distribution ships, AnyVM notices and fetches exactly that, for
+          exactly those cases. Nothing to configure.
+        </p>
+        <p lang="zh">
+          有些系统需要比你发行版更新的 QEMU，或者打过补丁的固件。AnyVM 认得出这些情况，
+          只在需要的时候去取，不用你操心。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COVERAGE TABLE ===================== -->
+<section class="section" id="coverage">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag" lang="en">Guests</span><span class="tag" lang="zh">客户机</span>
+      <h2 lang="en">The matrix, spelled out</h2>
+      <h2 lang="zh">把矩阵摊开看</h2>
+      <p lang="en">
+        The same 33 combinations from the hero, in a form you can read and
+        link to. Each builder repository owns the full release list for its
+        guest.
+      </p>
+      <p lang="zh">
+        还是上面那 33 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
+        自己的 builder 仓库说了算。
+      </p>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col"><span lang="en">Guest</span><span lang="zh">客户机</span></th>
+            <th scope="col" class="mark">x86_64</th>
+            <th scope="col" class="mark">aarch64</th>
+            <th scope="col" class="mark">riscv64</th>
+            <th scope="col" class="mark">powerpc64</th>
+            <th scope="col" class="mark">sparc64</th>
+            <th scope="col" class="mark">s390x</th>
+            <th scope="col" class="mark">loongarch64</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-os="freebsd">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#freebsd">FreeBSD</a><span class="sub">freebsd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="openbsd">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#openbsd">OpenBSD</a><span class="sub">openbsd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="netbsd">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#netbsd">NetBSD</a><span class="sub">netbsd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="dragonfly">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#dragonflybsd">DragonFlyBSD</a><span class="sub">dragonflybsd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="midnightbsd">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#midnightbsd">MidnightBSD</a><span class="sub">midnightbsd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="ghostbsd">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#ghostbsd">GhostBSD</a><span class="sub">ghostbsd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="nextbsd">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#nextbsd">NextBSD</a><span class="sub">nextbsd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+
+          <tr data-os="solaris">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#solaris">Solaris</a><span class="sub">solaris-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="omnios">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#omnios">OmniOS</a><span class="sub">omnios-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="openindiana">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#openindiana">OpenIndiana</a><span class="sub">openindiana-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="tribblix">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#tribblix">Tribblix</a><span class="sub">tribblix-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+
+          <tr data-os="ubuntu">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#ubuntu">Ubuntu</a><span class="sub">ubuntu-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="openeuler">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#openeuler">OpenEuler</a><span class="sub">openeuler-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+          </tr>
+          <tr data-os="blissos">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#blissos">BlissOS</a><span class="sub">Android x86 &middot; blissos-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+
+          <tr data-os="haiku">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#haiku">HaikuOS</a><span class="sub">haiku-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="hurd">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#hurd">GNU Hurd</a><span class="sub">Debian &middot; also i386</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="plan9">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#plan9">Plan 9</a><span class="sub">9front &middot; plan9-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="legend" lang="en">
+      Hosts: Linux, macOS and Windows. A Linux x86_64 host -- including WSL --
+      runs every guest architecture above.
+      <a href="/docs/guests.html">Per-guest notes</a> and the
+      <a href="/docs/#hosts">host matrix</a> live in the docs.
+    </p>
+    <p class="legend" lang="zh">
+      宿主支持 Linux、macOS 和 Windows。一台 Linux x86_64（WSL 也算）能跑上面所有
+      架构。<a href="/docs/guests.html">每个系统的说明</a>和
+      <a href="/docs/#hosts">宿主对照表</a>都在文档里。
+    </p>
+  </div>
+</section>
+
+<!-- ===================== ORG ===================== -->
+<section class="section section-2" id="org">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag" lang="en">Around it</span><span class="tag" lang="zh">周边</span>
+      <h2 lang="en">What makes the matrix possible</h2>
+      <h2 lang="zh">这张矩阵背后是什么</h2>
+      <p lang="en">
+        AnyVM is the front end. Behind it are the builders that produce every
+        image, plus the pieces that make the awkward parts work identically on
+        every host.
+      </p>
+      <p lang="zh">
+        AnyVM 只是前台。后面有一整套 builder 在产出镜像，还有几个组件专门负责把最
+        麻烦的那些事在每种宿主上抹平。
+      </p>
+    </div>
+
+    <div class="eco">
+      <div class="eco-item">
+        <h3 lang="en">Image builders</h3><h3 lang="zh">镜像 builder</h3>
+        <p lang="en">
+          One repository per guest, all generated from a single template. Each
+          installs its operating system from scratch, boots it, verifies it,
+          and publishes the image as a release.
+        </p>
+        <p lang="zh">
+          一个系统一个仓库，都从同一份模板生成。每个仓库自己从零装系统、启动、验证，
+          最后把镜像作为 release 发出来。
+        </p>
+        <div class="pills">
+          <a class="pill" href="https://github.com/anyvm-org/base-builder">base-builder</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/freebsd-builder">freebsd</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/openbsd-builder">openbsd</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/netbsd-builder">netbsd</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/dragonflybsd-builder">dragonflybsd</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/midnightbsd-builder">midnightbsd</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/ghostbsd-builder">ghostbsd</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/nextbsd-builder">nextbsd</a>
+          <a class="pill" data-fam="illumos" href="https://github.com/anyvm-org/solaris-builder">solaris</a>
+          <a class="pill" data-fam="illumos" href="https://github.com/anyvm-org/omnios-builder">omnios</a>
+          <a class="pill" data-fam="illumos" href="https://github.com/anyvm-org/openindiana-builder">openindiana</a>
+          <a class="pill" data-fam="illumos" href="https://github.com/anyvm-org/tribblix-builder">tribblix</a>
+          <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/ubuntu-builder">ubuntu</a>
+          <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/openeuler-builder">openeuler</a>
+          <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/blissos-builder">blissos</a>
+          <a class="pill" data-fam="research" href="https://github.com/anyvm-org/haiku-builder">haiku</a>
+          <a class="pill" data-fam="research" href="https://github.com/anyvm-org/hurd-builder">hurd</a>
+          <a class="pill" data-fam="research" href="https://github.com/anyvm-org/plan9-builder">plan9</a>
+        </div>
+      </div>
+
+      <div class="eco-item">
+        <h3 lang="en">Agents</h3><h3 lang="zh">AI 智能体</h3>
+        <p lang="en">
+          An MCP server and a skill file, so Claude Code, Copilot or any other
+          MCP-capable assistant can boot a guest and run your build in it
+          because you asked in a sentence.
+        </p>
+        <p lang="zh">
+          一个 MCP 服务器加一份 skill 文件。装上以后，你跟 Claude Code 或 Copilot 说一句
+          话，它就能开好虚拟机、在里面把你的构建跑完。
+        </p>
+        <div class="eco-links">
+          <a href="https://github.com/anyvm-org/mcp">mcp</a>
+          <a href="https://github.com/anyvm-org/anyvm-skill">anyvm-skill</a>
+        </div>
+      </div>
+
+      <div class="eco-item">
+        <h3 lang="en">Also powering vmactions</h3><h3 lang="zh">vmactions 用的也是这批镜像</h3>
+        <p lang="en">
+          The same images run inside the vmactions GitHub Actions --
+          <code>freebsd-vm</code>, <code>openbsd-vm</code>,
+          <code>netbsd-vm</code>, <code>solaris-vm</code> and friends -- which
+          run your CI steps inside a real BSD or illumos guest on GitHub's
+          Linux runners.
+        </p>
+        <p lang="zh">
+          vmactions 那套 GitHub Actions —— <code>freebsd-vm</code>、<code>openbsd-vm</code>、
+          <code>netbsd-vm</code>、<code>solaris-vm</code> 等等 —— 用的就是这些镜像：在
+          GitHub 的 Linux runner 上，把你的 CI 步骤丢进真正的 BSD 或 illumos 里跑。
+        </p>
+        <div class="eco-links">
+          <a href="https://vmactions.org">vmactions.org</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4 lang="en">Docs</h4><h4 lang="zh">文档</h4>
+        <ul>
+          <li><a href="/docs/"><span lang="en">Getting started</span><span lang="zh">快速上手</span></a></li>
+          <li><a href="/docs/guests.html"><span lang="en">Guest notes</span><span lang="zh">客户机说明</span></a></li>
+          <li><a href="/docs/cli.html"><span lang="en">CLI reference</span><span lang="zh">CLI 参考</span></a></li>
+          <li><a href="/docs/faq.html"><span lang="en">Troubleshooting</span><span lang="zh">故障排查</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 lang="en">Project</h4><h4 lang="zh">项目</h4>
+        <ul>
+          <li><a href="https://github.com/anyvm-org/anyvm">anyvm</a></li>
+          <li><a href="https://github.com/anyvm-org/docker">docker</a></li>
+          <li><a href="https://github.com/anyvm-org/homebrew-tap">homebrew-tap</a></li>
+          <li><a href="https://pypi.org/project/anyvm.py/">PyPI</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 lang="en">Agents</h4><h4 lang="zh">智能体</h4>
+        <ul>
+          <li><a href="https://github.com/anyvm-org/mcp"><span lang="en">MCP server</span><span lang="zh">MCP 服务器</span></a></li>
+          <li><a href="https://github.com/anyvm-org/anyvm-skill"><span lang="en">Agent skill</span><span lang="zh">Agent skill</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 lang="en">Organization</h4><h4 lang="zh">组织</h4>
+        <ul>
+          <li><a href="https://github.com/anyvm-org">github.com/anyvm-org</a></li>
+          <li><a href="https://github.com/orgs/anyvm-org/repositories"><span lang="en">All repositories</span><span lang="zh">全部仓库</span></a></li>
+          <li><a href="https://vmactions.org">vmactions</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span lang="en">MIT licensed.</span>
+      <span lang="zh">MIT 许可。</span>
+      <span lang="en">Built and tested in the open on GitHub Actions.</span>
+      <span lang="zh">构建和测试全在 GitHub Actions 上公开进行。</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
