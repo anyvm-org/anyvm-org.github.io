@@ -143,8 +143,11 @@
 <pre><span class="s">$</span> winget install anyvm-org.anyvm</pre>
   </div>
   <p lang="en">
-    This one is a self-contained build with Python bundled in, so the machine
-    needs nothing else except <a href="#qemu">QEMU</a>.
+    This one is a self-contained build with Python bundled in, and it declares
+    <code>qemu</code> as a package dependency, so winget installs that too and
+    you can skip the <a href="#qemu">next section</a>. Installing QEMU needs
+    elevation, so this one prompts for UAC; pass
+    <code>--skip-dependencies</code> to install anyvm alone.
   </p>
   <p lang="zh">
     这个版本打包了 Python，机器上除了 <a href="#qemu">QEMU</a> 什么都不用另装。
