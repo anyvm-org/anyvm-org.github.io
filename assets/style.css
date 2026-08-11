@@ -633,7 +633,7 @@ code, kbd, samp, pre { font-family: var(--mono); }
 
 .cov-grid {
   display: grid;
-  grid-template-columns: auto repeat(8, var(--cell));
+  grid-template-columns: auto repeat(7, var(--cell));
   align-items: center;
   column-gap: 3px;
 }
