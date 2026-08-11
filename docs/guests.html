@@ -88,6 +88,7 @@
     <li><a href="#haiku">HaikuOS</a></li>
     <li><a href="#hurd">GNU Hurd</a></li>
     <li><a href="#plan9">Plan 9</a></li>
+    <li><a href="#reactos">ReactOS</a></li>
   </ul>
 </aside>
 
@@ -528,6 +529,96 @@
     (<code>mount -t 9p</code>, needs root or sudo). On Windows and macOS hosts
     a Plan 9 guest still boots and still runs commands -- only <code>-v</code>
     folder sync is skipped.
+  </p>
+
+  <h2 id="reactos" data-fam="research">ReactOS</h2>
+  <p class="meta">
+    <span>i386 &middot; 0.4.15</span>
+    <span><a href="https://github.com/anyvm-org/reactos-builder">reactos-builder</a></span>
+  </p>
+  <p lang="en">
+    An open-source reimplementation of Windows NT, and a <strong>tech
+    preview</strong> here: it boots, runs commands and syncs a folder, but it
+    is not as finished as the other guests. Upstream ships 32-bit x86 only, so
+    this is the one guest AnyVM does not default to your host architecture:
+    <code>--os reactos</code> resolves to <code>i386</code> on its own.
+  </p>
+  <p lang="zh">
+    ReactOS 是 Windows NT 的开源重新实现，在这里属于<strong>技术预览</strong>：能开机、
+    能跑命令、能同步目录，但成熟度不及其他客户机。上游只发布 32 位 x86，所以它是唯一
+    一个 AnyVM 不按宿主架构去猜的客户机：<code>--os reactos</code> 自己就会解析成
+    <code>i386</code>。
+  </p>
+  <p lang="en">
+    <strong>The image carries its own telnet server.</strong> ReactOS ships no
+    remote-access server of any kind -- there is no sshd, and the networking
+    tools it bundles are all clients -- so reactos-builder cross-compiles a
+    small Win32 telnet daemon, copies it onto the volume while the guest is
+    offline, and registers it as a boot-time service. AnyVM drives the guest
+    over that channel, the same transport it uses for 9front. It authenticates
+    nobody and is reachable only through the loopback-bound QEMU forward.
+  </p>
+  <p lang="zh">
+    <strong>镜像自带一个 telnet 服务端。</strong>ReactOS 完全没有远程访问服务 ——
+    没有 sshd，自带的网络工具也全是客户端 —— 所以 reactos-builder 交叉编译了一个很小的
+    Win32 telnet 守护进程，在客户机关机状态下拷进磁盘，并注册成开机启动的服务。AnyVM
+    通过这个通道驱动客户机，用的是和 9front 相同的传输方式。它不做任何认证，只能经由
+    绑定在回环地址上的 QEMU 端口转发访问。
+  </p>
+  <p lang="en">
+    <strong>Directory sync is tar, and it is the default here.</strong>
+    <code>--sync tar</code> streams each shared folder as a ustar archive over
+    that same telnet channel: host to guest at boot, then guest back to host
+    once your command finishes. It is a one-shot copy in each direction rather
+    than a live mount, so nothing is pulled back in <code>--detach</code> mode.
+    Every other backend is unavailable: no sshd means no rsync, sshfs or scp,
+    there is no 9P client and no SMB redirector, and while the NFS client stack
+    does ship and load, its daemon hangs on start -- a ReactOS bug, not a
+    builder gap. Guest paths are Windows-style:
+    <code>-v "$PWD:C:\work"</code>.
+  </p>
+  <p lang="zh">
+    <strong>目录同步走 tar，也是这里的默认值。</strong><code>--sync tar</code>
+    把每个共享目录打成 ustar 包，从同一条 telnet 通道里流过去：开机时从宿主推给客户机，
+    命令跑完后再从客户机拉回宿主。两个方向都是一次性拷贝，不是实时挂载，所以
+    <code>--detach</code> 模式下不会回拉。其他后端都用不了：没有 sshd 就没有 rsync、
+    sshfs、scp，也没有 9P 客户端和 SMB 重定向器；NFS 客户端虽然装了也能加载，但它的
+    守护进程启动即卡死 —— 那是 ReactOS 自己的 bug，不是构建器缺东西。客户机侧的路径是
+    Windows 风格的：<code>-v "$PWD:C:\work"</code>。
+  </p>
+  <p lang="en">
+    <strong>It boots on every host</strong>, but only because AnyVM withholds
+    one QEMU option from it. Measured on the same image: about 18 seconds with
+    KVM, 35 under Windows' WHPX, 68 under pure software emulation. The option
+    is <code>-rtc driftfix=slew</code>, which replays timer interrupts a slow
+    guest missed. ReactOS sizes every busy-wait by counting a loop between two
+    such interrupts, so replayed ones make it measure zero, and from then on
+    each delay -- even a one-microsecond one -- runs 2<sup>32</sup> times,
+    about nine seconds. AnyVM leaves that option off for ReactOS, which is why
+    it boots here and not under a hand-written QEMU command line that copies
+    the usual flags.
+  </p>
+  <p lang="zh">
+    <strong>它在任何宿主上都能启动</strong>,但前提是 AnyVM 对它少传一个 QEMU 选项。
+    同一个镜像实测:KVM 下约 18 秒,Windows 的 WHPX 下 35 秒,纯软件模拟下 68 秒。
+    那个选项是 <code>-rtc driftfix=slew</code> —— 它会把慢客户机错过的时钟中断补发
+    回去。而 ReactOS 正是靠"两次这种中断之间跑了多少圈"来标定所有忙等,补发会让它量
+    出 0,于是之后每一次延时(哪怕只要 1 微秒)都要空转 2<sup>32</sup> 次,约九秒。
+    AnyVM 对 ReactOS 不传这个选项,所以它能起来 —— 而照抄常规参数手写的 QEMU 命令行
+    往往起不来。
+  </p>
+  <p lang="en">
+    <strong>No virtio at all.</strong> The guest has no virtio block, network,
+    GPU, balloon or RNG driver, so AnyVM gives it an IDE disk, an e1000 NIC and
+    QEMU's std VGA, and leaves the balloon and RNG devices off. A virtio disk
+    would not even reach the desktop -- the boot drivers find no disk and the
+    guest bugchecks 0x7B.
+  </p>
+  <p lang="zh">
+    <strong>完全没有 virtio。</strong>这个客户机没有 virtio 的块设备、网卡、显卡、
+    balloon 和 RNG 驱动，所以 AnyVM 给它 IDE 磁盘、e1000 网卡和 QEMU 的 std VGA，
+    并且不挂 balloon 和 RNG 设备。用 virtio 磁盘的话根本进不了桌面 —— 启动驱动找不到
+    磁盘，客户机直接 0x7B 蓝屏。
   </p>
 
   <nav class="pagenav">

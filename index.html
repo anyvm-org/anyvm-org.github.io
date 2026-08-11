@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AnyVM -- run any VM anywhere</title>
-<meta name="description" content="One Python file boots 17 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
+<meta name="description" content="One Python file boots 18 operating systems across 8 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://anyvm.org/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
@@ -13,7 +13,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="AnyVM -- run any VM anywhere">
-<meta property="og:description" content="One Python file boots 17 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
+<meta property="og:description" content="One Python file boots 18 operating systems across 8 CPU architectures, on Linux, macOS and Windows.">
 <meta property="og:url" content="https://anyvm.org/">
 <meta name="twitter:card" content="summary">
 </head>
@@ -81,6 +81,7 @@
     <span>OpenIndiana</span>
     <span>NextBSD</span>
     <span>Ubuntu</span>
+    <span>ReactOS</span>
 
     <!-- Second layer: the architectures, set smaller so the guests stay the
          primary read. Aliases are included on purpose -- aarch64 and arm64
@@ -101,8 +102,8 @@
   <div class="hero-in">
 
     <div>
-      <span class="eyebrow" lang="en">17 operating systems / 7 architectures / 1 file</span>
-      <span class="eyebrow" lang="zh">17 个操作系统 / 7 种架构 / 1 个文件</span>
+      <span class="eyebrow" lang="en">18 operating systems / 8 architectures / 1 file</span>
+      <span class="eyebrow" lang="zh">18 个操作系统 / 8 种架构 / 1 个文件</span>
       <!-- Four rotating slots -- guest, architecture, host, accelerator --
            each cycling its own list independently. The motion is decorative,
            so the accessible name is the fixed claim rather than a moving
@@ -167,12 +168,13 @@
     <figure class="cov">
       <figcaption class="cov-title">
         <span lang="en">Verified coverage</span><span lang="zh">已验证覆盖</span>
-        <span lang="en">33 combinations</span><span lang="zh">33 种组合</span>
+        <span lang="en">35 combinations</span><span lang="zh">35 种组合</span>
       </figcaption>
 
       <div class="cov-grid">
         <span></span>
         <span class="axis">x86_64</span>
+        <span class="axis">i386</span>
         <span class="axis">aarch64</span>
         <span class="axis">riscv64</span>
         <span class="axis">powerpc64</span>
@@ -182,80 +184,84 @@
 
         <div class="cov-band" data-os="freebsd">
           <span class="cov-os">FreeBSD</span>
-          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="openbsd">
           <span class="cov-os">OpenBSD</span>
-          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="netbsd">
           <span class="cov-os">NetBSD</span>
-          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="dragonfly">
           <span class="cov-os">DragonFlyBSD</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="midnightbsd">
           <span class="cov-os">MidnightBSD</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="ghostbsd">
           <span class="cov-os">GhostBSD</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="nextbsd">
           <span class="cov-os">NextBSD</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
 
         <span class="cov-gap"></span>
 
         <div class="cov-band" data-os="solaris">
           <span class="cov-os">Solaris</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="omnios">
           <span class="cov-os">OmniOS</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="openindiana">
           <span class="cov-os">OpenIndiana</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="tribblix">
           <span class="cov-os">Tribblix</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
 
         <span class="cov-gap"></span>
 
         <div class="cov-band" data-os="ubuntu">
           <span class="cov-os">Ubuntu</span>
-          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="openeuler">
           <span class="cov-os">OpenEuler</span>
-          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell on"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell on"></span>
         </div>
         <div class="cov-band" data-os="blissos">
           <span class="cov-os">BlissOS</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
 
         <span class="cov-gap"></span>
 
         <div class="cov-band" data-os="haiku">
           <span class="cov-os">HaikuOS</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="hurd">
           <span class="cov-os">GNU Hurd</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="plan9">
           <span class="cov-os">Plan 9</span>
-          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="reactos">
+          <span class="cov-os">ReactOS</span>
+          <span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
       </div>
     </figure>
@@ -487,12 +493,12 @@
       <h2 lang="en">The matrix, spelled out</h2>
       <h2 lang="zh">把矩阵摊开看</h2>
       <p lang="en">
-        The same 33 combinations from the hero, in a form you can read and
+        The same 35 combinations from the hero, in a form you can read and
         link to. Each builder repository owns the full release list for its
         guest.
       </p>
       <p lang="zh">
-        还是上面那 33 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
+        还是上面那 35 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
         自己的 builder 仓库说了算。
       </p>
     </div>
@@ -503,6 +509,7 @@
           <tr>
             <th scope="col"><span lang="en">Guest</span><span lang="zh">客户机</span></th>
             <th scope="col" class="mark">x86_64</th>
+            <th scope="col" class="mark">i386</th>
             <th scope="col" class="mark">aarch64</th>
             <th scope="col" class="mark">riscv64</th>
             <th scope="col" class="mark">powerpc64</th>
@@ -515,6 +522,7 @@
           <tr data-os="freebsd">
             <th scope="row" class="row-os"><a href="/docs/guests.html#freebsd">FreeBSD</a><span class="sub">freebsd-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -525,6 +533,7 @@
           <tr data-os="openbsd">
             <th scope="row" class="row-os"><a href="/docs/guests.html#openbsd">OpenBSD</a><span class="sub">openbsd-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -535,6 +544,7 @@
           <tr data-os="netbsd">
             <th scope="row" class="row-os"><a href="/docs/guests.html#netbsd">NetBSD</a><span class="sub">netbsd-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -551,10 +561,12 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="midnightbsd">
             <th scope="row" class="row-os"><a href="/docs/guests.html#midnightbsd">MidnightBSD</a><span class="sub">midnightbsd-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -571,10 +583,12 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="nextbsd">
             <th scope="row" class="row-os"><a href="/docs/guests.html#nextbsd">NextBSD</a><span class="sub">nextbsd-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -592,10 +606,12 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="omnios">
             <th scope="row" class="row-os"><a href="/docs/guests.html#omnios">OmniOS</a><span class="sub">omnios-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -612,10 +628,12 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="tribblix">
             <th scope="row" class="row-os"><a href="/docs/guests.html#tribblix">Tribblix</a><span class="sub">tribblix-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -627,6 +645,7 @@
           <tr data-os="ubuntu">
             <th scope="row" class="row-os"><a href="/docs/guests.html#ubuntu">Ubuntu</a><span class="sub">ubuntu-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -637,6 +656,7 @@
           <tr data-os="openeuler">
             <th scope="row" class="row-os"><a href="/docs/guests.html#openeuler">OpenEuler</a><span class="sub">openeuler-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -647,6 +667,7 @@
           <tr data-os="blissos">
             <th scope="row" class="row-os"><a href="/docs/guests.html#blissos">BlissOS</a><span class="sub">Android x86 &middot; blissos-builder</span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -664,9 +685,11 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="hurd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#hurd">GNU Hurd</a><span class="sub">Debian &middot; also i386</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#hurd">GNU Hurd</a><span class="sub">Debian &middot; hurd-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -677,6 +700,18 @@
           </tr>
           <tr data-os="plan9">
             <th scope="row" class="row-os"><a href="/docs/guests.html#plan9">Plan 9</a><span class="sub">9front &middot; plan9-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+          <tr data-os="reactos">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#reactos">ReactOS</a><span class="sub">32-bit only &middot; reactos-builder</span></th>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -752,6 +787,7 @@
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/haiku-builder">haiku</a>
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/hurd-builder">hurd</a>
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/plan9-builder">plan9</a>
+          <a class="pill" data-fam="research" href="https://github.com/anyvm-org/reactos-builder">reactos</a>
         </div>
       </div>
 
@@ -831,6 +867,7 @@
           <li><a href="https://github.com/anyvm-org">github.com/anyvm-org</a></li>
           <li><a href="https://github.com/orgs/anyvm-org/repositories"><span lang="en">All repositories</span><span lang="zh">全部仓库</span></a></li>
           <li><a href="https://vmactions.org">vmactions</a></li>
+          <li><a href="https://github.com/vmactions/donate"><span lang="en">Donate</span><span lang="zh">赞助</span></a></li>
         </ul>
       </div>
     </div>

@@ -98,11 +98,11 @@
       <code>nextbsd</code>, <code>solaris</code>, <code>omnios</code>,
       <code>openindiana</code>, <code>tribblix</code>, <code>haiku</code>,
       <code>ubuntu</code>, <code>openeuler</code>, <code>blissos</code>,
-      <code>hurd</code>, <code>plan9</code>.
+      <code>hurd</code>, <code>plan9</code>, <code>reactos</code>.
       <div class="code"><pre><span class="s">$</span> anyvm --os freebsd</pre></div>
     </dd>
     <dd lang="zh">
-      要跑哪个客户机系统。这是唯一必填的选项。可选：<code>freebsd</code>、<code>ghostbsd</code>、<code>openbsd</code>、<code>netbsd</code>、<code>dragonflybsd</code>、<code>midnightbsd</code>、<code>nextbsd</code>、<code>solaris</code>、<code>omnios</code>、<code>openindiana</code>、<code>tribblix</code>、<code>haiku</code>、<code>ubuntu</code>、<code>openeuler</code>、<code>blissos</code>、<code>hurd</code>、<code>plan9</code>。
+      要跑哪个客户机系统。这是唯一必填的选项。可选：<code>freebsd</code>、<code>ghostbsd</code>、<code>openbsd</code>、<code>netbsd</code>、<code>dragonflybsd</code>、<code>midnightbsd</code>、<code>nextbsd</code>、<code>solaris</code>、<code>omnios</code>、<code>openindiana</code>、<code>tribblix</code>、<code>haiku</code>、<code>ubuntu</code>、<code>openeuler</code>、<code>blissos</code>、<code>hurd</code>、<code>plan9</code>、<code>reactos</code>。
     </dd>
 
     <dt>--release &lt;ver&gt;</dt>
@@ -298,10 +298,11 @@
       Which mechanism backs <code>-v</code>. Strictly validated -- an
       unrecognised value is an error, not a fallback.
       <code>rsync</code> (default), <code>sshfs</code>, <code>nfs</code>,
-      <code>sys-nfs</code>, <code>scp</code>, <code>9p</code>.
+      <code>sys-nfs</code>, <code>scp</code>, <code>tar</code>,
+      <code>9p</code>.
     </dd>
     <dd lang="zh">
-      <code>-v</code> 底下用什么机制。严格校验 —— 值不认识就直接报错，不会悄悄退回默认。可选 <code>rsync</code>（默认）、<code>sshfs</code>、<code>nfs</code>、<code>sys-nfs</code>、<code>scp</code>、<code>9p</code>。
+      <code>-v</code> 底下用什么机制。严格校验 —— 值不认识就直接报错，不会悄悄退回默认。可选 <code>rsync</code>（默认）、<code>sshfs</code>、<code>nfs</code>、<code>sys-nfs</code>、<code>scp</code>、<code>tar</code>、<code>9p</code>。
     </dd>
     <dd lang="en">
       <code>nfs</code> runs the bundled user-space NFS server
@@ -321,11 +322,28 @@
       <code>sys-nfs</code> 强制改用宿主的内核 NFS 服务器。需要 Linux 宿主、root 权限，并且装了内核 NFS 服务。
     </dd>
     <dd lang="en">
+      <code>tar</code> streams the folder as a ustar archive over the guest's
+      own remote-exec channel -- ssh where there is an sshd, otherwise the
+      guest's telnet server. Host to guest at boot, guest back to host when
+      your command finishes: a one-shot copy each way, not a live mount, so
+      nothing is pulled back under <code>--detach</code>. It needs no mount
+      privileges and works from any host. It is ReactOS's default and its only
+      backend.
+    </dd>
+    <dd lang="zh">
+      <code>tar</code> 把目录打成 ustar 包，从客户机自己的远程执行通道流过去 ——
+      有 sshd 就走 ssh，没有就走客户机的 telnet 服务。开机时宿主推给客户机，命令跑完
+      再从客户机拉回来：两个方向都是一次性拷贝，不是实时挂载，所以 <code>--detach</code>
+      下不会回拉。不需要挂载权限，什么宿主都能用。它是 ReactOS 的默认值，也是那里唯一
+      可用的后端。
+    </dd>
+    <dd lang="en">
       <code>9p</code> is Plan 9's backend and its default there; it needs a
       Linux host.
       <div class="code"><pre><span class="s">$</span> anyvm --os solaris --sync scp -v D:\data:/data
 <span class="s">$</span> anyvm --os freebsd --sync nfs -v "$PWD:/data"
-<span class="s">$</span> anyvm --os plan9 --sync 9p -v "$PWD:/usr/glenda/work"</pre></div>
+<span class="s">$</span> anyvm --os plan9 --sync 9p -v "$PWD:/usr/glenda/work"
+<span class="s">$</span> anyvm --os reactos --sync tar -v "$PWD:C:\work"</pre></div>
     </dd>
     <dd lang="zh">
       <code>9p</code> 是 Plan 9 的后端，也是它那里的默认值；需要 Linux 宿主。

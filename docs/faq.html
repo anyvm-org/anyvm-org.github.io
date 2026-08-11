@@ -79,6 +79,7 @@
     <li><a href="#vnc-port"><span lang="en">VNC port is busy</span><span lang="zh">VNC 端口被占</span></a></li>
     <li><a href="#proxy"><span lang="en">Behind a proxy</span><span lang="zh">在代理后面</span></a></li>
     <li><a href="#plan9-v"><span lang="en">Plan 9 ignores -v</span><span lang="zh">Plan 9 忽略 -v</span></a></li>
+    <li><a href="#reactos-arch"><span lang="en">ReactOS image not found</span><span lang="zh">ReactOS 找不到镜像</span></a></li>
   </ul>
   <h4 lang="en">Reporting</h4><h4 lang="zh">反馈</h4>
   <ul>
@@ -304,6 +305,20 @@
     （<code>mount -t 9p</code>，需要 root 或 sudo），所以只有 Linux 宿主能用。这个
     系统的其他部分 —— 启动、跑命令 —— 在哪都正常，只是跳过了目录共享。</span>
   </p>
+
+  <h2 id="reactos-arch" lang="en">ReactOS says "Cannot find the image link"</h2>
+  <h2 lang="zh">ReactOS 报 "Cannot find the image link"</h2>
+  <p>
+    <span lang="en">Update AnyVM, or add <code>--arch i386</code>. ReactOS is published for
+    32-bit x86 only. Current AnyVM resolves <code>--os reactos</code> to
+    <code>i386</code> by itself; older versions defaulted to the host
+    architecture and went looking for an x86_64 image that does not
+    exist:</span>
+    <span lang="zh">升级 AnyVM，或者加上 <code>--arch i386</code>。ReactOS 只发布 32 位 x86
+    版本。现在的 AnyVM 会自己把 <code>--os reactos</code> 解析成 <code>i386</code>；
+    旧版本按宿主架构去找，于是找一个并不存在的 x86_64 镜像：</span>
+  </p>
+  <div class="code"><pre><span class="s">$</span> anyvm --os reactos --arch i386</pre></div>
 
   <h2 id="report" lang="en">Filing a bug</h2><h2 lang="zh">提交问题</h2>
   <p>

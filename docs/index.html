@@ -366,6 +366,7 @@
         <tr><td><code>nfs</code></td><td><span lang="en">The bundled user-space NFS server (<a href="https://github.com/anyvm-org/nfsd">nfsd</a>). No kernel nfsd, no root, works on Linux, macOS and Windows hosts.</span><span lang="zh">自带的用户态 NFS 服务器（<a href="https://github.com/anyvm-org/nfsd">nfsd</a>）。不用内核 nfsd，不用 root，Linux、macOS、Windows 宿主都能用。</span></td></tr>
         <tr><td><code>sys-nfs</code></td><td><span lang="en">The host's kernel NFS server. Linux host with root only.</span><span lang="zh">宿主的内核 NFS 服务器。只能在有 root 的 Linux 宿主上用。</span></td></tr>
         <tr><td><code>scp</code></td><td><span lang="en">A one-shot copy, for guests where a live mount is a bad idea.</span><span lang="zh">一次性拷贝，给那些不适合做实时挂载的系统用。</span></td></tr>
+        <tr><td><code>tar</code></td><td><span lang="en">A one-shot copy each way, streamed as a ustar archive over the guest's own exec channel (ssh, or telnet where there is no sshd). Needs no mount privileges, works from any host. ReactOS's default and only backend.</span><span lang="zh">两个方向各拷一次，打成 ustar 包走客户机自己的执行通道（有 sshd 走 ssh，没有就走 telnet）。不需要挂载权限，什么宿主都能用。ReactOS 的默认值，也是它唯一能用的后端。</span></td></tr>
         <tr><td><code>9p</code></td><td><span lang="en">Plan&nbsp;9 only, and its default there. Mounts the guest's 9P share on the host, so it needs a Linux host.</span><span lang="zh">只用于 Plan&nbsp;9，也是它的默认值。把虚拟机的 9P 共享挂到宿主上，所以需要 Linux 宿主。</span></td></tr>
       </tbody>
     </table>
@@ -530,6 +531,22 @@
       </tbody>
     </table>
   </div>
+
+  <p lang="en">
+    i386 guests -- ReactOS, and Hurd's 32-bit image -- follow the
+    <code>x86_64</code> column: they run <code>qemu-system-i386</code>, which
+    ships in the same QEMU package as the 64-bit emulator, so any host that
+    runs x86_64 guests runs those too. On Windows AnyVM launches them on
+    <code>qemu-system-x86_64.exe</code> instead, because that is the only
+    binary Windows QEMU builds WHPX into.
+  </p>
+  <p lang="zh">
+    i386 客户机 —— ReactOS 和 Hurd 的 32 位镜像 —— 跟着 <code>x86_64</code>
+    那一列走：它们跑的是 <code>qemu-system-i386</code>，和 64 位模拟器在同一个 QEMU
+    包里，所以能跑 x86_64 客户机的宿主都能跑它们。在 Windows 上 AnyVM 会改用
+    <code>qemu-system-x86_64.exe</code> 启动它们，因为 Windows 版 QEMU 只把 WHPX
+    编进了那个二进制。
+  </p>
 
   <p lang="en">
     Hardware acceleration -- KVM, HVF or WHPX -- is detected and enabled

@@ -42,8 +42,8 @@ Then open <http://127.0.0.1:8765/>.
 
 ## Design system
 
-The direction is called **Coverage**. The subject is a tool that makes 17
-operating systems boot on 7 CPU architectures, so the coverage matrix itself
+The direction is called **Coverage**. The subject is a tool that makes 18
+operating systems boot on 8 CPU architectures, so the coverage matrix itself
 is the hero rather than a table further down the page.
 
 **Colour identifies a guest and does nothing else.** Buttons, links and focus

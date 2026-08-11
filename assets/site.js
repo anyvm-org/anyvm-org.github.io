@@ -151,13 +151,14 @@
   // who only watches a few cycles still sees the range, not four BSDs.
   var GUESTS = [
     "FreeBSD", "Solaris", "Plan 9", "Ubuntu", "OpenBSD", "HaikuOS",
-    "OmniOS", "OpenEuler", "NetBSD", "GNU Hurd", "Tribblix", "BlissOS",
-    "DragonFlyBSD", "OpenIndiana", "MidnightBSD", "GhostBSD", "NextBSD"
+    "OmniOS", "OpenEuler", "NetBSD", "GNU Hurd", "Tribblix", "ReactOS",
+    "BlissOS", "DragonFlyBSD", "OpenIndiana", "MidnightBSD", "GhostBSD",
+    "NextBSD"
   ];
   // Canonical spellings only. The aliases (arm64, amd64, ppc64le) belong in
   // the background field, not in a headline that states what is supported.
   var ARCHES = [
-    "aarch64", "x86_64", "riscv64", "sparc64", "s390x", "powerpc64",
+    "aarch64", "x86_64", "riscv64", "sparc64", "i386", "s390x", "powerpc64",
     "loongarch64"
   ];
   var HOSTS = ["Linux", "macOS", "Windows", "WSL2"];
