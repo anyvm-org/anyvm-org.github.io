@@ -175,6 +175,8 @@
   var ERASE_MS = 38;    // per character while erasing -- deleting reads faster
   var HOLD_MS = 2000;   // dwell on a finished pair
   var GAP_MS = 260;     // beat between erase and type
+  var CALM_MS = 4200;   // dwell under reduced motion -- long enough to read,
+                        // and slow enough that the swap is not itself motion
 
   // Park until the tab is actually being looked at. This waits on the EVENT,
   // never on a setTimeout poll. A hidden tab has its timers throttled to once
@@ -222,9 +224,17 @@
     var fields = [].slice.call(document.querySelectorAll(".hero h1 .typed"));
     if (!fields.length) { return; }
 
-    // Reduced motion: leave the headline on its static wording, no caret.
-    if (window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches) { return; }
+    // Reduced motion keeps the rotation and drops the motion, rather than
+    // switching the headline off. The words ARE the claim -- that this runs
+    // more than FreeBSD on aarch64 -- and a reader who asked for less movement
+    // should still get to read it. What goes is the per-character typing and
+    // the 1Hz caret, which are the actual motion; the caret is also the only
+    // thing on the page that flashes. Whole words then swap in place, slowly.
+    //
+    // Worth knowing when testing: Windows 11 turns this preference ON in
+    // several power and accessibility modes, so plenty of readers land here.
+    var calm = !!(window.matchMedia &&
+                  window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
     var lists = { guest: GUESTS, arch: ARCHES, host: HOSTS, accel: ACCEL };
 
@@ -241,18 +251,31 @@
         at: 0
       };
 
-      // Marks the slot as JS-driven: that is what reveals its caret. Without
-      // JS the headline is static and shows no cursor.
-      slot.typer.classList.add("active");
+      // Marks the slot as JS-driven: that is what reveals its caret. Left off
+      // with no JS at all, and off under reduced motion -- a blinking cursor
+      // beside a word that is not being typed would be claiming something
+      // untrue about what the page is doing.
+      if (!calm) { slot.typer.classList.add("active"); }
 
-      var dwell = HOLD_MS + i * 320;
+      var dwell = calm ? CALM_MS + i * 700 : HOLD_MS + i * 320;
 
       function loop() {
-        slot.at = (slot.at + 1) % slot.words.length;
-        retype(slot, function () { setTimeout(loop, dwell); });
+        // whenVisible for both paths: a background tab should not be quietly
+        // cycling words nobody can see, and the resume is instant either way.
+        whenVisible(function () {
+          slot.at = (slot.at + 1) % slot.words.length;
+          if (calm) {
+            slot.el.textContent = slot.words[slot.at];
+            setTimeout(loop, dwell);
+            return;
+          }
+          retype(slot, function () { setTimeout(loop, dwell); });
+        });
       }
 
-      setTimeout(loop, 900 + i * 520);
+      // The calm path opens later and spreads wider, so the first swap does
+      // not read as the page changing under the reader the moment it loads.
+      setTimeout(loop, calm ? 2600 + i * 700 : 900 + i * 520);
     });
   }
 
