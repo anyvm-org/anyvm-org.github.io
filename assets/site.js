@@ -176,6 +176,23 @@
   var HOLD_MS = 2000;   // dwell on a finished pair
   var GAP_MS = 260;     // beat between erase and type
 
+  // Park until the tab is actually being looked at. This waits on the EVENT,
+  // never on a setTimeout poll. A hidden tab has its timers throttled to once
+  // a second, and once it has been hidden for five minutes Chrome coalesces
+  // them to roughly once a MINUTE -- so a poll leaves the headline visibly
+  // frozen for up to a minute after the reader comes back. Measured here: with
+  // the old 400ms poll the typer advanced one single character in 25 seconds.
+  // visibilitychange fires the instant the tab is shown, so the resume is
+  // immediate however long it was away.
+  function whenVisible(fn) {
+    if (!document.hidden) { fn(); return; }
+    document.addEventListener("visibilitychange", function once() {
+      if (document.hidden) { return; }
+      document.removeEventListener("visibilitychange", once);
+      fn();
+    });
+  }
+
   function retype(slot, done) {
     var from = slot.el.textContent;
     var to = slot.words[slot.at];
@@ -183,7 +200,7 @@
     var grown = 0;
 
     function erase() {
-      if (document.hidden) { setTimeout(erase, 400); return; }
+      if (document.hidden) { whenVisible(erase); return; }
       cut--;
       slot.el.textContent = from.slice(0, cut > 0 ? cut : 0);
       if (cut <= 0) { setTimeout(type, GAP_MS); return; }
@@ -191,7 +208,7 @@
     }
 
     function type() {
-      if (document.hidden) { setTimeout(type, 400); return; }
+      if (document.hidden) { whenVisible(type); return; }
       grown++;
       slot.el.textContent = to.slice(0, grown);
       if (grown >= to.length) { done(); return; }
@@ -519,14 +536,32 @@
 
   /* ---- Go ---------------------------------------------------------- */
 
+  // Each feature is independent, so one failing must not take the others with
+  // it. This was not hypothetical: a null passed to ResizeObserver.observe()
+  // threw partway down the old straight-line init() and silently killed
+  // everything after it on five of the six pages. A bare chain also puts the
+  // most visible feature -- the typing headline, called last -- first in line
+  // to disappear whenever anything above it breaks.
+  function step(name, fn) {
+    try {
+      fn();
+    } catch (e) {
+      // Log rather than swallow: a feature that quietly stops working is the
+      // failure mode this wrapper exists to make loud.
+      if (window.console && console.error) {
+        console.error("anyvm: " + name + " failed to initialise", e);
+      }
+    }
+  }
+
   function init() {
-    wireLang();
-    wireTheme();
-    addCopyButtons();
-    wireTabs();
-    wireScrollSpy();
-    layoutHeroNames();
-    wireTyper();
+    step("lang", wireLang);
+    step("theme", wireTheme);
+    step("copy buttons", addCopyButtons);
+    step("tabs", wireTabs);
+    step("scroll spy", wireScrollSpy);
+    step("hero names", layoutHeroNames);
+    step("typer", wireTyper);
 
     var resizeTimer = null;
     function resolveLater() {
@@ -550,7 +585,9 @@
       window.addEventListener("resize", resolveLater);
     }
 
-    window.addEventListener("load", layoutHeroNames);
+    window.addEventListener("load", function () {
+      step("hero names (load)", layoutHeroNames);
+    });
   }
 
   if (document.readyState === "loading") {
