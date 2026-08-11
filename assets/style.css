@@ -1039,6 +1039,10 @@ tbody tr[data-os] th[scope="row"] {
 
 /* ---------- 17. Motion ---------- */
 
+/* Transitions only. The typing headline and its caret are deliberately NOT
+   suppressed here -- that is the site owner's explicit decision, and site.js
+   carries the same note where the JS check used to be. Do not "fix" the
+   inconsistency by adding .typer or .caret to this block. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; }

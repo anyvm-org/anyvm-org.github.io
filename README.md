@@ -78,6 +78,14 @@ It appears inline in each page's nav and as an SVG data URI favicon.
   the text is content rather than code. No file may carry a BOM.
 - **No external resources.** No CDN, no web fonts, no remote images. Icons
   are inline SVG.
+- **The typing headline ignores `prefers-reduced-motion`, on purpose.** That
+  check used to sit in `wireTyper()` and return early, which left the headline
+  static with no caret -- indistinguishable from broken, and Windows reports
+  the preference in more situations than you would guess. The owner's call is
+  that it always runs. `site.js` and the motion block in `style.css` both
+  carry the note; do not re-add the check as a "fix". (If it is ever
+  reinstated, the graceful form -- whole-word swaps, slow dwell, no caret --
+  was built and measured before being removed, and is in git history.)
 - **Both colour schemes, both languages.** Every surface must work under
   light and dark, and in English and Chinese; all text meets WCAG AA.
 - **Responsive down to 375px.** Wide content (tables, the matrix) scrolls
