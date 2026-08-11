@@ -266,6 +266,34 @@ code, kbd, samp, pre { font-family: var(--mono); }
 }
 .lang-toggle:hover { color: var(--fg); border-color: var(--line-2); }
 
+/* ---- Donate ---------------------------------------------------------
+   Sits with the language and theme controls rather than among the nav
+   links, because it is an action, not a destination. Distinguished by the
+   heart and the border, NOT by colour -- hue on this site means "which
+   guest", and spending it here would break that. */
+.donate {
+  display: inline-flex;
+  align-items: center; gap: 6px;
+  height: 32px; padding: 0 11px; flex: none;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  color: var(--fg-2);
+  font-size: 0.86rem;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.donate:hover { color: var(--fg); border-color: var(--line-2); text-decoration: none; }
+.donate svg { display: block; flex: none; }
+
+/* Below ~560px the label goes and the heart carries it, so the control
+   survives where the nav links are already being dropped. The selector is
+   doubled to outrank [lang="zh"][lang]. */
+@media (max-width: 560px) {
+  .donate { padding: 0 8px; }
+  .donate span[lang] { display: none; }
+}
+
 /* ---- Theme switch -------------------------------------------------
    Hidden until the inline head script adds .js: without JS the control
    cannot do anything, and a dead button is worse than no button. The page
