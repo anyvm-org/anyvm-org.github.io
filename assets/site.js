@@ -539,9 +539,14 @@
     // reflow, the headline settling -- and a stale layout means names sitting
     // on top of the text. Placed names are absolutely positioned, so they
     // cannot feed their own size back in and loop.
-    if (window.ResizeObserver) {
-      new ResizeObserver(resolveLater).observe(document.querySelector(".hero"));
-    } else {
+    //
+    // Only the landing page has a hero. Without the null check, observe()
+    // throws on the docs pages and on 404, which kills the rest of init()
+    // -- including the load handler below.
+    var hero = document.querySelector(".hero");
+    if (window.ResizeObserver && hero) {
+      new ResizeObserver(resolveLater).observe(hero);
+    } else if (hero) {
       window.addEventListener("resize", resolveLater);
     }
 

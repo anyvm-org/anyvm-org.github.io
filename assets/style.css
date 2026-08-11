@@ -286,13 +286,8 @@ code, kbd, samp, pre { font-family: var(--mono); }
 .donate:hover { color: var(--fg); border-color: var(--line-2); text-decoration: none; }
 .donate svg { display: block; flex: none; }
 
-/* Below ~560px the label goes and the heart carries it, so the control
-   survives where the nav links are already being dropped. The selector is
-   doubled to outrank [lang="zh"][lang]. */
-@media (max-width: 560px) {
-  .donate { padding: 0 8px; }
-  .donate span[lang] { display: none; }
-}
+/* The narrow-screen fallback lives with the rest of the nav shedding
+   ladder, below the theme switch, so the whole order can be read at once. */
 
 /* ---- Theme switch -------------------------------------------------
    Hidden until the inline head script adds .js: without JS the control
@@ -323,19 +318,46 @@ code, kbd, samp, pre { font-family: var(--mono); }
 :root[data-theme="light"] .theme-toggle .moon { display: block; }
 :root[data-theme="light"] .theme-toggle .sun  { display: none; }
 
+/* ---- The nav shedding ladder --------------------------------------
+   The bar loses items in a fixed order as it narrows. Adding Donate moved
+   every crossover earlier -- measured, not guessed: the widest failure was
+   561px, where four links and a labelled Donate overflowed by 10px. Each
+   step below was checked at both sides of its boundary.
+
+   Order of sacrifice, least useful first:
+     720  Ecosystem (.opt, already optional)
+     620  Install + Guests -- in-page jumps, a scroll away regardless
+     540  the row gaps tighten; Donate falls back to the bare heart
+     410  GitHub -- also the hero CTA and in the footer
+   Docs and the three controls survive to 320px. */
 @media (max-width: 720px) {
   .nav-links { gap: 14px; font-size: 0.84rem; }
   .nav-links .opt { display: none; }
 }
 
-/* Under ~440px the nav cannot hold four items beside the wordmark without
-   pushing the whole page into horizontal scroll. Drop the two in-page jumps
-   -- they only target sections of the landing page -- and keep Docs and
-   GitHub, which are the actual destinations. */
-@media (max-width: 440px) {
-  .nav-links { gap: 12px; }
+@media (max-width: 620px) {
   .nav-links a:nth-child(1),
   .nav-links a:nth-child(2) { display: none; }
+}
+
+@media (max-width: 540px) {
+  .nav-in { gap: 12px; }
+  .nav-links { gap: 12px; }
+  .donate { padding: 0 8px; }
+  /* Specificity, the hard way. The Chinese label is shown by
+     `:root[data-lang="zh"] [lang="zh"][lang] { display: revert }` -- (0,4,0),
+     and `revert` throws away the author origin, so a plain
+     `.donate span[lang]` (0,2,1) loses and the label stays put in Chinese
+     while vanishing in English. `:root` + a second [lang] gets this to
+     (0,4,1), which is the smallest thing that beats it. */
+  :root .donate span[lang][lang] { display: none; }
+}
+
+/* :last-child, not :nth-child(n) -- the 404 page's nav is one item shorter,
+   so a positional index would drop the wrong link there. GitHub is last on
+   every page. */
+@media (max-width: 410px) {
+  .nav-links a:last-child { display: none; }
 }
 
 /* ---------- 4. Buttons: neutral by design ---------- */

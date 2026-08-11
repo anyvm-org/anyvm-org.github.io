@@ -81,10 +81,46 @@ It appears inline in each page's nav and as an SVG data URI favicon.
 - **Both colour schemes, both languages.** Every surface must work under
   light and dark, and in English and Chinese; all text meets WCAG AA.
 - **Responsive down to 375px.** Wide content (tables, the matrix) scrolls
-  inside its own container -- the page body never scrolls sideways.
+  inside its own container -- the page body never scrolls sideways. The nav
+  is the part that breaks first; see below before adding anything to it.
 - Keep `assets/site.js` optional. It enhances; it must never be required to
   read or navigate a page. Without it the page is still a complete document
   in the default language, in the system theme, minus the background field.
+
+### Adding anything to the nav
+
+The bar has no room to spare. It sheds items as it narrows, in a fixed order
+set by four media queries in `style.css`:
+
+| below | what goes |
+|---|---|
+| 720px | `Ecosystem` (marked `.opt`) |
+| 620px | `Install` + `Guests` -- in-page jumps, a scroll away regardless |
+| 540px | row gaps tighten; `Donate` drops to the bare heart |
+| 410px | `GitHub` -- also the hero CTA, and in the footer |
+
+`Docs`, the wordmark and the three controls survive to 320px.
+
+Two things that are easy to get wrong here:
+
+- **English is the worst case**, not Chinese -- `Guests` is wider than
+  `客户机` and `Donate` is wider than `赞助`. Measure in English.
+- **Drop `GitHub` with `:last-child`, never `:nth-child(n)`.** The 404 page's
+  nav is one item shorter than every other page's, so a positional index
+  silently targets the wrong link there.
+
+Adding one item moves every crossover. Re-measure at each boundary in both
+languages -- `documentElement.scrollWidth - clientWidth` must stay 0 at 375px
+and at 320px.
+
+### Hiding a `[lang]` span needs more specificity than you think
+
+`:root[data-lang="zh"] [lang="zh"][lang] { display: revert }` scores (0,4,0),
+and `revert` discards the author origin outright. A plain
+`.donate span[lang] { display: none }` (0,2,1) therefore loses: the label
+vanishes in English and stays put in Chinese. Anything that hides a
+translated span from a media query has to outscore that rule --
+`:root .donate span[lang][lang]` (0,4,1) is the smallest thing that does.
 
 ### Editing these files from PowerShell: don't
 
