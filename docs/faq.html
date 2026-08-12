@@ -88,7 +88,7 @@
     <li><a href="#proxy"><span lang="en">Behind a proxy</span><span lang="zh">在代理后面</span></a></li>
     <li><a href="#plan9-v"><span lang="en">Plan 9 ignores -v</span><span lang="zh">Plan 9 忽略 -v</span></a></li>
     <li><a href="#reactos-arch"><span lang="en">ReactOS image not found</span><span lang="zh">ReactOS 找不到镜像</span></a></li>
-    <li><a href="#riscos-keyboard"><span lang="en">RISC OS ignores the keyboard</span><span lang="zh">RISC OS 键盘没反应</span></a></li>
+    <li><a href="#riscos-keyboard"><span lang="en">RISC OS ignores the keyboard and mouse</span><span lang="zh">RISC OS 键盘和鼠标都没反应</span></a></li>
   </ul>
   <h4 lang="en">Reporting</h4><h4 lang="zh">反馈</h4>
   <ul>
@@ -329,19 +329,33 @@
   </p>
   <div class="code"><pre><span class="s">$</span> anyvm --os reactos --arch i386</pre></div>
 
-  <h2 id="riscos-keyboard" lang="en">Typing into the RISC OS console does nothing</h2>
-  <h2 lang="zh">在 RISC OS 控制台里打字没有任何反应</h2>
+  <h2 id="riscos-keyboard" lang="en">The RISC OS console ignores the keyboard and the mouse</h2>
+  <h2 lang="zh">RISC OS 控制台不响应键盘和鼠标</h2>
   <p>
     <span lang="en">Expected, and not something AnyVM can fix. The Raspberry Pi
-    build of RISC OS ships no USB keyboard driver at all -- it prints
+    build of RISC OS ships no USB HID driver at all -- it prints
     <code>No keyboard present - autobooting</code> as it starts and treats
-    every attached HID device as one it has no driver for. The desktop runs
-    and the VNC console shows it, but it cannot receive keystrokes. Drive the
+    every attached HID device as one it has no driver for. Ask the guest
+    itself and it agrees: <code>USBDevices</code> lists the pointer, and
+    <code>Devices</code> shows a raw <code>USB<em>n</em></code> stream node for
+    it, but not one of the 137 loaded modules is a HID class driver. Storage
+    has <code>SCSISoftUSB</code> and networking has <code>EtherUSB</code>;
+    input has nothing, so no interrupt endpoint is ever opened. It is not a
+    QEMU problem: the device enumerates and is assigned an address, and a
+    boot-protocol mouse present from power-on behaves exactly like an absolute
+    tablet -- neither moves the pointer by a single pixel. The Wimp desktop
+    runs and the VNC console shows it, so the console is view-only. Drive the
     guest by passing a command instead:</span>
     <span lang="zh">这是预期行为，AnyVM 也修不了。树莓派版的 RISC OS 里根本没有 USB
-    键盘驱动 —— 它启动时会打印 <code>No keyboard present - autobooting</code>，并且
-    把接上的每个 HID 设备都当作没有驱动的设备。桌面能跑，VNC 控制台也看得到，但它接收
-    不到按键。请改用传命令的方式驱动它：</span>
+    HID 驱动 —— 它启动时会打印 <code>No keyboard present - autobooting</code>，并且
+    把接上的每个 HID 设备都当作没有驱动的设备。问客机自己也是同一个答案：
+    <code>USBDevices</code> 列得出指针设备，<code>Devices</code> 里也有对应的
+    <code>USB<em>n</em></code> 原始流节点，但已加载的 137 个模块里没有任何一个是 HID
+    类驱动。存储有 <code>SCSISoftUSB</code>、网络有 <code>EtherUSB</code>，输入什么都
+    没有，所以中断端点从来没被打开过。这不是 QEMU 的问题：设备枚举正常也分配到了地址，
+    而且开机就挂载的 boot 协议鼠标跟绝对定位的 tablet 表现完全一样 —— 两者都不能让指针
+    移动一个像素。Wimp 桌面照常运行、VNC 也看得到，所以控制台是只读的。请改用传命令的
+    方式驱动它：</span>
   </p>
   <div class="code"><pre><span class="s">$</span> anyvm --os riscos -- Cat $</pre></div>
 
