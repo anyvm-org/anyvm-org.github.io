@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AnyVM -- run any VM anywhere</title>
-<meta name="description" content="One Python file boots 19 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
+<meta name="description" content="One Python file boots 20 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://anyvm.org/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
@@ -13,7 +13,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="AnyVM -- run any VM anywhere">
-<meta property="og:description" content="One Python file boots 19 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
+<meta property="og:description" content="One Python file boots 20 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
 <meta property="og:url" content="https://anyvm.org/">
 <meta name="twitter:card" content="summary">
 </head>
@@ -113,8 +113,8 @@
   <div class="hero-in">
 
     <div>
-      <span class="eyebrow" lang="en">19 operating systems / 7 architectures / 1 file</span>
-      <span class="eyebrow" lang="zh">19 个操作系统 / 7 种架构 / 1 个文件</span>
+      <span class="eyebrow" lang="en">20 operating systems / 7 architectures / 1 file</span>
+      <span class="eyebrow" lang="zh">20 个操作系统 / 7 种架构 / 1 个文件</span>
       <!-- Four rotating slots -- guest, architecture, host, accelerator --
            each cycling its own list independently. The motion is decorative,
            so the accessible name is the fixed claim rather than a moving
@@ -541,7 +541,7 @@
         </thead>
         <tbody>
           <tr data-os="freebsd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#freebsd">FreeBSD</a><span class="sub">freebsd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#freebsd">FreeBSD</a><span class="sub"><a href="https://github.com/anyvm-org/freebsd-builder">freebsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -551,7 +551,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="openbsd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#openbsd">OpenBSD</a><span class="sub">openbsd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#openbsd">OpenBSD</a><span class="sub"><a href="https://github.com/anyvm-org/openbsd-builder">openbsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -561,7 +561,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="netbsd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#netbsd">NetBSD</a><span class="sub">netbsd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#netbsd">NetBSD</a><span class="sub"><a href="https://github.com/anyvm-org/netbsd-builder">netbsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -571,7 +571,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="dragonfly">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#dragonflybsd">DragonFlyBSD</a><span class="sub">dragonflybsd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#dragonflybsd">DragonFlyBSD</a><span class="sub"><a href="https://github.com/anyvm-org/dragonflybsd-builder">dragonflybsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -581,7 +581,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="midnightbsd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#midnightbsd">MidnightBSD</a><span class="sub">midnightbsd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#midnightbsd">MidnightBSD</a><span class="sub"><a href="https://github.com/anyvm-org/midnightbsd-builder">midnightbsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -591,7 +591,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="ghostbsd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#ghostbsd">GhostBSD</a><span class="sub">ghostbsd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#ghostbsd">GhostBSD</a><span class="sub"><a href="https://github.com/anyvm-org/ghostbsd-builder">ghostbsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -601,7 +601,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="nextbsd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#nextbsd">NextBSD</a><span class="sub">nextbsd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#nextbsd">NextBSD</a><span class="sub"><a href="https://github.com/anyvm-org/nextbsd-builder">nextbsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -612,7 +612,7 @@
           </tr>
 
           <tr data-os="solaris">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#solaris">Solaris</a><span class="sub">solaris-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#solaris">Solaris</a><span class="sub"><a href="https://github.com/anyvm-org/solaris-builder">solaris-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -622,7 +622,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="omnios">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#omnios">OmniOS</a><span class="sub">omnios-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#omnios">OmniOS</a><span class="sub"><a href="https://github.com/anyvm-org/omnios-builder">omnios-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -632,7 +632,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="openindiana">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#openindiana">OpenIndiana</a><span class="sub">openindiana-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#openindiana">OpenIndiana</a><span class="sub"><a href="https://github.com/anyvm-org/openindiana-builder">openindiana-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -642,7 +642,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="tribblix">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#tribblix">Tribblix</a><span class="sub">tribblix-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#tribblix">Tribblix</a><span class="sub"><a href="https://github.com/anyvm-org/tribblix-builder">tribblix-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -653,7 +653,7 @@
           </tr>
 
           <tr data-os="ubuntu">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#ubuntu">Ubuntu</a><span class="sub">ubuntu-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#ubuntu">Ubuntu</a><span class="sub"><a href="https://github.com/anyvm-org/ubuntu-builder">ubuntu-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -663,7 +663,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="openeuler">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#openeuler">OpenEuler</a><span class="sub">openeuler-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#openeuler">OpenEuler</a><span class="sub"><a href="https://github.com/anyvm-org/openeuler-builder">openeuler-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -673,7 +673,7 @@
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
           </tr>
           <tr data-os="blissos">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#blissos">BlissOS</a><span class="sub">Android x86 &middot; blissos-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#blissos">BlissOS</a><span class="sub">Android x86 &middot; <a href="https://github.com/anyvm-org/blissos-builder">blissos-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -684,7 +684,7 @@
           </tr>
 
           <tr data-os="haiku">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#haiku">HaikuOS</a><span class="sub">haiku-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#haiku">HaikuOS</a><span class="sub"><a href="https://github.com/anyvm-org/haiku-builder">haiku-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -694,7 +694,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="hurd">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#hurd">GNU Hurd</a><span class="sub">Debian &middot; also i386 &middot; hurd-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#hurd">GNU Hurd</a><span class="sub">Debian &middot; also i386 &middot; <a href="https://github.com/anyvm-org/hurd-builder">hurd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported -- x86_64 and i386"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -704,7 +704,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="plan9">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#plan9">Plan 9</a><span class="sub">9front &middot; plan9-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#plan9">Plan 9</a><span class="sub">9front &middot; <a href="https://github.com/anyvm-org/plan9-builder">plan9-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -714,7 +714,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="reactos">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#reactos">ReactOS</a><span class="sub">i386 only &middot; reactos-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#reactos">ReactOS</a><span class="sub">i386 only &middot; <a href="https://github.com/anyvm-org/reactos-builder">reactos-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported -- i386 only"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -724,7 +724,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="riscos">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#riscos">RISC OS</a><span class="sub">armv7 only &middot; riscos-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#riscos">RISC OS</a><span class="sub">armv7 only &middot; <a href="https://github.com/anyvm-org/riscos-builder">riscos-builder</a></span></th>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported -- 32-bit armv7 only"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -734,7 +734,7 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
           <tr data-os="redox">
-            <th scope="row" class="row-os"><a href="/docs/guests.html#redox">Redox OS</a><span class="sub">x86_64 &middot; redox-builder</span></th>
+            <th scope="row" class="row-os"><a href="/docs/guests.html#redox">Redox OS</a><span class="sub">x86_64 &middot; <a href="https://github.com/anyvm-org/redox-builder">redox-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>

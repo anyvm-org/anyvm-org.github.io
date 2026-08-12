@@ -42,7 +42,7 @@ Then open <http://127.0.0.1:8765/>.
 
 ## Design system
 
-The direction is called **Coverage**. The subject is a tool that makes 19
+The direction is called **Coverage**. The subject is a tool that makes 20
 operating systems boot on 7 CPU architectures, so the coverage matrix itself
 is the hero rather than a table further down the page.
 
@@ -167,6 +167,14 @@ sync backend changes, update it here in the same change:
   "N combinations" count must match the number of filled cells. A new guest
   also needs a colour (`--os-<name>`) and one line in the `[data-os=...]`
   block that both the matrix and the table read from.
+- **The guest count, which is stated four more times** and is the item this
+  list used to omit -- so it shipped stale. `index.html` says "N operating
+  systems" in `<meta name="description">`, in `<meta property="og:...">` and
+  in the hero eyebrow *twice*, once per language. The paragraph above in this
+  file says it a fifth time. Count the guests rather than incrementing: the
+  hero `.cov-band` rows, the `<tr data-os=...>` rows and the `<h2 id=...>`
+  sections in `docs/guests.html` must all agree, and if they do not, that
+  disagreement is itself the bug.
 - **The typing headline** -- `GUESTS`, `ARCHES`, `HOSTS` and `ACCEL` in
   `assets/site.js`. It claims support out loud, one word at a time, so a
   guest missing from `GUESTS` is a guest the front page never mentions. If a

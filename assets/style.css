@@ -897,6 +897,19 @@ td.mark, th.mark { text-align: center; }
   display: block; font-weight: 400;
   font-family: var(--mono); font-size: 0.71rem; color: var(--fg-3);
 }
+/* The builder name links to its repository. It keeps the muted sub-line
+   colour instead of taking the link colour: the guest stripe is the only
+   colour in this table, and a second coloured thing in the same cell would
+   compete with the one that carries meaning. The underline is what marks it
+   as a link, and it firms up on hover. */
+.row-os .sub a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 2px;
+}
+.row-os .sub a:hover,
+.row-os .sub a:focus-visible { color: var(--fg-2); text-decoration-color: currentColor; }
 .legend { margin-top: 14px; font-size: 0.85rem; color: var(--fg-2); }
 
 /* Brand stripe on the readable table, same source of truth as the matrix.
