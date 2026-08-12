@@ -91,6 +91,7 @@
     <span>Ubuntu</span>
     <span>ReactOS</span>
     <span>RISC OS</span>
+    <span>Redox OS</span>
 
     <!-- Second layer: the architectures, set smaller so the guests stay the
          primary read. Aliases are included on purpose -- aarch64 and arm64
@@ -178,7 +179,7 @@
     <figure class="cov">
       <figcaption class="cov-title">
         <span lang="en">Verified coverage</span><span lang="zh">已验证覆盖</span>
-        <span lang="en">35 combinations</span><span lang="zh">35 种组合</span>
+        <span lang="en">36 combinations</span><span lang="zh">36 种组合</span>
       </figcaption>
 
       <div class="cov-grid">
@@ -279,6 +280,10 @@
         <div class="cov-band" data-os="riscos">
           <span class="cov-os">RISC OS</span>
           <span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="redox">
+          <span class="cov-os">Redox OS</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
       </div>
     </figure>
@@ -510,12 +515,12 @@
       <h2 lang="en">The matrix, spelled out</h2>
       <h2 lang="zh">把矩阵摊开看</h2>
       <p lang="en">
-        The same 35 combinations from the hero, in a form you can read and
+        The same 36 combinations from the hero, in a form you can read and
         link to. Each builder repository owns the full release list for its
         guest.
       </p>
       <p lang="zh">
-        还是上面那 35 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
+        还是上面那 36 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
         自己的 builder 仓库说了算。
       </p>
     </div>
@@ -728,6 +733,16 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
+          <tr data-os="redox">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#redox">Redox OS</a><span class="sub">x86_64 &middot; redox-builder</span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -805,6 +820,7 @@
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/plan9-builder">plan9</a>
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/reactos-builder">reactos</a>
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/riscos-builder">riscos</a>
+          <a class="pill" data-fam="research" href="https://github.com/anyvm-org/redox-builder">redox</a>
         </div>
       </div>
 

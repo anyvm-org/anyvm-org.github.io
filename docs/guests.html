@@ -98,6 +98,7 @@
     <li><a href="#plan9">Plan 9</a></li>
     <li><a href="#reactos">ReactOS</a></li>
     <li><a href="#riscos">RISC OS</a></li>
+    <li><a href="#redox">Redox OS</a></li>
   </ul>
 </aside>
 
@@ -703,6 +704,59 @@
     并且把接上的每个 HID 设备都当成没有驱动的设备。桌面会正常启动，VNC 控制台也能看到，
     但你没法往里打字；请改用 <code>--</code> 传命令的方式驱动它。这也是构建器为什么要
     离线改盘、而不是跑安装程序的原因：根本没有可以输入的控制台。
+  </p>
+
+  <h2 id="redox" data-fam="research">Redox OS</h2>
+  <p class="meta">
+    <span>x86_64 &middot; 0.9.0</span>
+    <span><a href="https://github.com/anyvm-org/redox-builder">redox-builder</a></span>
+  </p>
+  <p lang="en">
+    A Unix-like microkernel operating system written in Rust, with its own
+    filesystem (RedoxFS), its own shell (Ion) and its own desktop (Orbital).
+    It boots, runs commands and syncs folders here. Everything in userspace is
+    a scheme rather than a syscall, which is why several things below work
+    differently from every other guest.
+  </p>
+  <p lang="zh">
+    用 Rust 写的类 Unix 微内核操作系统，自带文件系统（RedoxFS）、自带 shell（Ion）、
+    自带桌面（Orbital）。在这里能开机、能跑命令、能同步目录。它的用户态一切皆
+    scheme 而非系统调用，下面几处与其他客户机不同的行为都源于此。
+  </p>
+  <p lang="en">
+    <strong>The image carries its own agent.</strong> Redox ships no
+    remote-access server -- no sshd, no telnetd -- so redox-builder bakes one
+    in: a small telnet agent. It cannot be an ordinary program, because the
+    0.9.0 kernel has no process-creation syscall at all; spawning lives in
+    userspace, so the agent is a <code>no_std</code> binary linked against
+    Redox's own runtime rather than its C library. AnyVM drives the guest over
+    that channel, the same transport it uses for 9front, ReactOS and RISC OS.
+    <code>--sync tar</code> streams each shared folder through it as a ustar
+    archive: host to guest at boot, guest back to host once your command
+    finishes. Guest paths are ordinary Unix paths. No other backend exists
+    here -- without an sshd there is no rsync, sshfs or scp, and no 9P client.
+  </p>
+  <p lang="zh">
+    <strong>镜像自带一个 agent。</strong>Redox 没有任何远程访问服务 —— 没有 sshd，
+    也没有 telnetd —— 所以 redox-builder 自己烤了一个进去：一个小型 telnet agent。
+    它没法写成普通程序，因为 0.9.0 内核根本没有创建进程的系统调用；创建进程这件事在
+    用户态完成，于是这个 agent 是链接 Redox 自家运行时（而非 C 库）的 <code>no_std</code>
+    二进制。AnyVM 通过这条通道驱动客户机，用的是和 9front、ReactOS、RISC OS 相同的
+    传输方式。<code>--sync tar</code> 把每个共享目录打成 ustar 包从这条通道流过去：
+    开机时从宿主推给客户机，命令跑完后再从客户机拉回宿主。客户机路径就是普通的 Unix
+    路径。这里没有别的后端 —— 没有 sshd 就没有 rsync、sshfs、scp，也没有 9P 客户端。
+  </p>
+  <p lang="en">
+    <strong>The bootloader always shows a video-mode menu.</strong> It has no
+    timeout and reads no configuration, so it waits for a keypress on every
+    boot. AnyVM presses Return for you over the QEMU monitor until the guest
+    comes up, which is why a Redox boot needs no interaction even though the
+    VNC console briefly shows the menu.
+  </p>
+  <p lang="zh">
+    <strong>引导器每次开机都会弹出显示模式菜单。</strong>它没有超时、也不读任何配置，
+    所以每次都停在那里等按键。AnyVM 会通过 QEMU monitor 替你按下回车，直到客户机起来
+    为止 —— 这就是为什么 VNC 控制台会一闪而过地出现那个菜单，但整个过程不需要你动手。
   </p>
 
   <nav class="pagenav">

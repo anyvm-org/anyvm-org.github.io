@@ -107,11 +107,11 @@
       <code>openindiana</code>, <code>tribblix</code>, <code>haiku</code>,
       <code>ubuntu</code>, <code>openeuler</code>, <code>blissos</code>,
       <code>hurd</code>, <code>plan9</code>, <code>reactos</code>,
-      <code>riscos</code>.
+      <code>riscos</code>, <code>redox</code>.
       <div class="code"><pre><span class="s">$</span> anyvm --os freebsd</pre></div>
     </dd>
     <dd lang="zh">
-      要跑哪个客户机系统。这是唯一必填的选项。可选：<code>freebsd</code>、<code>ghostbsd</code>、<code>openbsd</code>、<code>netbsd</code>、<code>dragonflybsd</code>、<code>midnightbsd</code>、<code>nextbsd</code>、<code>solaris</code>、<code>omnios</code>、<code>openindiana</code>、<code>tribblix</code>、<code>haiku</code>、<code>ubuntu</code>、<code>openeuler</code>、<code>blissos</code>、<code>hurd</code>、<code>plan9</code>、<code>reactos</code>、<code>riscos</code>。
+      要跑哪个客户机系统。这是唯一必填的选项。可选：<code>freebsd</code>、<code>ghostbsd</code>、<code>openbsd</code>、<code>netbsd</code>、<code>dragonflybsd</code>、<code>midnightbsd</code>、<code>nextbsd</code>、<code>solaris</code>、<code>omnios</code>、<code>openindiana</code>、<code>tribblix</code>、<code>haiku</code>、<code>ubuntu</code>、<code>openeuler</code>、<code>blissos</code>、<code>hurd</code>、<code>plan9</code>、<code>reactos</code>、<code>riscos</code>、<code>redox</code>。
     </dd>
 
     <dt>--release &lt;ver&gt;</dt>
@@ -337,14 +337,14 @@
       your command finishes: a one-shot copy each way, not a live mount, so
       nothing is pulled back under <code>--detach</code>. It needs no mount
       privileges and works from any host. It is the default and the only
-      backend for both ReactOS and RISC OS.
+      backend for ReactOS, RISC OS and Redox OS.
     </dd>
     <dd lang="zh">
       <code>tar</code> 把目录打成 ustar 包，从客户机自己的远程执行通道流过去 ——
       有 sshd 就走 ssh，没有就走客户机的 telnet 服务。开机时宿主推给客户机，命令跑完
       再从客户机拉回来：两个方向都是一次性拷贝，不是实时挂载，所以 <code>--detach</code>
-      下不会回拉。不需要挂载权限，什么宿主都能用。ReactOS 和 RISC OS 都以它为默认值，
-      而且是这两个系统唯一可用的后端。
+      下不会回拉。不需要挂载权限，什么宿主都能用。ReactOS、RISC OS 和 Redox OS 都以它
+      为默认值，而且是这三个系统唯一可用的后端。
     </dd>
     <dd lang="en">
       <code>9p</code> is Plan 9's backend and its default there; it needs a
