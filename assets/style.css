@@ -2,7 +2,7 @@
    anyvm.org
 
    Direction: "Coverage".
-   The subject is a tool that makes 18 operating systems boot on 7 CPU
+   The subject is a tool that makes 19 operating systems boot on 7 CPU
    architectures. The most characteristic artifact in that world is the
    coverage matrix itself, so it is the hero, not a table further down.
 
@@ -63,6 +63,15 @@
   --os-hurd:        #a48fd0;  /* DERIVED -- logo is monochrome */
   --os-plan9:       #ffd324;  /* 9front.org style.css, as-is */
   --os-reactos:     #5f9bdd;  /* reactos.org style.blue.css #467fbf, lifted */
+  /* rool_header_cog.png, the pink spoke, as-is. The ROOL mark is a rainbow
+     cog -- eight equal spokes, no single logo colour -- so the spoke is
+     chosen rather than the hue averaged. Not the site masthead (#283556):
+     its hue is 223, inside the band already holding blissos 210, reactos
+     211, nextbsd 219, openeuler 220 and midnightbsd 233, and a sixth entry
+     there stops colour identifying a guest. 316 sits in the wheel's one
+     wide gap (hurd 259 -> freebsd 2). Same value in the 1x and 2x assets,
+     so it is authored, not resampling. 9.84:1 on the ink ground. */
+  --os-riscos:      #ffa2e6;
 
   /* Page surfaces (light is the default document). */
   --bg:      #ffffff;
@@ -461,22 +470,25 @@ code, kbd, samp, pre { font-family: var(--mono); }
 .hero-names span:nth-child(17) { font-size: 2.85em; opacity: .13; } /* Ubuntu */
 .hero-names span:nth-child(18) { font-size: 2.05em; opacity: .15; } /* ReactOS */
 
+.hero-names span:nth-child(19) { font-size: 1.75em; opacity: .16; } /* RISC OS */
+
 /* Architectures: a second, quieter layer. Held well below the guest sizes so
    the two read as foreground and background of the same field rather than as
    one flat list of words. These indices follow the guest list above -- adding
    a guest shifts every one of them, so renumber the whole block rather than
    appending the new name after the architectures. */
-.hero-names span:nth-child(19) { font-size: 1.35em; opacity: .18; } /* x86_64 */
-.hero-names span:nth-child(20) { font-size: 1.50em; opacity: .17; } /* aarch64 */
-.hero-names span:nth-child(21) { font-size: 1.20em; opacity: .18; } /* riscv64 */
-.hero-names span:nth-child(22) { font-size: 1.10em; opacity: .18; } /* arm64 */
-.hero-names span:nth-child(23) { font-size: 1.40em; opacity: .17; } /* sparc64 */
-.hero-names span:nth-child(24) { font-size: 1.00em; opacity: .18; } /* s390x */
-.hero-names span:nth-child(25) { font-size: 1.25em; opacity: .18; } /* loongarch64 */
-.hero-names span:nth-child(26) { font-size: 1.15em; opacity: .18; } /* ppc64le */
-.hero-names span:nth-child(27) { font-size: 1.05em; opacity: .18; } /* amd64 */
-.hero-names span:nth-child(28) { font-size: 1.30em; opacity: .17; } /* powerpc64 */
-.hero-names span:nth-child(29) { font-size: 0.95em; opacity: .18; } /* i386 */
+.hero-names span:nth-child(20) { font-size: 1.35em; opacity: .18; } /* x86_64 */
+.hero-names span:nth-child(21) { font-size: 1.50em; opacity: .17; } /* aarch64 */
+.hero-names span:nth-child(22) { font-size: 1.20em; opacity: .18; } /* riscv64 */
+.hero-names span:nth-child(23) { font-size: 1.10em; opacity: .18; } /* arm64 */
+.hero-names span:nth-child(24) { font-size: 1.40em; opacity: .17; } /* sparc64 */
+.hero-names span:nth-child(25) { font-size: 1.00em; opacity: .18; } /* s390x */
+.hero-names span:nth-child(26) { font-size: 1.25em; opacity: .18; } /* loongarch64 */
+.hero-names span:nth-child(27) { font-size: 1.15em; opacity: .18; } /* ppc64le */
+.hero-names span:nth-child(28) { font-size: 1.05em; opacity: .18; } /* amd64 */
+.hero-names span:nth-child(29) { font-size: 1.30em; opacity: .17; } /* powerpc64 */
+.hero-names span:nth-child(30) { font-size: 0.95em; opacity: .18; } /* i386 */
+.hero-names span:nth-child(31) { font-size: 1.05em; opacity: .18; } /* armv7 */
 
 @media (max-width: 1000px) { .hero-names { font-size: 0.8rem; } }
 @media (max-width: 640px)  { .hero-names { font-size: 0.6rem; } }
@@ -695,6 +707,7 @@ code, kbd, samp, pre { font-family: var(--mono); }
 [data-os="hurd"]        { --os-color: var(--os-hurd); }
 [data-os="plan9"]       { --os-color: var(--os-plan9); }
 [data-os="reactos"]     { --os-color: var(--os-reactos); }
+[data-os="riscos"]      { --os-color: var(--os-riscos); }
 
 /* One band per guest. Lineage grouping is still legible -- the gaps do that
    job -- but the colour now names the system itself, which is why there is

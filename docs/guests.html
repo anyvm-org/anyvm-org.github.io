@@ -97,6 +97,7 @@
     <li><a href="#hurd">GNU Hurd</a></li>
     <li><a href="#plan9">Plan 9</a></li>
     <li><a href="#reactos">ReactOS</a></li>
+    <li><a href="#riscos">RISC OS</a></li>
   </ul>
 </aside>
 
@@ -627,6 +628,81 @@
     balloon 和 RNG 驱动，所以 AnyVM 给它 IDE 磁盘、e1000 网卡和 QEMU 的 std VGA，
     并且不挂 balloon 和 RNG 设备。用 virtio 磁盘的话根本进不了桌面 —— 启动驱动找不到
     磁盘，客户机直接 0x7B 蓝屏。
+  </p>
+
+  <h2 id="riscos" data-fam="research">RISC OS</h2>
+  <p class="meta">
+    <span>armv7 &middot; 5.30</span>
+    <span><a href="https://github.com/anyvm-org/riscos-builder">riscos-builder</a></span>
+  </p>
+  <p lang="en">
+    The Acorn operating system, still developed, and a <strong>tech
+    preview</strong> here: it boots, runs commands and syncs a folder. RISC OS
+    is a 32-bit ARM system with no 64-bit port, so like ReactOS it is a guest
+    AnyVM does not default to your host architecture -- <code>--os riscos</code>
+    resolves to <code>armv7</code> on its own, and the machine is a Raspberry
+    Pi 2 rather than QEMU's generic <code>virt</code> board.
+  </p>
+  <p lang="zh">
+    Acorn 的操作系统，至今仍在开发，在这里属于<strong>技术预览</strong>：能开机、能跑
+    命令、能同步目录。RISC OS 是纯 32 位 ARM 系统，没有 64 位移植，所以和 ReactOS 一样，
+    它也是 AnyVM 不按宿主架构去猜的客户机 —— <code>--os riscos</code> 自己就会解析成
+    <code>armv7</code>，而且模拟的是树莓派 2 这块真实板子，不是 QEMU 通用的
+    <code>virt</code>。
+  </p>
+  <p lang="en">
+    <strong>AnyVM downloads a patched QEMU for it.</strong> No released QEMU
+    can boot RISC OS on a Raspberry Pi machine at all, so riscos-builder
+    publishes its own build and AnyVM fetches it automatically on Linux
+    x86_64. Four of the fixes in it are ordinary QEMU bugs with nothing to do
+    with RISC OS; the rest are BCM2835 peripherals the guest drives directly,
+    plus a model of the SMSC LAN9512 that is the Pi 2's real network chip and
+    the only one this guest has a driver for.
+  </p>
+  <p lang="zh">
+    <strong>AnyVM 会为它下载一个打过补丁的 QEMU。</strong>没有任何已发布的 QEMU 能在
+    树莓派机型上把 RISC OS 启动起来，所以 riscos-builder 自己构建并发布一份，AnyVM 在
+    Linux x86_64 上会自动取用。其中四个修复是与 RISC OS 无关的通用 QEMU 缺陷；其余是
+    客户机直接驱动的 BCM2835 外设，以及 SMSC LAN9512 的设备模型 —— 那是树莓派 2 上真实
+    的网卡芯片，也是这个客户机唯一有驱动的一款。
+  </p>
+  <p lang="en">
+    <strong>The image carries its own agent.</strong> RISC OS ships no
+    remote-access server of any kind: its module list has the TCP/IP stack and
+    clients, but no sshd, no telnetd and no ftpd. So riscos-builder supplies
+    one -- a small telnet agent written in Python, running on the Python 2.7
+    the RISC OS Open image already carries. AnyVM drives the guest over that
+    channel, the same transport it uses for 9front and ReactOS.
+    <code>--sync tar</code> streams each shared folder as a ustar archive down
+    it: host to guest at boot, guest back to host once your command finishes.
+    Every other backend is unavailable -- no sshd means no rsync, sshfs or
+    scp, and there is no 9P client.
+  </p>
+  <p lang="zh">
+    <strong>镜像自带一个 agent。</strong>RISC OS 完全没有远程访问服务：模块列表里有
+    TCP/IP 协议栈和各种客户端，但没有 sshd、没有 telnetd、也没有 ftpd。所以
+    riscos-builder 自己补了一个 —— 用 Python 写的小型 telnet agent，跑在 RISC OS Open
+    镜像本来就自带的 Python 2.7 上。AnyVM 通过这条通道驱动客户机，用的是和 9front、
+    ReactOS 相同的传输方式。<code>--sync tar</code> 把每个共享目录打成 ustar 包从这条
+    通道流过去：开机时从宿主推给客户机，命令跑完后再从客户机拉回宿主。其他后端都用不了
+    —— 没有 sshd 就没有 rsync、sshfs、scp，也没有 9P 客户端。
+  </p>
+  <p lang="en">
+    <strong>There is no keyboard, and that is RISC OS, not QEMU.</strong> The
+    Raspberry Pi ROM ships no USB keyboard driver at all -- it announces
+    <code>No keyboard present - autobooting</code> and treats every attached
+    HID device as one it has no driver for. The desktop starts and the VNC
+    console shows it, but you cannot type into it; drive the guest over
+    <code>--</code> commands instead. It is also why the builder prepares the
+    disc offline rather than running an installer: there is no console to type
+    one into.
+  </p>
+  <p lang="zh">
+    <strong>没有键盘，这是 RISC OS 的限制，不是 QEMU 的。</strong>树莓派版 ROM 里根本
+    没有 USB 键盘驱动 —— 它开机时会打印 <code>No keyboard present - autobooting</code>，
+    并且把接上的每个 HID 设备都当成没有驱动的设备。桌面会正常启动，VNC 控制台也能看到，
+    但你没法往里打字；请改用 <code>--</code> 传命令的方式驱动它。这也是构建器为什么要
+    离线改盘、而不是跑安装程序的原因：根本没有可以输入的控制台。
   </p>
 
   <nav class="pagenav">

@@ -153,13 +153,13 @@
     "FreeBSD", "Solaris", "Plan 9", "Ubuntu", "OpenBSD", "HaikuOS",
     "OmniOS", "OpenEuler", "NetBSD", "GNU Hurd", "Tribblix", "ReactOS",
     "BlissOS", "DragonFlyBSD", "OpenIndiana", "MidnightBSD", "GhostBSD",
-    "NextBSD"
+    "NextBSD", "RISC OS"
   ];
   // Canonical spellings only. The aliases (arm64, amd64, ppc64le) belong in
   // the background field, not in a headline that states what is supported.
   var ARCHES = [
     "aarch64", "x86_64", "riscv64", "sparc64", "i386", "s390x", "powerpc64",
-    "loongarch64"
+    "loongarch64", "armv7"
   ];
   var HOSTS = ["Linux", "macOS", "Windows", "WSL2"];
   // The hardware accelerators AnyVM picks up on its own, one per host family.

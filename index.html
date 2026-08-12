@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AnyVM -- run any VM anywhere</title>
-<meta name="description" content="One Python file boots 18 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
+<meta name="description" content="One Python file boots 19 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://anyvm.org/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
@@ -13,7 +13,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="AnyVM -- run any VM anywhere">
-<meta property="og:description" content="One Python file boots 18 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
+<meta property="og:description" content="One Python file boots 19 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
 <meta property="og:url" content="https://anyvm.org/">
 <meta name="twitter:card" content="summary">
 </head>
@@ -90,6 +90,7 @@
     <span>NextBSD</span>
     <span>Ubuntu</span>
     <span>ReactOS</span>
+    <span>RISC OS</span>
 
     <!-- Second layer: the architectures, set smaller so the guests stay the
          primary read. Aliases are included on purpose -- aarch64 and arm64
@@ -105,13 +106,14 @@
     <span>amd64</span>
     <span>powerpc64</span>
     <span>i386</span>
+    <span>armv7</span>
   </div>
 
   <div class="hero-in">
 
     <div>
-      <span class="eyebrow" lang="en">18 operating systems / 7 architectures / 1 file</span>
-      <span class="eyebrow" lang="zh">18 个操作系统 / 7 种架构 / 1 个文件</span>
+      <span class="eyebrow" lang="en">19 operating systems / 7 architectures / 1 file</span>
+      <span class="eyebrow" lang="zh">19 个操作系统 / 7 种架构 / 1 个文件</span>
       <!-- Four rotating slots -- guest, architecture, host, accelerator --
            each cycling its own list independently. The motion is decorative,
            so the accessible name is the fixed claim rather than a moving
@@ -176,7 +178,7 @@
     <figure class="cov">
       <figcaption class="cov-title">
         <span lang="en">Verified coverage</span><span lang="zh">已验证覆盖</span>
-        <span lang="en">34 combinations</span><span lang="zh">34 种组合</span>
+        <span lang="en">35 combinations</span><span lang="zh">35 种组合</span>
       </figcaption>
 
       <div class="cov-grid">
@@ -269,6 +271,14 @@
         <div class="cov-band" data-os="reactos">
           <span class="cov-os">ReactOS</span>
           <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <!-- RISC OS is 32-bit ARM only (armv7, a Raspberry Pi 2). It sits in
+             the aarch64 column for the same reason ReactOS sits in x86_64:
+             the 32-bit variant folds into its family's column rather than
+             earning an eighth axis. See the legend under the table. -->
+        <div class="cov-band" data-os="riscos">
+          <span class="cov-os">RISC OS</span>
+          <span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
       </div>
     </figure>
@@ -500,12 +510,12 @@
       <h2 lang="en">The matrix, spelled out</h2>
       <h2 lang="zh">把矩阵摊开看</h2>
       <p lang="en">
-        The same 34 combinations from the hero, in a form you can read and
+        The same 35 combinations from the hero, in a form you can read and
         link to. Each builder repository owns the full release list for its
         guest.
       </p>
       <p lang="zh">
-        还是上面那 34 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
+        还是上面那 35 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
         自己的 builder 仓库说了算。
       </p>
     </div>
@@ -708,22 +718,36 @@
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
+          <tr data-os="riscos">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#riscos">RISC OS</a><span class="sub">armv7 only &middot; riscos-builder</span></th>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported -- 32-bit armv7 only"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <p class="legend" lang="en">
       Hosts: Linux, macOS and Windows. A Linux x86_64 host -- including WSL --
-      runs every guest architecture above. The <code>x86_64</code> column also
-      covers the 32-bit <code>i386</code> images -- ReactOS has only that one,
-      GNU Hurd has both -- because they run on the same QEMU package.
+      runs every guest architecture above. Each column also covers its 32-bit
+      sibling, because both run on the same QEMU package: <code>x86_64</code>
+      includes <code>i386</code> -- ReactOS has only that one, GNU Hurd has
+      both -- and <code>aarch64</code> includes <code>armv7</code>, which is
+      RISC OS, a 32-bit ARM system with no 64-bit port.
       <a href="/docs/guests.html">Per-guest notes</a> and the
       <a href="/docs/#hosts">host matrix</a> live in the docs.
     </p>
     <p class="legend" lang="zh">
       宿主支持 Linux、macOS 和 Windows。一台 Linux x86_64（WSL 也算）能跑上面所有
-      架构。<code>x86_64</code> 这一列也包含 32 位的 <code>i386</code> 镜像 ——
-      ReactOS 只有 32 位，GNU Hurd 两种都有 —— 因为它们用的是同一个 QEMU 包。
+      架构。每一列也都包含它对应的 32 位架构，因为两者用的是同一个 QEMU 包：
+      <code>x86_64</code> 含 <code>i386</code> —— ReactOS 只有 32 位，GNU Hurd
+      两种都有 —— <code>aarch64</code> 含 <code>armv7</code>，也就是 RISC OS，
+      它是纯 32 位 ARM 系统，没有 64 位移植。
       <a href="/docs/guests.html">每个系统的说明</a>和
       <a href="/docs/#hosts">宿主对照表</a>都在文档里。
     </p>
@@ -780,6 +804,7 @@
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/hurd-builder">hurd</a>
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/plan9-builder">plan9</a>
           <a class="pill" data-fam="research" href="https://github.com/anyvm-org/reactos-builder">reactos</a>
+          <a class="pill" data-fam="research" href="https://github.com/anyvm-org/riscos-builder">riscos</a>
         </div>
       </div>
 

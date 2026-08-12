@@ -548,6 +548,19 @@
     <code>qemu-system-x86_64.exe</code> instead, because that is the only
     binary Windows QEMU builds WHPX into.
   </p>
+  <p lang="en">
+    RISC OS follows the <code>aarch64</code> column the same way, but only
+    loosely: it is 32-bit ARM, so it runs <code>qemu-system-arm</code> from
+    the same package -- and it needs a <strong>patched</strong> build, which
+    AnyVM downloads for you on Linux x86_64. There is no such build for macOS
+    or Windows hosts, so RISC OS is Linux-only for now.
+  </p>
+  <p lang="zh">
+    RISC OS 也跟着 <code>aarch64</code> 那一列走，但只是大致如此：它是 32 位 ARM，
+    跑的是同一个包里的 <code>qemu-system-arm</code> —— 而且需要一个<strong>打过补丁</strong>的
+    版本，AnyVM 会在 Linux x86_64 上自动帮你下载。macOS 和 Windows 宿主没有对应的
+    构建，所以目前 RISC OS 只能在 Linux 上跑。
+  </p>
   <p lang="zh">
     i386 客户机 —— ReactOS 和 Hurd 的 32 位镜像 —— 跟着 <code>x86_64</code>
     那一列走：它们跑的是 <code>qemu-system-i386</code>，和 64 位模拟器在同一个 QEMU
