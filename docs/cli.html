@@ -472,6 +472,18 @@
       等多久之后杀掉 QEMU 并重试一次。默认 600 秒。OpenBSD 的 aarch64 自动提到 1200，没有硬件加速时自动提到 1800 —— TCG 慢 10 到 50 倍，重的系统需要这个余量。你自己写的值永远盖过这两者。
     </dd>
 
+    <dt>--exec-timeout-sec &lt;n&gt;</dt>
+    <dd lang="en">
+      Ceiling for one guest command on the telnet-transport guests (Plan 9,
+      ReactOS, RISC OS, Redox). Completion is announced by a marker line, so
+      AnyVM waits exactly as long as the command actually runs -- this flag
+      only bounds a wedged guest. Default 7200. On expiry the command is
+      reported as exit 124.
+    </dd>
+    <dd lang="zh">
+      telnet 传输客户机（Plan 9、ReactOS、RISC OS、Redox）上单条命令的等待上限。命令结束由标记行宣告，AnyVM 会一直等到命令真正跑完 —— 这个上限只是给卡死的客户机兜底。默认 7200 秒，超时按退出码 124 上报。
+    </dd>
+
     <dt>--enable-pmu</dt>
     <dd lang="en">
       Expose the host performance monitoring unit to the guest. Off by default:
@@ -510,17 +522,54 @@
   <h2 id="exec" lang="en">Running a command</h2><h2 lang="zh">直接跑命令</h2>
 
   <dl class="dl">
+    <dt>--attach</dt>
+    <dd lang="en">
+      Talk to an already-running telnet-transport guest (one started earlier
+      with <code>--detach</code>) instead of booting anything: no download, no
+      QEMU. Needs <code>--os</code> and <code>--ssh-port</code> (the control
+      port that VM was started with). With <code>-- &lt;cmd&gt;</code> it runs
+      the command and exits with its status; with <code>--pull-files</code> it
+      copies the <code>-v</code> trees back. The ssh guests do not need it --
+      just <code>ssh &lt;vm-name&gt;</code>.
+      <div class="code"><pre><span class="s">$</span> anyvm --os reactos --ssh-port 10023 -d --sync tar -v "$PWD:C:\work"
+<span class="s">$</span> anyvm --os reactos --attach --ssh-port 10023 -- dir C:\work
+<span class="s">$</span> anyvm --os reactos --attach --ssh-port 10023 --pull-files -v "$PWD:C:\work"</pre></div>
+    </dd>
+    <dd lang="zh">
+      对一台已经在运行的 telnet 传输客户机（之前用 <code>--detach</code>
+      启动的）操作，而不是再启动一台：不下载、不起 QEMU。需要
+      <code>--os</code> 和 <code>--ssh-port</code>（启动那台 VM 时的控制端口）。接
+      <code>-- &lt;cmd&gt;</code> 在客户机里跑命令并用它的退出码退出；接
+      <code>--pull-files</code> 把 <code>-v</code> 目录拉回宿主。ssh 客户机不需要它 ——
+      直接 <code>ssh &lt;vm-name&gt;</code> 就行。
+    </dd>
+
+    <dt>--pull-files</dt>
+    <dd lang="en">
+      With <code>--attach</code>: tar-pull every <code>-v</code>
+      host:guest pair from the running guest back to the host over the telnet
+      channel. Exits 0 only when every tree came back intact.
+    </dd>
+    <dd lang="zh">
+      配合 <code>--attach</code>：把每个 <code>-v</code> host:guest
+      目录经 telnet 通道从运行中的客户机拉回宿主。全部完整拉回才以 0 退出。
+    </dd>
+
     <dt>-- &lt;cmd...&gt;</dt>
     <dd lang="en">
       Everything after <code>--</code> is executed inside the guest, and AnyVM
       exits with that command's status. This is the form to use in scripts and
-      CI.
+      CI. The telnet-transport guests carry status too: completion is detected
+      by a marker (no fixed read window to outrun), and cmd.exe on ReactOS,
+      ion on Redox and rc on Plan 9 report success or failure as exit 0/1.
+      RISC OS is the exception -- its agent has no status channel, so commands
+      there report completion only.
       <div class="code"><pre><span class="s">$</span> anyvm --os freebsd -- uname -a
 <span class="s">$</span> anyvm --os freebsd -- sh -lc "id; uname -a"
 <span class="s">$</span> anyvm --os ubuntu -v "$PWD:/src" -- sh -lc "cd /src &amp;&amp; make test"</pre></div>
     </dd>
     <dd lang="zh">
-      <code>--</code> 后面的一切都在客户机里执行，AnyVM 用那条命令的退出码退出。写脚本和 CI 时就该用这种形式。
+      <code>--</code> 后面的一切都在客户机里执行，AnyVM 用那条命令的退出码退出。写脚本和 CI 时就该用这种形式。telnet 传输的客户机同样带状态：命令结束由标记探测（没有会被超出的固定读窗口），ReactOS 的 cmd.exe、Redox 的 ion、Plan 9 的 rc 都以 0/1 上报成败。例外是 RISC OS —— 它的 agent 没有状态通道，那里的命令只上报“跑完了”。
     </dd>
   </dl>
 

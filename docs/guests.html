@@ -540,6 +540,17 @@
     a Plan 9 guest still boots and still runs commands -- only <code>-v</code>
     folder sync is skipped.
   </p>
+  <p lang="en">
+    <strong>Commands report status.</strong> A <code>-- &lt;cmd&gt;</code> run
+    (and <code>--attach</code>) chains a marker through <code>rc</code>, waits
+    until the command actually finishes, and AnyVM exits 0/1 with its result;
+    <code>--exec-timeout-sec</code> (default 7200) only bounds a wedged guest.
+  </p>
+  <p lang="zh">
+    <strong>命令带退出码。</strong><code>-- &lt;cmd&gt;</code>（以及
+    <code>--attach</code>）会经 <code>rc</code> 链上一个标记，等命令真正跑完，AnyVM
+    按 0/1 退出；<code>--exec-timeout-sec</code>（默认 7200 秒）只是给卡死的客户机兜底。
+  </p>
 
   <h2 id="reactos" data-fam="research">ReactOS</h2>
   <p class="meta">
@@ -558,6 +569,27 @@
     能跑命令、能同步目录，但成熟度不及其他客户机。上游只发布 32 位 x86，所以它是唯一
     一个 AnyVM 不按宿主架构去猜的客户机：<code>--os reactos</code> 自己就会解析成
     <code>i386</code>。
+  </p>
+  <p lang="en">
+    <strong>Commands report status.</strong> A <code>-- &lt;cmd&gt;</code> run
+    (and <code>--attach</code>) chains a marker through cmd.exe's
+    <code>&amp;&amp;</code>/<code>||</code>, waits until the command actually
+    finishes, and AnyVM exits 0/1 with its result;
+    <code>--exec-timeout-sec</code> (default 7200) only bounds a wedged guest.
+    One ReactOS quirk, probed against a live 0.4.15 guest: its cmd does not
+    set errorlevel for a failed <code>dir</code> or <code>del</code> (both
+    read as success), while <code>type</code>, <code>copy</code>, unknown
+    commands and <code>cmd /c exit N</code> all report failure correctly.
+  </p>
+  <p lang="zh">
+    <strong>命令带退出码。</strong><code>-- &lt;cmd&gt;</code>（以及
+    <code>--attach</code>）会经 cmd.exe 的
+    <code>&amp;&amp;</code>/<code>||</code> 链上一个标记，等命令真正跑完，AnyVM
+    按 0/1 退出；<code>--exec-timeout-sec</code>（默认 7200 秒）只是给卡死的客户机兜底。
+    一个 ReactOS 特有的坑（对真实 0.4.15 客户机实测）：它的 cmd 对失败的
+    <code>dir</code> 和 <code>del</code> 不置 errorlevel（都当成功），而
+    <code>type</code>、<code>copy</code>、未知命令和 <code>cmd /c exit N</code>
+    都能正确报错。
   </p>
   <p lang="en">
     <strong>The image carries its own telnet server.</strong> ReactOS ships no
@@ -652,6 +684,22 @@
     <code>virt</code>。
   </p>
   <p lang="en">
+    <strong>Commands report completion, not status.</strong> The RISC OS agent
+    is not a shell: it has no <code>&amp;&amp;</code>/<code>||</code> and no
+    status variable, so a <code>-- &lt;cmd&gt;</code> run (and
+    <code>--attach</code>) waits until the command has finished -- no fixed
+    read window -- but always exits 0 once it did, whatever the command's own
+    outcome. <code>--exec-timeout-sec</code> (default 7200) bounds a wedged
+    guest.
+  </p>
+  <p lang="zh">
+    <strong>命令只报"跑完了"，不报成败。</strong>RISC OS 的 agent 不是 shell：没有
+    <code>&amp;&amp;</code>/<code>||</code> 也没有状态变量，所以
+    <code>-- &lt;cmd&gt;</code>（以及 <code>--attach</code>）会等命令真正结束 ——
+    没有固定读窗口 —— 但一旦结束一律以 0 退出，与命令本身的成败无关。
+    <code>--exec-timeout-sec</code>（默认 7200 秒）给卡死的客户机兜底。
+  </p>
+  <p lang="en">
     <strong>AnyVM downloads a patched QEMU for it.</strong> No released QEMU
     can boot RISC OS on a Raspberry Pi machine at all, so riscos-builder
     publishes its own build and AnyVM fetches it automatically on Linux
@@ -722,6 +770,19 @@
     用 Rust 写的类 Unix 微内核操作系统，自带文件系统（RedoxFS）、自带 shell（Ion）、
     自带桌面（Orbital）。在这里能开机、能跑命令、能同步目录。它的用户态一切皆
     scheme 而非系统调用，下面几处与其他客户机不同的行为都源于此。
+  </p>
+  <p lang="en">
+    <strong>Commands report status.</strong> A <code>-- &lt;cmd&gt;</code> run
+    (and <code>--attach</code>) chains a marker through Ion's
+    <code>&amp;&amp;</code>/<code>||</code>, waits until the command actually
+    finishes, and AnyVM exits 0/1 with its result;
+    <code>--exec-timeout-sec</code> (default 7200) only bounds a wedged guest.
+  </p>
+  <p lang="zh">
+    <strong>命令带退出码。</strong><code>-- &lt;cmd&gt;</code>（以及
+    <code>--attach</code>）会经 Ion 的
+    <code>&amp;&amp;</code>/<code>||</code> 链上一个标记，等命令真正跑完，AnyVM
+    按 0/1 退出；<code>--exec-timeout-sec</code>（默认 7200 秒）只是给卡死的客户机兜底。
   </p>
   <p lang="en">
     <strong>The image carries its own agent.</strong> Redox ships no
