@@ -546,13 +546,32 @@
 
     <dt>--pull-files</dt>
     <dd lang="en">
-      With <code>--attach</code>: tar-pull every <code>-v</code>
-      host:guest pair from the running guest back to the host over the telnet
-      channel. Exits 0 only when every tree came back intact.
+      With <code>--attach</code>: copy every <code>-v</code> host:guest pair
+      from the running guest back to the host. Exits 0 only when every tree
+      came back intact. The channel follows the guest: a tar stream over
+      telnet by default, or the 9P share when you add
+      <code>--sync 9p --p9-port &lt;n&gt;</code> (Plan 9 -- its
+      <code>tar</code> does not survive the telnet pty).
     </dd>
     <dd lang="zh">
       配合 <code>--attach</code>：把每个 <code>-v</code> host:guest
-      目录经 telnet 通道从运行中的客户机拉回宿主。全部完整拉回才以 0 退出。
+      目录从运行中的客户机拉回宿主，全部完整拉回才以 0 退出。走哪条通道取决于客户机：默认是
+      telnet 上的 tar 流；加上 <code>--sync 9p --p9-port &lt;n&gt;</code>
+      则走 9P 共享（Plan 9 专用 —— 它的 <code>tar</code> 过不了 telnet 的 pty）。
+    </dd>
+
+    <dt>--p9-port &lt;n&gt;</dt>
+    <dd lang="en">
+      Pin the host port of the 9P forward for a Plan 9 guest instead of
+      letting AnyVM pick a free one. Needed whenever a later
+      <code>--attach --pull-files</code> has to reopen that channel: it runs
+      as a separate process and cannot discover a random port.
+      <div class="code"><pre><span class="s">$</span> anyvm --os plan9 --ssh-port 10023 --p9-port 20564 -d --sync 9p -v "$PWD:/usr/glenda/work"
+<span class="s">$</span> anyvm --os plan9 --attach --ssh-port 10023 --sync 9p --p9-port 20564 --pull-files -v "$PWD:/usr/glenda/work"</pre></div>
+    </dd>
+    <dd lang="zh">
+      给 Plan 9 客户机固定 9P 转发的宿主端口，而不是让 AnyVM 随机挑一个。只要之后还要用
+      <code>--attach --pull-files</code> 重新打开这条通道就必须固定：那是另一个进程，发现不了随机端口。
     </dd>
 
     <dt>-- &lt;cmd...&gt;</dt>

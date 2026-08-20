@@ -541,6 +541,20 @@
     folder sync is skipped.
   </p>
   <p lang="en">
+    Both directions are one-shot copies through that mount, not a live share:
+    the push happens at boot, and the way back is
+    <code>--attach --sync 9p --p9-port &lt;n&gt; --pull-files</code>, which is
+    why the boot needs <code>--p9-port</code> to pin the forward. It uses 9P
+    rather than the telnet tar stream every other agent guest uses because
+    9front's <code>tar</code> output does not survive the telnet pty.
+  </p>
+  <p lang="zh">
+    两个方向都是经这个挂载做的一次性拷贝，不是活共享：开机时推进去，回来则靠
+    <code>--attach --sync 9p --p9-port &lt;n&gt; --pull-files</code> ——
+    所以开机时要用 <code>--p9-port</code> 把转发端口固定下来。这里走 9P 而不是其他
+    agent 客户机用的 telnet tar 流，是因为 9front 的 <code>tar</code> 输出过不了 telnet 的 pty。
+  </p>
+  <p lang="en">
     <strong>Commands report status.</strong> A <code>-- &lt;cmd&gt;</code> run
     (and <code>--attach</code>) chains a marker through <code>rc</code>, waits
     until the command actually finishes, and AnyVM exits 0/1 with its result;
