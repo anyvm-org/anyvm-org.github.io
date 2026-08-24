@@ -153,7 +153,8 @@
     "FreeBSD", "Solaris", "Plan 9", "Ubuntu", "OpenBSD", "HaikuOS",
     "OmniOS", "OpenEuler", "NetBSD", "GNU Hurd", "Tribblix", "ReactOS",
     "BlissOS", "DragonFlyBSD", "OpenIndiana", "MidnightBSD", "GhostBSD",
-    "Redox OS", "NextBSD", "RISC OS", "HardenedBSD", "Alpine", "Debian"
+    "Redox OS", "NextBSD", "RISC OS", "HardenedBSD", "Alpine", "Debian",
+    "OPNsense"
   ];
   // Canonical spellings only. The aliases (arm64, amd64, ppc64le) belong in
   // the background field, not in a headline that states what is supported.

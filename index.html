@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AnyVM -- run any VM anywhere</title>
-<meta name="description" content="One Python file boots 23 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
+<meta name="description" content="One Python file boots 24 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://anyvm.org/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
@@ -13,7 +13,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="AnyVM -- run any VM anywhere">
-<meta property="og:description" content="One Python file boots 23 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
+<meta property="og:description" content="One Python file boots 24 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
 <meta property="og:url" content="https://anyvm.org/">
 <meta name="twitter:card" content="summary">
 </head>
@@ -95,6 +95,7 @@
     <span>HardenedBSD</span>
     <span>Alpine</span>
     <span>Debian</span>
+    <span>OPNsense</span>
 
     <!-- Second layer: the architectures, set smaller so the guests stay the
          primary read. Aliases are included on purpose -- aarch64 and arm64
@@ -116,8 +117,8 @@
   <div class="hero-in">
 
     <div>
-      <span class="eyebrow" lang="en">23 operating systems / 7 architectures / 1 file</span>
-      <span class="eyebrow" lang="zh">23 个操作系统 / 7 种架构 / 1 个文件</span>
+      <span class="eyebrow" lang="en">24 operating systems / 7 architectures / 1 file</span>
+      <span class="eyebrow" lang="zh">24 个操作系统 / 7 种架构 / 1 个文件</span>
       <!-- Four rotating slots -- guest, architecture, host, accelerator --
            each cycling its own list independently. The motion is decorative,
            so the accessible name is the fixed claim rather than a moving
@@ -182,7 +183,7 @@
     <figure class="cov">
       <figcaption class="cov-title">
         <span lang="en">Verified coverage</span><span lang="zh">已验证覆盖</span>
-        <span lang="en">44 combinations</span><span lang="zh">44 种组合</span>
+        <span lang="en">45 combinations</span><span lang="zh">45 种组合</span>
       </figcaption>
 
       <div class="cov-grid">
@@ -226,6 +227,10 @@
         <div class="cov-band" data-os="nextbsd">
           <span class="cov-os">NextBSD</span>
           <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="opnsense">
+          <span class="cov-os">OPNsense</span>
+          <span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span><span class="cov-cell"></span>
         </div>
 
         <span class="cov-gap"></span>
@@ -530,12 +535,12 @@
       <h2 lang="en">The matrix, spelled out</h2>
       <h2 lang="zh">把矩阵摊开看</h2>
       <p lang="en">
-        The same 44 combinations from the hero, in a form you can read and
+        The same 45 combinations from the hero, in a form you can read and
         link to. Each builder repository owns the full release list for its
         guest.
       </p>
       <p lang="zh">
-        还是上面那 44 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
+        还是上面那 45 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
         自己的 builder 仓库说了算。
       </p>
     </div>
@@ -629,6 +634,17 @@
             <th scope="row" class="row-os"><a href="/docs/guests.html#nextbsd">NextBSD</a><span class="sub"><a href="https://github.com/anyvm-org/nextbsd-builder">nextbsd-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
+
+          <tr data-os="opnsense">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#opnsense">OPNsense</a><span class="sub"><a href="https://github.com/anyvm-org/opnsense-builder">opnsense-builder</a></span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
@@ -854,6 +870,7 @@
           <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/midnightbsd-builder">midnightbsd</a>
           <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/ghostbsd-builder">ghostbsd</a>
           <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/nextbsd-builder">nextbsd</a>
+          <a class="pill" data-fam="bsd" href="https://github.com/anyvm-org/opnsense-builder">opnsense</a>
           <a class="pill" data-fam="illumos" href="https://github.com/anyvm-org/solaris-builder">solaris</a>
           <a class="pill" data-fam="illumos" href="https://github.com/anyvm-org/omnios-builder">omnios</a>
           <a class="pill" data-fam="illumos" href="https://github.com/anyvm-org/openindiana-builder">openindiana</a>

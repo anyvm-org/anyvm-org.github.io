@@ -42,7 +42,7 @@ Then open <http://127.0.0.1:8765/>.
 
 ## Design system
 
-The direction is called **Coverage**. The subject is a tool that makes 23
+The direction is called **Coverage**. The subject is a tool that makes 24
 operating systems boot on 7 CPU architectures, so the coverage matrix itself
 is the hero rather than a table further down the page.
 

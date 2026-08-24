@@ -78,6 +78,7 @@
     <li><a href="#midnightbsd">MidnightBSD</a></li>
     <li><a href="#ghostbsd">GhostBSD</a></li>
     <li><a href="#nextbsd">NextBSD</a></li>
+    <li><a href="#opnsense">OPNsense</a></li>
   </ul>
   <h4>illumos</h4>
   <ul>
@@ -325,6 +326,45 @@
     带 Mach IPC 的 FreeBSD，PID 1 是 <code>launchd</code> —— 没有
     <code>rc.d</code>。它从上游的滚动标签构建，所以你拿到的是哪个版本，在构建时才定。
   </p>
+
+  <h2 id="opnsense" data-fam="bsd">OPNsense</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/opnsense-builder">opnsense-builder</a></span>
+  </p>
+  <p lang="en">
+    A FreeBSD-derived firewall appliance, built from upstream's preinstalled
+    <code>nano</code> image. You get root SSH into a fully configured
+    appliance -- the console shows OPNsense's numbered menu, and the web GUI
+    is on the guest's port 443 if you forward it. Release <code>26.7</code>.
+  </p>
+  <p lang="zh">
+    基于 FreeBSD 的防火墙设备系统，用上游预装好的 <code>nano</code> 镜像构建。
+    你拿到的是一台配置完毕、可 root SSH 的设备 —— 控制台是 OPNsense 的数字菜单，
+    转发 443 端口就能开它的 Web 管理界面。版本 <code>26.7</code>。
+  </p>
+  <ul>
+    <li>
+      <span lang="en"><strong>No sshfs.</strong> OPNsense's own package
+      repository carries no fusefs-sshfs, so folder sync is
+      <code>rsync</code>, <code>scp</code>, <code>nfs</code> or
+      <code>tar</code>.</span>
+      <span lang="zh"><strong>没有 sshfs。</strong>OPNsense 自己的软件仓库里没有
+      fusefs-sshfs，目录共享用 <code>rsync</code>、<code>scp</code>、
+      <code>nfs</code> 或 <code>tar</code>。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>The root shell is csh.</strong> A command passed
+      with <code>-- cmd</code> runs under csh, where Bourne-isms like
+      <code>2&gt;&amp;1</code> are syntax errors -- wrap in
+      <code>sh -c '...'</code> when in doubt. Durable configuration lives in
+      <code>/conf/config.xml</code>, not in rc files.</span>
+      <span lang="zh"><strong>root 的 shell 是 csh。</strong>用 <code>-- cmd</code>
+      传进去的命令在 csh 下执行，<code>2&gt;&amp;1</code> 这类 Bourne 写法是语法
+      错误 —— 拿不准就包一层 <code>sh -c '...'</code>。持久配置在
+      <code>/conf/config.xml</code> 里，不在 rc 文件里。</span>
+    </li>
+  </ul>
 
   <!-- ================= illumos ================= -->
 
