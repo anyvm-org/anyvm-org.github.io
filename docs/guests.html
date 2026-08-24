@@ -89,6 +89,7 @@
   <h4>Linux</h4>
   <ul>
     <li><a href="#ubuntu">Ubuntu</a></li>
+    <li><a href="#debian">Debian</a></li>
     <li><a href="#openeuler">OpenEuler</a></li>
     <li><a href="#alpine">Alpine</a></li>
     <li><a href="#blissos">BlissOS</a></li>
@@ -471,6 +472,33 @@
       </tbody>
     </table>
   </div>
+
+  <h2 id="debian" data-fam="linux">Debian</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; riscv64 &middot; ppc64le</span>
+    <span><a href="https://github.com/anyvm-org/debian-builder">debian-builder</a></span>
+  </p>
+  <p lang="en">
+    Built from Debian's official cloud images (the full-driver
+    <code>generic</code> variant). Two releases ship -- <code>12</code>
+    (bookworm) and <code>13</code> (trixie) -- on four architectures each,
+    except riscv64, which exists for 13 only: it became a Debian release
+    architecture in trixie. rsync, sshfs and the NFS client are
+    pre-installed, so all five sync backends work on every arch.
+  </p>
+  <p lang="zh">
+    用 Debian 官方云镜像构建（全驱动的 <code>generic</code> 变体）。提供两个版本
+    —— <code>12</code>（bookworm）和 <code>13</code>（trixie），各四种架构；只有
+    riscv64 例外，仅 13 提供：它从 trixie 开始才成为 Debian 的正式发布架构。
+    rsync、sshfs 和 NFS 客户端已预装，五种同步后端在每个架构上都可用。
+  </p>
+  <p>
+    <span lang="en"><strong>The arch is spelled <code>ppc64le</code> here.</strong>
+    Debian itself calls it <code>ppc64el</code>; AnyVM uses the common
+    spelling, same as Ubuntu.</span>
+    <span lang="zh"><strong>架构名在这里写作 <code>ppc64le</code>。</strong>
+    Debian 自己叫它 <code>ppc64el</code>；AnyVM 用通用拼法，和 Ubuntu 一致。</span>
+  </p>
 
   <h2 id="openeuler" data-fam="linux">OpenEuler</h2>
   <p class="meta">
