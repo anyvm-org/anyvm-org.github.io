@@ -71,6 +71,7 @@
   <h4>BSD</h4>
   <ul>
     <li><a href="#freebsd">FreeBSD</a></li>
+    <li><a href="#hardenedbsd">HardenedBSD</a></li>
     <li><a href="#openbsd">OpenBSD</a></li>
     <li><a href="#netbsd">NetBSD</a></li>
     <li><a href="#dragonflybsd">DragonFlyBSD</a></li>
@@ -89,6 +90,7 @@
   <ul>
     <li><a href="#ubuntu">Ubuntu</a></li>
     <li><a href="#openeuler">OpenEuler</a></li>
+    <li><a href="#alpine">Alpine</a></li>
     <li><a href="#blissos">BlissOS</a></li>
   </ul>
   <h4 lang="en">Research</h4><h4 lang="zh">研究系</h4>
@@ -149,6 +151,42 @@
     桌面镜像有 XFCE、GNOME 和 KDE 三种：<code>--release 15.1-xfce</code>、
     <code>15.1-gnome</code>、<code>15.1-kde6</code>。
   </p>
+
+  <h2 id="hardenedbsd" data-fam="bsd">HardenedBSD</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/hardenedbsd-builder">hardenedbsd-builder</a></span>
+  </p>
+  <p lang="en">
+    A security-hardened FreeBSD derivative (PaX ASLR and exploit mitigations
+    baked into base). Upstream builds amd64 only and publishes no numbered
+    releases: <code>--release 15</code> follows the rolling 15-STABLE branch,
+    and each builder release freezes one of its <code>LATEST</code> builds --
+    the same model NextBSD uses.
+  </p>
+  <p lang="zh">
+    以安全加固为目标的 FreeBSD 衍生系统（PaX ASLR 等利用缓解直接进了 base）。
+    上游只构建 amd64，也不发布带版本号的正式版：<code>--release 15</code> 跟随
+    滚动的 15-STABLE 分支，每个 builder release 冻结其中一个
+    <code>LATEST</code> 构建 —— 和 NextBSD 是同一种模式。
+  </p>
+  <ul>
+    <li>
+      <span lang="en"><strong>All five sync backends work.</strong> rsync and
+      fusefs-sshfs are pre-installed, and nfs, scp and tar need nothing extra
+      -- behaviour matches FreeBSD throughout.</span>
+      <span lang="zh"><strong>五种同步后端都可用。</strong>rsync 和 fusefs-sshfs
+      已预装，nfs、scp、tar 则不需要装任何东西 —— 行为和 FreeBSD 完全一致。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>No release 14.</strong> Upstream still publishes
+      14-STABLE installers but has retired its binary package repository, so a
+      14 guest cannot even bootstrap <code>pkg</code>; only 15 ships.</span>
+      <span lang="zh"><strong>没有 14 这个版本。</strong>上游虽然还在发 14-STABLE
+      安装镜像，但二进制软件包仓库已经下线，14 的客户机连 <code>pkg</code>
+      都无法引导，所以只提供 15。</span>
+    </li>
+  </ul>
 
   <h2 id="openbsd" data-fam="bsd">OpenBSD</h2>
   <p class="meta">
@@ -460,6 +498,33 @@
   <p lang="zh">
     它的版本名自带大小写（<code>24.03-LTS-SP4</code>），不过 <code>--release</code>
     匹配时不区分大小写，写 <code>24.03-lts-sp4</code> 也能找到。
+  </p>
+
+  <h2 id="alpine" data-fam="linux">Alpine</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64</span>
+    <span><a href="https://github.com/anyvm-org/alpine-builder">alpine-builder</a></span>
+  </p>
+  <p lang="en">
+    The small musl/BusyBox Linux, built from Alpine's official cloud images.
+    Two release lines ship (<code>3.23</code>, <code>3.24</code>), each on
+    both architectures. rsync, sshfs and the NFS client are pre-installed, so
+    all five sync backends work out of the box.
+  </p>
+  <p lang="zh">
+    小巧的 musl/BusyBox Linux，用 Alpine 官方云镜像构建。提供两个版本线
+    （<code>3.23</code>、<code>3.24</code>），每个都有两种架构。rsync、sshfs
+    和 NFS 客户端已预装，五种同步后端开箱即用。
+  </p>
+  <p>
+    <span lang="en"><strong>Releases name the line, not the patch.</strong>
+    <code>--release 3.24</code> maps to whichever 3.24.x cloud image the
+    builder release pinned -- patch bumps update the image within the same
+    release name, the way Ubuntu's <code>24.04</code> behaves.</span>
+    <span lang="zh"><strong>版本号是版本线，不带补丁位。</strong>
+    <code>--release 3.24</code> 对应 builder release 当时固定的那个 3.24.x
+    云镜像 —— 补丁更新在同一个版本名内滚动，和 Ubuntu 的 <code>24.04</code>
+    是一样的方式。</span>
   </p>
 
   <h2 id="blissos" data-fam="linux">BlissOS</h2>
