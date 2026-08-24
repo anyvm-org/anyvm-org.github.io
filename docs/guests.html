@@ -92,6 +92,7 @@
     <li><a href="#ubuntu">Ubuntu</a></li>
     <li><a href="#debian">Debian</a></li>
     <li><a href="#openeuler">OpenEuler</a></li>
+    <li><a href="#rocky">Rocky</a></li>
     <li><a href="#alpine">Alpine</a></li>
     <li><a href="#blissos">BlissOS</a></li>
   </ul>
@@ -567,6 +568,45 @@
     它的版本名自带大小写（<code>24.03-LTS-SP4</code>），不过 <code>--release</code>
     匹配时不区分大小写，写 <code>24.03-lts-sp4</code> 也能找到。
   </p>
+
+  <h2 id="rocky" data-fam="linux">Rocky</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; ppc64le &middot; s390x</span>
+    <span><a href="https://github.com/anyvm-org/rocky-builder">rocky-builder</a></span>
+  </p>
+  <p lang="en">
+    The RHEL-compatible enterprise distribution, built from Rocky's official
+    GenericCloud images. Releases <code>9</code> and <code>10</code>;
+    <code>10</code> covers all four architectures, <code>9</code> ships
+    x86_64, aarch64 and s390x (upstream publishes no 9 ppc64le cloud image).
+  </p>
+  <p lang="zh">
+    与 RHEL 兼容的企业发行版，用 Rocky 官方 GenericCloud 镜像构建。提供
+    <code>9</code> 和 <code>10</code> 两个版本；<code>10</code> 四种架构齐全，
+    <code>9</code> 提供 x86_64、aarch64 和 s390x（上游没有 9 的 ppc64le 云镜像）。
+  </p>
+  <ul>
+    <li>
+      <span lang="en"><strong>No sshfs.</strong> <code>fuse-sshfs</code> is not
+      in Rocky's BaseOS or AppStream -- it lives in EPEL, and a base image
+      should not carry a third-party repository. Folder sync is
+      <code>rsync</code>, <code>scp</code>, <code>nfs</code> or
+      <code>tar</code>; all three of those packages are in BaseOS.</span>
+      <span lang="zh"><strong>没有 sshfs。</strong><code>fuse-sshfs</code> 不在
+      Rocky 的 BaseOS 或 AppStream 里 —— 它在 EPEL，而基础镜像不该自带第三方仓库。
+      目录共享用 <code>rsync</code>、<code>scp</code>、<code>nfs</code> 或
+      <code>tar</code>，这些包都在 BaseOS 里。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>SELinux runs enforcing.</strong> The image is
+      relabelled at build time so the injected SSH key carries the right
+      context. If you add files to <code>/root/.ssh</code> yourself from
+      outside the guest, relabel them or sshd will silently ignore them.</span>
+      <span lang="zh"><strong>SELinux 是 enforcing 模式。</strong>镜像在构建时做过
+      relabel，注入的 SSH key 带着正确的上下文。如果你从客户机外面自己往
+      <code>/root/.ssh</code> 加文件，记得重新打标签，否则 sshd 会默默忽略它们。</span>
+    </li>
+  </ul>
 
   <h2 id="alpine" data-fam="linux">Alpine</h2>
   <p class="meta">
