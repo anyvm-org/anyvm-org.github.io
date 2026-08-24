@@ -93,6 +93,7 @@
     <li><a href="#debian">Debian</a></li>
     <li><a href="#openeuler">OpenEuler</a></li>
     <li><a href="#rocky">Rocky</a></li>
+    <li><a href="#almalinux">AlmaLinux</a></li>
     <li><a href="#alpine">Alpine</a></li>
     <li><a href="#blissos">BlissOS</a></li>
   </ul>
@@ -605,6 +606,46 @@
       <span lang="zh"><strong>SELinux 是 enforcing 模式。</strong>镜像在构建时做过
       relabel，注入的 SSH key 带着正确的上下文。如果你从客户机外面自己往
       <code>/root/.ssh</code> 加文件，记得重新打标签，否则 sshd 会默默忽略它们。</span>
+    </li>
+  </ul>
+
+  <h2 id="almalinux" data-fam="linux">AlmaLinux</h2>
+  <p class="meta">
+    <span>x86_64 &middot; aarch64 &middot; ppc64le &middot; s390x</span>
+    <span><a href="https://github.com/anyvm-org/almalinux-builder">almalinux-builder</a></span>
+  </p>
+  <p lang="en">
+    The other RHEL-compatible enterprise distribution, built from AlmaLinux's
+    official GenericCloud images. Same shape as Rocky: releases <code>9</code>
+    and <code>10</code>, with <code>10</code> covering all four architectures
+    and <code>9</code> covering x86_64, aarch64 and s390x.
+  </p>
+  <p lang="zh">
+    另一个与 RHEL 兼容的企业发行版，用 AlmaLinux 官方 GenericCloud 镜像构建。
+    形状和 Rocky 一样：提供 <code>9</code> 和 <code>10</code>，<code>10</code>
+    四种架构齐全，<code>9</code> 提供 x86_64、aarch64 和 s390x。
+  </p>
+  <ul>
+    <li>
+      <span lang="en"><strong>No sshfs</strong>, for the same reason as Rocky:
+      <code>fuse-sshfs</code> is EPEL-only. Folder sync is <code>rsync</code>,
+      <code>scp</code>, <code>nfs</code> or <code>tar</code>. SELinux runs
+      enforcing, and the image is relabelled at build time.</span>
+      <span lang="zh"><strong>没有 sshfs</strong>，原因和 Rocky 一样：
+      <code>fuse-sshfs</code> 只在 EPEL 里。目录共享用 <code>rsync</code>、
+      <code>scp</code>、<code>nfs</code> 或 <code>tar</code>。SELinux 是
+      enforcing 模式，镜像在构建时做过 relabel。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>No 9 <code>ppc64le</code>, even though upstream
+      publishes one.</strong> Under emulation that guest boots and then loses
+      cloud-init to a repeatable crash inside Python 3.9, so it never gets a
+      network. 9 on aarch64 and s390x runs the same Python and is fine, and 10
+      on ppc64le is fine -- it is that one combination.</span>
+      <span lang="zh"><strong>没有 9 的 <code>ppc64le</code>，尽管上游有这个
+      镜像。</strong>在模拟环境下它能启动，但 cloud-init 会在 Python 3.9 里稳定
+      崩溃，导致网络起不来。9 的 aarch64 和 s390x 用同一个 Python 却没问题，10
+      的 ppc64le 也没问题 —— 只有这一个组合不行。</span>
     </li>
   </ul>
 

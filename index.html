@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AnyVM -- run any VM anywhere</title>
-<meta name="description" content="One Python file boots 25 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
+<meta name="description" content="One Python file boots 26 operating systems across 7 CPU architectures, on Linux, macOS and Windows. No libvirt, no Vagrant, no VirtualBox.">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://anyvm.org/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20rx='4'%20fill='%230a1922'/%3E%3Crect%20x='7.6'%20y='2.4'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2'%20opacity='.45'/%3E%3Crect%20x='2.4'%20y='7.6'%20width='14'%20height='14'%20rx='3.4'%20fill='none'%20stroke='%23e9f1f5'%20stroke-width='2.2'/%3E%3C/svg%3E">
@@ -13,7 +13,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="AnyVM -- run any VM anywhere">
-<meta property="og:description" content="One Python file boots 25 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
+<meta property="og:description" content="One Python file boots 26 operating systems across 7 CPU architectures, on Linux, macOS and Windows.">
 <meta property="og:url" content="https://anyvm.org/">
 <meta name="twitter:card" content="summary">
 </head>
@@ -97,6 +97,7 @@
     <span>Debian</span>
     <span>OPNsense</span>
     <span>Rocky</span>
+    <span>AlmaLinux</span>
 
     <!-- Second layer: the architectures, set smaller so the guests stay the
          primary read. Aliases are included on purpose -- aarch64 and arm64
@@ -118,8 +119,8 @@
   <div class="hero-in">
 
     <div>
-      <span class="eyebrow" lang="en">25 operating systems / 7 architectures / 1 file</span>
-      <span class="eyebrow" lang="zh">25 个操作系统 / 7 种架构 / 1 个文件</span>
+      <span class="eyebrow" lang="en">26 operating systems / 7 architectures / 1 file</span>
+      <span class="eyebrow" lang="zh">26 个操作系统 / 7 种架构 / 1 个文件</span>
       <!-- Four rotating slots -- guest, architecture, host, accelerator --
            each cycling its own list independently. The motion is decorative,
            so the accessible name is the fixed claim rather than a moving
@@ -184,7 +185,7 @@
     <figure class="cov">
       <figcaption class="cov-title">
         <span lang="en">Verified coverage</span><span lang="zh">已验证覆盖</span>
-        <span lang="en">49 combinations</span><span lang="zh">49 种组合</span>
+        <span lang="en">53 combinations</span><span lang="zh">53 种组合</span>
       </figcaption>
 
       <div class="cov-grid">
@@ -269,6 +270,10 @@
         </div>
         <div class="cov-band" data-os="rocky">
           <span class="cov-os">Rocky</span>
+          <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span>
+        </div>
+        <div class="cov-band" data-os="almalinux">
+          <span class="cov-os">AlmaLinux</span>
           <span class="cov-cell on"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span><span class="cov-cell on"></span><span class="cov-cell"></span>
         </div>
         <div class="cov-band" data-os="alpine">
@@ -540,12 +545,12 @@
       <h2 lang="en">The matrix, spelled out</h2>
       <h2 lang="zh">把矩阵摊开看</h2>
       <p lang="en">
-        The same 49 combinations from the hero, in a form you can read and
+        The same 53 combinations from the hero, in a form you can read and
         link to. Each builder repository owns the full release list for its
         guest.
       </p>
       <p lang="zh">
-        还是上面那 49 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
+        还是上面那 53 种组合，换成能读、能引用的表格。每个系统支持哪些版本，由它
         自己的 builder 仓库说了算。
       </p>
     </div>
@@ -738,6 +743,16 @@
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
             <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
           </tr>
+          <tr data-os="almalinux">
+            <th scope="row" class="row-os"><a href="/docs/guests.html#almalinux">AlmaLinux</a><span class="sub"><a href="https://github.com/anyvm-org/almalinux-builder">almalinux-builder</a></span></th>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+            <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
+            <td class="mark"><span class="mk mk-off" title="Not available"></span></td>
+          </tr>
           <tr data-os="alpine">
             <th scope="row" class="row-os"><a href="/docs/guests.html#alpine">Alpine</a><span class="sub"><a href="https://github.com/anyvm-org/alpine-builder">alpine-builder</a></span></th>
             <td class="mark"><span class="mk mk-on" title="Supported"></span></td>
@@ -893,6 +908,7 @@
           <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/ubuntu-builder">ubuntu</a>
           <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/debian-builder">debian</a>
           <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/rocky-builder">rocky</a>
+          <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/almalinux-builder">almalinux</a>
           <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/openeuler-builder">openeuler</a>
           <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/alpine-builder">alpine</a>
           <a class="pill" data-fam="linux" href="https://github.com/anyvm-org/blissos-builder">blissos</a>
