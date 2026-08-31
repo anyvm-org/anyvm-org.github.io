@@ -254,6 +254,26 @@
     <li>
       <span lang="en">sparc64 is console-only here too.</span><span lang="zh">这里的 sparc64 同样只有控制台。</span>
     </li>
+    <li>
+      <span lang="en"><strong>Fast boot: the <code>11.0-microvm</code> release
+      variant.</strong> Same install and userspace as 11.0, but anyvm boots
+      NetBSD's official MICROVM kernel directly on QEMU's
+      <code>microvm</code> machine type &mdash; no BIOS, no PCI, no ACPI,
+      virtio over MMIO &mdash; cutting boot-to-ssh about 4x (7.4s vs 29.6s
+      under KVM). Use <code>--release 11.0-microvm</code>. x86_64 and Linux
+      hosts only for now; the console is serial. No <code>nfs</code> sync
+      (the MICROVM kernel has no NFS client); <code>rsync</code>,
+      <code>scp</code>, <code>sshfs</code> and <code>tar</code> all
+      work.</span>
+      <span lang="zh"><strong>快速启动：<code>11.0-microvm</code> 发行变体。</strong>
+      安装内容和用户态与 11.0 完全相同，但 anyvm 会在 QEMU 的
+      <code>microvm</code> 机型上直接引导 NetBSD 官方的 MICROVM 内核 ——
+      没有 BIOS、PCI 和 ACPI，virtio 走 MMIO —— 到 ssh 可用的启动时间缩短约
+      4 倍（KVM 下 7.4 秒 vs 29.6 秒）。用 <code>--release 11.0-microvm</code>
+      启用。目前仅支持 x86_64 和 Linux 宿主；控制台是串口。不支持
+      <code>nfs</code> 同步（MICROVM 内核没有 NFS 客户端）；<code>rsync</code>、
+      <code>scp</code>、<code>sshfs</code>、<code>tar</code> 都可用。</span>
+    </li>
   </ul>
 
   <h2 id="dragonflybsd" data-fam="bsd">DragonFlyBSD</h2>
