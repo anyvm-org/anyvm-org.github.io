@@ -671,19 +671,22 @@
 
   <h2 id="alpine" data-fam="linux">Alpine</h2>
   <p class="meta">
-    <span>x86_64 &middot; aarch64</span>
+    <span>x86_64 &middot; aarch64 &middot; riscv64</span>
     <span><a href="https://github.com/anyvm-org/alpine-builder">alpine-builder</a></span>
   </p>
   <p lang="en">
-    The small musl/BusyBox Linux, built from Alpine's official cloud images.
-    Two release lines ship (<code>3.23</code>, <code>3.24</code>), each on
-    both architectures. rsync, sshfs and the NFS client are pre-installed, so
-    all five sync backends work out of the box.
+    The small musl/BusyBox Linux. x86_64 and aarch64 are built from Alpine's
+    official cloud images; Alpine publishes none for riscv64, so that one is
+    installed from the standard Alpine installer ISO and exists for
+    <code>3.24</code> only. Two release lines ship (<code>3.23</code>,
+    <code>3.24</code>). rsync, sshfs and the NFS client are pre-installed, so
+    all five sync backends work out of the box on every architecture.
   </p>
   <p lang="zh">
-    小巧的 musl/BusyBox Linux，用 Alpine 官方云镜像构建。提供两个版本线
-    （<code>3.23</code>、<code>3.24</code>），每个都有两种架构。rsync、sshfs
-    和 NFS 客户端已预装，五种同步后端开箱即用。
+    小巧的 musl/BusyBox Linux。x86_64 和 aarch64 用 Alpine 官方云镜像构建；
+    riscv64 上游没有云镜像，改用标准安装 ISO 安装，仅 <code>3.24</code> 提供。
+    提供两个版本线（<code>3.23</code>、<code>3.24</code>）。rsync、sshfs 和
+    NFS 客户端已预装，每种架构上五种同步后端都开箱即用。
   </p>
   <p>
     <span lang="en"><strong>Releases name the line, not the patch.</strong>
