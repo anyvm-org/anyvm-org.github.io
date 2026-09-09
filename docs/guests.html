@@ -155,6 +155,28 @@
     桌面镜像有 XFCE、GNOME 和 KDE 三种：<code>--release 15.1-xfce</code>、
     <code>15.1-gnome</code>、<code>15.1-kde6</code>。
   </p>
+  <p lang="en">
+    riscv64 is the one architecture upstream ships no packages for at all:
+    pkg.FreeBSD.org has an empty <code>FreeBSD:15:riscv64</code> repository. The
+    15.x riscv64 images therefore come with
+    <a href="https://github.com/anyvm-org/freebsd-pkg-repo">anyvm-org/freebsd-pkg-repo</a>
+    configured instead -- the ports tree cross-built with poudriere and published
+    as signed release assets -- so <code>pkg install</code> works and
+    <code>--sync rsync</code> and <code>--sync sshfs</code> are available there.
+    13.x and 14.x riscv64 have no such repository and stay on
+    <code>nfs</code>, <code>scp</code> and <code>tar</code>.
+  </p>
+  <p lang="zh">
+    riscv64 是唯一上游完全没有官方软件包的架构：pkg.FreeBSD.org 上
+    <code>FreeBSD:15:riscv64</code> 仓库是空的。所以 15.x 的 riscv64
+    镜像改用
+    <a href="https://github.com/anyvm-org/freebsd-pkg-repo">anyvm-org/freebsd-pkg-repo</a>：
+    用 poudriere 交叉编译的 ports 树，签名后作为 release 资产发布。
+    因此它们能直接 <code>pkg install</code>，也支持
+    <code>--sync rsync</code> 和 <code>--sync sshfs</code>。13.x 和 14.x 的 riscv64
+    没有这个仓库，仍然只有 <code>nfs</code>、<code>scp</code> 和
+    <code>tar</code>。
+  </p>
 
   <h2 id="hardenedbsd" data-fam="bsd">HardenedBSD</h2>
   <p class="meta">
