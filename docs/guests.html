@@ -1117,6 +1117,22 @@
     所以每次都停在那里等按键。AnyVM 会通过 QEMU monitor 替你按下回车，直到客户机起来
     为止 —— 这就是为什么 VNC 控制台会一闪而过地出现那个菜单，但整个过程不需要你动手。
   </p>
+  <p lang="en">
+    <strong>The disk does not wait for host flushes.</strong> The 0.9.0 IDE
+    driver gives every disk command one second and flushes after each write,
+    while QEMU completes a guest flush only once the host has synced the image
+    file. A single host sync slower than that makes the driver give up, and the
+    root filesystem never mounts. So AnyVM runs the Redox disk with
+    <code>cache.no-flush=on</code>: guest writes still land in the host's page
+    cache, and only a host crash could lose them.
+  </p>
+  <p lang="zh">
+    <strong>磁盘不等宿主刷盘。</strong>0.9.0 的 IDE 驱动给每条磁盘命令只留一秒，而且
+    每次写完都要刷盘；QEMU 却要等宿主把镜像文件真正写进磁盘，才算完成这次刷盘。宿主
+    只要有一次刷盘超过一秒，驱动就会放弃，根文件系统也就挂不上。所以 AnyVM 给 Redox
+    的磁盘加了 <code>cache.no-flush=on</code>：客户机写的数据照样进入宿主的页缓存，
+    只有宿主自己崩溃时才可能丢。
+  </p>
 
   <nav class="pagenav">
     <a href="/docs/">&larr; Getting started</a>
