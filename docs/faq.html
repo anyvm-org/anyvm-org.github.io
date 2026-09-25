@@ -72,6 +72,7 @@
   <ul>
     <li><a href="#pep668"><span lang="en">pip refuses to install</span><span lang="zh">pip 拒绝安装</span></a></li>
     <li><a href="#qemu-old"><span lang="en">QEMU is too old</span><span lang="zh">QEMU 太旧</span></a></li>
+    <li><a href="#edk2-lpa2"><span lang="en">aarch64 hangs at the firmware banner</span><span lang="zh">aarch64 卡在固件横幅</span></a></li>
   </ul>
   <h4 lang="en">Boot</h4><h4 lang="zh">启动</h4>
   <ul>
@@ -146,6 +147,51 @@
     combination needs what is in <a href="/docs/guests.html">guest notes</a>.</span>
     <span lang="zh">其他宿主上就得你自己装新版 QEMU。哪个组合需要什么，完整清单在
     <a href="/docs/guests.html">系统说明</a>里。</span>
+  </p>
+
+  <h2 id="edk2-lpa2" lang="en">An aarch64 guest hangs right after "UEFI firmware (version 2025.11-...)"</h2>
+  <h2 lang="zh">aarch64 客户机在 "UEFI firmware (version 2025.11-...)" 之后就卡住</h2>
+  <p>
+    <span lang="en">That line is the last thing edk2 prints before it sets up the MMU.
+    Builds from edk2-stable202508 through edk2-stable202602 -- Ubuntu 26.04's
+    <code>qemu-efi-aarch64</code> 2025.11 among them -- switch the CPU to
+    LPA2 (52-bit) mode while the early page tables in flash are still in the
+    old format, so under <code>-cpu max</code>, QEMU's TCG default for most
+    aarch64 guests, the firmware faults on its very next instruction and spins
+    forever; the guest never reaches its bootloader
+    (<a href="https://github.com/tianocore/edk2/issues/11962">tianocore/edk2#11962</a>,
+    fixed in edk2-stable202605). The fixed 2026.05 build is no way out either:
+    on QEMU 10.2.1 it raises a <code>Synchronous Exception</code> when the
+    loaders of FreeBSD 12.4 and openEuler 22.03 (GRUB 2.06) hand over to the
+    kernel. Nothing to configure: AnyVM reads the build stamp out of the host
+    firmware and, when it is a 2025.08 or later build, boots with Ubuntu
+    24.04's edk2 2024.02 firmware instead: the unmodified
+    <code>QEMU_EFI.fd</code> from Ubuntu's <code>qemu-efi-aarch64</code>
+    2024.02-2ubuntu0.9 package, published by
+    <a href="https://github.com/anyvm-org/firmware">anyvm-org/firmware</a>
+    and downloaded once (2 MB, sha256-checked).
+    <code>--firmware &lt;path|URL&gt;</code> overrides everything; passing that
+    firmware's release URL uses it on any host.</span>
+    <span lang="zh">这一行是 edk2 设置 MMU 之前打印的最后一句。edk2-stable202508 到
+    edk2-stable202602 之间的版本 —— Ubuntu 26.04 的 <code>qemu-efi-aarch64</code>
+    2025.11 就是其中之一 —— 会在 flash 里的早期页表还是旧格式的时候就把 CPU 切到
+    LPA2（52 位）模式，于是在 <code>-cpu max</code>（QEMU TCG 下大多数 aarch64
+    客户机的默认 CPU）下，固件紧接着的一条指令就出错，然后永远转圈；客户机根本
+    到不了引导程序（<a href="https://github.com/tianocore/edk2/issues/11962">tianocore/edk2#11962</a>，
+    edk2-stable202605 已修复）。修好的 2026.05 版也不能用：在 QEMU 10.2.1 上，
+    FreeBSD 12.4 和 openEuler 22.03（GRUB 2.06）的引导程序把控制权交给内核时，
+    它会报 <code>Synchronous Exception</code>。不用配置什么：AnyVM 会从宿主机固件里读出版本戳，
+    发现是 2025.08 及以后的版本，就改用 Ubuntu 24.04 的 edk2 2024.02 固件启动：Ubuntu
+    <code>qemu-efi-aarch64</code> 2024.02-2ubuntu0.9 软件包里原封不动的 <code>QEMU_EFI.fd</code>，由
+    <a href="https://github.com/anyvm-org/firmware">anyvm-org/firmware</a>
+    发布，只下载一次（2 MB，校验 sha256）。<code>--firmware &lt;路径|链接&gt;</code>
+    覆盖一切；传那份固件的 release 链接，就能在任何宿主机上用它。</span>
+  </p>
+  <p>
+    <span lang="en"><code>-cpu max,lpa2=off</code> is not a workaround: it trips a second bug in
+    the same firmware, which then faults while loading its own DXE core.</span>
+    <span lang="zh"><code>-cpu max,lpa2=off</code> 不是办法：它会撞上同一份固件里的另一个 bug，
+    加载自己的 DXE core 时照样出错。</span>
   </p>
 
   <h2 id="timeout" lang="en">The boot times out and gets killed</h2>

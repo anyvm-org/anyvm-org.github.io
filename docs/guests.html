@@ -177,6 +177,18 @@
     没有这个仓库，仍然只有 <code>nfs</code>、<code>scp</code> 和
     <code>tar</code>。
   </p>
+  <p lang="en">
+    On QEMU 10.1 and newer, riscv64 releases 13.2 through 14.3 run on
+    <code>-cpu rv64,sstc=off</code>: with the Sstc timer extension, QEMU
+    10.2.1 hangs them right after the last PCI device attaches. QEMU 8.2, and
+    FreeBSD 14.4 and later, are fine with it, so they keep it.
+  </p>
+  <p lang="zh">
+    在 QEMU 10.1 及以后的版本上，13.2 到 14.3 的 riscv64 用
+    <code>-cpu rv64,sstc=off</code> 启动：开着 Sstc 定时器扩展时，QEMU 10.2.1
+    会让它们在最后一个 PCI 设备挂载完之后就卡住。QEMU 8.2 以及 FreeBSD 14.4
+    和之后的版本开着它都没问题，所以保持不变。
+  </p>
 
   <h2 id="hardenedbsd" data-fam="bsd">HardenedBSD</h2>
   <p class="meta">
@@ -295,6 +307,17 @@
       启用。目前仅支持 x86_64 和 Linux 宿主；控制台是串口。不支持
       <code>nfs</code> 同步（MICROVM 内核没有 NFS 客户端）；<code>rsync</code>、
       <code>scp</code>、<code>sshfs</code>、<code>tar</code> 都可用。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>9.x aarch64 boots without ACPI.</strong> Through ACPI,
+      QEMU 10.2.1 hangs NetBSD 9 right after its interrupt controller attaches,
+      so AnyVM adds <code>acpi=off</code> to the machine for 9.x and the kernel
+      boots from the device tree instead. 10.x and 11.0 are unaffected and keep
+      ACPI.</span>
+      <span lang="zh"><strong>9.x 的 aarch64 不走 ACPI 启动。</strong>走 ACPI 时，
+      QEMU 10.2.1 会让 NetBSD 9 在中断控制器挂载完之后就卡住，所以 AnyVM 给 9.x 的
+      机器加上 <code>acpi=off</code>，内核改从设备树启动。10.x 和 11.0 不受影响，
+      仍然用 ACPI。</span>
     </li>
   </ul>
 
@@ -592,15 +615,17 @@
   <p lang="en">
     The only guest with a loongarch64 image. That architecture needs the EDK2
     LoongArch firmware (<code>edk2-loongarch64-code.fd</code>), which QEMU only
-    started bundling in 9.2 -- so on a Linux x86_64 host with an older system
-    QEMU, AnyVM fetches a pinned QEMU 10.2.3 for it. Always TCG, so expect it
-    to be slow.
+    started bundling in 9.2, and distro packages may leave out (Ubuntu 26.04's
+    QEMU 10.2.1 has none) -- so on a Linux x86_64 host whose system QEMU is
+    older or comes without it, AnyVM fetches a pinned QEMU 10.2.3 for it.
+    Always TCG, so expect it to be slow.
   </p>
   <p lang="zh">
     唯一有 loongarch64 镜像的系统。这个架构需要 EDK2 的 LoongArch 固件
-    （<code>edk2-loongarch64-code.fd</code>），而 QEMU 从 9.2 才开始自带 —— 所以在
-    系统 QEMU 较旧的 Linux x86_64 宿主上，AnyVM 会为它取一个固定的 QEMU 10.2.3。
-    它始终走 TCG，所以慢是正常的。
+    （<code>edk2-loongarch64-code.fd</code>），而 QEMU 从 9.2 才开始自带，发行版的
+    软件包还可能不带（Ubuntu 26.04 的 QEMU 10.2.1 就没有）—— 所以在系统 QEMU
+    较旧或者没带这份固件的 Linux x86_64 宿主上，AnyVM 会为它取一个固定的
+    QEMU 10.2.3。它始终走 TCG，所以慢是正常的。
   </p>
   <p lang="en">
     Release names carry their own capitalisation

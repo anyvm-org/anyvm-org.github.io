@@ -450,6 +450,25 @@
       用 UEFI 启动。FreeBSD 会隐式打开。
     </dd>
 
+    <dt>--firmware &lt;path|URL&gt;</dt>
+    <dd lang="en">
+      The UEFI CODE firmware to boot with, instead of the one AnyVM finds next
+      to QEMU or in the system paths; implies <code>--uefi</code>. Takes a local
+      path or an <code>https://</code> URL, which is downloaded once and kept
+      with the VM's other files. On aarch64 AnyVM already replaces a host edk2
+      build from 2025.08 on by itself (see the
+      <a href="/docs/faq.html#edk2-lpa2">FAQ</a>); to use the firmware it boots
+      instead on any host, pass its URL:
+      <div class="code"><pre><span class="s">$</span> anyvm --os freebsd --arch aarch64 --firmware https://github.com/anyvm-org/firmware/releases/download/v0.0.2/QEMU_EFI-2024.02-2ubuntu0.9.fd</pre></div>
+    </dd>
+    <dd lang="zh">
+      指定启动用的 UEFI CODE 固件，代替 AnyVM 在 QEMU 旁边或系统路径里找到的那份，
+      同时隐含 <code>--uefi</code>。可以是本地路径，也可以是 <code>https://</code>
+      链接，链接只下载一次，和这台虚拟机的其他文件放在一起。aarch64 上，宿主机固件是
+      2025.08 及以后的 edk2 版本时，AnyVM 已经会自动替换（见<a href="/docs/faq.html#edk2-lpa2">常见问题</a>）；
+      想在任何宿主机上都用替换后的那份固件，直接传它的链接即可。
+    </dd>
+
     <dt>--disktype &lt;type&gt;</dt>
     <dd lang="en">
       Disk interface, for example <code>virtio</code> or <code>ide</code>.

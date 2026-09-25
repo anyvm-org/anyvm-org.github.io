@@ -203,19 +203,30 @@
 <pre><span class="s">$</span> sudo apt-get --no-install-recommends -y install \
     zstd ovmf xz-utils qemu-utils ca-certificates \
     qemu-system-x86 qemu-system-arm qemu-efi-aarch64 \
-    qemu-efi-riscv64 qemu-system-riscv64 qemu-system-misc u-boot-qemu \
+    qemu-efi-riscv64 qemu-system-misc u-boot-qemu \
+    $(apt-cache show qemu-system-riscv &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo qemu-system-riscv) \
     qemu-system-ppc qemu-system-s390x qemu-system-sparc \
     openssh-client</pre>
   </div>
   <p lang="en">
     That list covers every guest architecture. If you only care about x86_64
     guests, <code>qemu-system-x86</code>, <code>qemu-utils</code>,
-    <code>ovmf</code> and <code>zstd</code> are enough.
+    <code>ovmf</code> and <code>zstd</code> are enough. The
+    <code>$(apt-cache show ...)</code> line adds <code>qemu-system-riscv</code>
+    where it exists: from Ubuntu 25.10 and Debian 13 on, the riscv64 emulator
+    ships in that package instead of <code>qemu-system-misc</code>. Do not
+    install <code>qemu-system-riscv64</code> or <code>qemu-system-aarch64</code>
+    by name -- those are the binaries, and Ubuntu 26.04 refuses them as
+    package names.
   </p>
   <p lang="zh">
     这一串覆盖了所有客户机架构。如果你只跑 x86_64，装
     <code>qemu-system-x86</code>、<code>qemu-utils</code>、<code>ovmf</code>
-    和 <code>zstd</code> 就够了。
+    和 <code>zstd</code> 就够了。<code>$(apt-cache show ...)</code> 那一行会在有
+    <code>qemu-system-riscv</code> 的系统上把它加进来：从 Ubuntu 25.10 和 Debian 13
+    开始，riscv64 模拟器从 <code>qemu-system-misc</code> 挪进了这个包。不要把
+    <code>qemu-system-riscv64</code> 或 <code>qemu-system-aarch64</code> 当包名装——
+    那是可执行文件的名字，Ubuntu 26.04 的 apt 不认它们。
   </p>
 
   <h3 lang="en">macOS</h3><h3 lang="zh">macOS</h3>
@@ -604,7 +615,8 @@
 <span class="s">$</span> sudo apt-get --no-install-recommends -y install \
     zstd ovmf xz-utils qemu-utils ca-certificates \
     qemu-system-x86 qemu-system-arm qemu-efi-aarch64 \
-    qemu-efi-riscv64 qemu-system-riscv64 qemu-system-misc u-boot-qemu \
+    qemu-efi-riscv64 qemu-system-misc u-boot-qemu \
+    $(apt-cache show qemu-system-riscv &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo qemu-system-riscv) \
     qemu-system-ppc qemu-system-s390x qemu-system-sparc \
     openssh-client</pre>
   </div>
