@@ -60,7 +60,7 @@
   --os-tribblix:    #3fae3f;  /* tribblix.css #006600, lifted hard */
   --os-ubuntu:      #e95420;  /* ubuntu.com styles.css, as-is */
   --os-debian:      #e34e78;  /* openlogo-nd.svg #a80030, lifted */
-  --os-rocky:       #10b981;  /* rockylinux.org/images/logo.svg, as-is */
+  --os-rockylinux:  #10b981;  /* rockylinux.org/images/logo.svg, as-is */
   --os-almalinux:   #0069da;  /* almalinux.org/images/logo.svg .st4 + site link colour, as-is */
   --os-openeuler:   #5b8cf0;  /* official logo png #204bb9, lifted */
   --os-alpine:      #2b8ec2;  /* alpinelinux-logo.svg #0d597f, lifted */
@@ -729,7 +729,7 @@ code, kbd, samp, pre { font-family: var(--mono); }
 [data-os="tribblix"]    { --os-color: var(--os-tribblix); }
 [data-os="ubuntu"]      { --os-color: var(--os-ubuntu); }
 [data-os="debian"]      { --os-color: var(--os-debian); }
-[data-os="rocky"]       { --os-color: var(--os-rocky); }
+[data-os="rockylinux"]  { --os-color: var(--os-rockylinux); }
 [data-os="almalinux"]   { --os-color: var(--os-almalinux); }
 [data-os="openeuler"]   { --os-color: var(--os-openeuler); }
 [data-os="alpine"]      { --os-color: var(--os-alpine); }
