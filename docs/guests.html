@@ -1035,21 +1035,28 @@
     —— 没有 sshd 就没有 rsync、sshfs、scp，也没有 9P 客户端。
   </p>
   <p lang="en">
-    <strong>There is no keyboard, and that is RISC OS, not QEMU.</strong> The
-    Raspberry Pi ROM ships no USB keyboard driver at all -- it announces
-    <code>No keyboard present - autobooting</code> and treats every attached
-    HID device as one it has no driver for. The desktop starts and the VNC
-    console shows it, but you cannot type into it; drive the guest over
-    <code>--</code> commands instead. It is also why the builder prepares the
-    disc offline rather than running an installer: there is no console to type
-    one into.
+    <strong>Keyboard and mouse work on the VNC console.</strong> AnyVM attaches
+    a USB keyboard and a USB mouse, and RISC OS's own <code>USBDriver</code>
+    drives both. The boot still prints
+    <code>No keyboard present - autobooting</code>: that is the kernel's
+    5-second boot-time USB discovery finding nothing that early, and the
+    desktop rescans the bus when it starts. Earlier releases of this guest
+    were look-only -- a bug in the patched QEMU stopped framing the USB bus
+    after that rescan, so no interrupt transfer ever reached the keyboard --
+    and this page used to blame RISC OS for it; that was wrong. The builder
+    still prepares the disc offline rather than running an installer, because
+    RISC OS has no text console to type one into: it consoles on the
+    framebuffer and writes nothing to serial.
   </p>
   <p lang="zh">
-    <strong>没有键盘，这是 RISC OS 的限制，不是 QEMU 的。</strong>树莓派版 ROM 里根本
-    没有 USB 键盘驱动 —— 它开机时会打印 <code>No keyboard present - autobooting</code>，
-    并且把接上的每个 HID 设备都当成没有驱动的设备。桌面会正常启动，VNC 控制台也能看到，
-    但你没法往里打字；请改用 <code>--</code> 传命令的方式驱动它。这也是构建器为什么要
-    离线改盘、而不是跑安装程序的原因：根本没有可以输入的控制台。
+    <strong>VNC 控制台上键盘和鼠标都能用。</strong>AnyVM 会挂上一个 USB 键盘和一个 USB
+    鼠标，RISC OS 自带的 <code>USBDriver</code> 就能驱动它们。开机时仍会打印
+    <code>No keyboard present - autobooting</code>：那只是内核开机 5 秒的 USB 发现窗口
+    里什么都没枚举到，桌面启动时会重新扫描总线。这个客机早先的版本确实只能看不能打字
+    —— 是打过补丁的 QEMU 在那次重新扫描之后停止了 USB 总线的帧计数，中断传输再也到不了
+    键盘 —— 本页之前把这归咎于 RISC OS，是错的。构建器仍然采用离线改盘而不是跑安装
+    程序，原因是 RISC OS 没有文本控制台可以往里输入：它的控制台在帧缓冲上，串口什么
+    都不输出。
   </p>
 
   <h2 id="redox" data-fam="research">Redox OS</h2>

@@ -378,30 +378,33 @@
   <h2 id="riscos-keyboard" lang="en">The RISC OS console ignores the keyboard and the mouse</h2>
   <h2 lang="zh">RISC OS 控制台不响应键盘和鼠标</h2>
   <p>
-    <span lang="en">Expected, and not something AnyVM can fix. The Raspberry Pi
-    build of RISC OS ships no USB HID driver at all -- it prints
-    <code>No keyboard present - autobooting</code> as it starts and treats
-    every attached HID device as one it has no driver for. Ask the guest
-    itself and it agrees: <code>USBDevices</code> lists the pointer, and
-    <code>Devices</code> shows a raw <code>USB<em>n</em></code> stream node for
-    it, but not one of the 137 loaded modules is a HID class driver. Storage
-    has <code>SCSISoftUSB</code> and networking has <code>EtherUSB</code>;
-    input has nothing, so no interrupt endpoint is ever opened. It is not a
-    QEMU problem: the device enumerates and is assigned an address, and a
-    boot-protocol mouse present from power-on behaves exactly like an absolute
-    tablet -- neither moves the pointer by a single pixel. The Wimp desktop
-    runs and the VNC console shows it, so the console is view-only. Drive the
-    guest by passing a command instead:</span>
-    <span lang="zh">这是预期行为，AnyVM 也修不了。树莓派版的 RISC OS 里根本没有 USB
-    HID 驱动 —— 它启动时会打印 <code>No keyboard present - autobooting</code>，并且
-    把接上的每个 HID 设备都当作没有驱动的设备。问客机自己也是同一个答案：
-    <code>USBDevices</code> 列得出指针设备，<code>Devices</code> 里也有对应的
-    <code>USB<em>n</em></code> 原始流节点，但已加载的 137 个模块里没有任何一个是 HID
-    类驱动。存储有 <code>SCSISoftUSB</code>、网络有 <code>EtherUSB</code>，输入什么都
-    没有，所以中断端点从来没被打开过。这不是 QEMU 的问题：设备枚举正常也分配到了地址，
-    而且开机就挂载的 boot 协议鼠标跟绝对定位的 tablet 表现完全一样 —— 两者都不能让指针
-    移动一个像素。Wimp 桌面照常运行、VNC 也看得到，所以控制台是只读的。请改用传命令的
-    方式驱动它：</span>
+    <span lang="en">Update your pins. Keyboard and mouse work with the current
+    riscos-builder and anyvm releases: anyvm attaches <code>usb-kbd</code> and
+    <code>usb-mouse</code>, and RISC OS's own <code>USBDriver</code> (its HID
+    class drivers are compiled into that module, which is why
+    <code>*Modules</code> shows no separate one) drives both. Older releases
+    were view-only because of a bug in the patched QEMU, not RISC OS: the
+    second port reset RISC OS issues when the Wimp starts stopped the USB
+    bus's frame counter, so the keyboard driver attached and then never
+    received a single interrupt transfer. This page used to say the ROM had no
+    keyboard driver; that was wrong. Two things remain true: the boot still
+    prints <code>No keyboard present - autobooting</code>, which only means
+    the kernel's 5-second boot-time USB discovery found nothing that early
+    (the desktop rescans), and a QEMU <code>usb-tablet</code> never moves the
+    pointer, because it rejects the <code>SET_PROTOCOL</code> request RISC
+    OS's mouse driver requires -- use <code>usb-mouse</code>. The guest can
+    of course still be driven without a console:</span>
+    <span lang="zh">请更新版本号。当前的 riscos-builder 和 anyvm 发布版里键盘和鼠标
+    都能用：anyvm 会挂上 <code>usb-kbd</code> 和 <code>usb-mouse</code>，RISC OS 自带的
+    <code>USBDriver</code>（HID 类驱动编在这个模块里，所以 <code>*Modules</code> 看不到
+    单独的驱动）负责驱动它们。旧版本只能看不能操作，原因在打过补丁的 QEMU 而不是
+    RISC OS：Wimp 启动时 RISC OS 会对端口做第二次 reset，之后 USB 总线的帧计数停了，
+    键盘驱动虽然挂上了，却再也收不到任何中断传输。本页以前说 ROM 里没有键盘驱动，
+    那是错的。有两点仍然成立：开机仍会打印 <code>No keyboard present -
+    autobooting</code>，这只说明内核开机 5 秒的 USB 发现窗口里没枚举到东西（桌面会
+    重新扫描）；QEMU 的 <code>usb-tablet</code> 永远动不了指针，因为它拒绝 RISC OS
+    鼠标驱动必需的 <code>SET_PROTOCOL</code> 请求 —— 请用 <code>usb-mouse</code>。
+    当然，不用控制台也照样可以驱动客机：</span>
   </p>
   <div class="code"><pre><span class="s">$</span> anyvm --os riscos -- Cat $</pre></div>
 
