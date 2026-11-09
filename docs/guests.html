@@ -264,15 +264,26 @@
       一样。</span>
     </li>
     <li>
-      <span lang="en"><strong>Boots to a text console.</strong> The Hyprland
-      desktop is installed but SDDM is off: its Hyprland greeter needs a
-      VirGL-capable virtio-gpu, which anyvm's display does not provide, so left
-      on it only shows a black screen. <code>service sddm onestart</code> starts
-      it on demand.</span>
-      <span lang="zh"><strong>启动到文本控制台。</strong>Hyprland 桌面已经装好，但
-      SDDM 默认关闭：它的 Hyprland 登录界面需要支持 VirGL 的 virtio-gpu，anyvm
-      的显示设备不提供，开着只会黑屏。需要时可以用
-      <code>service sddm onestart</code> 手动启动。</span>
+      <span lang="en"><strong>Desktop needs host 3D.</strong> Hyprland draws
+      with OpenGL, so it needs a VirGL virtio-gpu. On a Linux host whose QEMU
+      has OpenGL support (<code>qemu-system-modules-opengl</code> on
+      Ubuntu/Debian) and a <code>/dev/dri/renderD*</code> the user can open
+      (usually: member of the <code>render</code> group), anyvm gives the guest
+      <code>virtio-vga-gl</code> with an <code>egl-headless</code> display, and
+      the VNC console shows the Hyprland login screen (user <code>anyvm</code>,
+      password <code>anyvm.org</code>). Mesa's software renderer is enough, so
+      WSL2 works too. Anywhere else (macOS, Windows, no render node, or an
+      explicit <code>--vga</code>) the guest boots to a text login and SDDM
+      stays off, because its greeter cannot draw without 3D.</span>
+      <span lang="zh"><strong>桌面需要宿主机 3D。</strong>Hyprland 用 OpenGL
+      绘制，需要支持 VirGL 的 virtio-gpu。在 Linux 宿主机上，如果 QEMU 带 OpenGL
+      支持（Ubuntu/Debian 上是 <code>qemu-system-modules-opengl</code>）、并且当前
+      用户能打开 <code>/dev/dri/renderD*</code>（通常要在 <code>render</code> 组里），
+      anyvm 会给虚拟机 <code>virtio-vga-gl</code> 加 <code>egl-headless</code>
+      显示，VNC 控制台里就是 Hyprland 登录界面（用户 <code>anyvm</code>，密码
+      <code>anyvm.org</code>）。Mesa 软件渲染就够用，WSL2 也可以。其他情况（macOS、
+      Windows、没有 render node，或者指定了 <code>--vga</code>）启动到文本登录，
+      SDDM 不启动，因为没有 3D 它的登录界面画不出来。</span>
     </li>
     <li>
       <span lang="en"><strong>All five sync backends work.</strong> rsync ships
