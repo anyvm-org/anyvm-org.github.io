@@ -157,6 +157,16 @@
     <code>15.1-gnome</code>、<code>15.1-kde6</code>。
   </p>
   <p lang="en">
+    The plain releases have a UFS root. For a ZFS root, use
+    <code>--release 15.0-zfs</code> or <code>15.1-zfs</code> (x86_64, aarch64,
+    riscv64). The desktop images are ZFS too.
+  </p>
+  <p lang="zh">
+    普通版本的根文件系统都是 UFS。需要 ZFS 根的话，用
+    <code>--release 15.0-zfs</code> 或 <code>15.1-zfs</code>（x86_64、aarch64、
+    riscv64）。桌面镜像也是 ZFS。
+  </p>
+  <p lang="en">
     riscv64 is the one architecture upstream ships no packages for at all:
     pkg.FreeBSD.org has an empty <code>FreeBSD:15:riscv64</code> repository. The
     15.x riscv64 images therefore come with
