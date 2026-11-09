@@ -47,6 +47,13 @@
 
   --os-freebsd:     #e2504a;  /* freebsd.org main.min.css #ab2b28, lifted */
   --os-hardenedbsd: #2fbef2;  /* logo wordmark 2014-08-21_logo_small_03_0_0.png, as-is */
+  /* hyprbsd.org style.css --teal, the site's link colour, as-is. HyprBSD's
+     other brand colour is --orange #ef6f3c (the wordmark accent), but its
+     hue, 17, lands in the band already holding opnsense 15, ubuntu 16,
+     netbsd 16 and openbsd 11, where a fifth entry stops colour naming a
+     guest. The teal is hue 173: between rockylinux 160 and ghostbsd 188,
+     and lighter than both. 7.97:1 on the ink ground. */
+  --os-hyprbsd:     #3cc0b0;
   --os-opnsense:    #c03e14;  /* logo-opnsense.svg, as-is */
   --os-openbsd:     #e05434;  /* openbsd.org --red, dark-theme value, as-is */
   --os-netbsd:      #f2551b;  /* netbsd.org global.css #d43900, lifted */
@@ -496,24 +503,25 @@ code, kbd, samp, pre { font-family: var(--mono); }
 .hero-names span:nth-child(24) { font-size: 1.55em; opacity: .17; } /* OPNsense */
 .hero-names span:nth-child(25) { font-size: 2.25em; opacity: .15; } /* Rocky */
 .hero-names span:nth-child(26) { font-size: 1.90em; opacity: .16; } /* AlmaLinux */
+.hero-names span:nth-child(27) { font-size: 1.85em; opacity: .16; } /* HyprBSD */
 
 /* Architectures: a second, quieter layer. Held well below the guest sizes so
    the two read as foreground and background of the same field rather than as
    one flat list of words. These indices follow the guest list above -- adding
    a guest shifts every one of them, so renumber the whole block rather than
    appending the new name after the architectures. */
-.hero-names span:nth-child(27) { font-size: 1.35em; opacity: .18; } /* x86_64 */
-.hero-names span:nth-child(28) { font-size: 1.50em; opacity: .17; } /* aarch64 */
-.hero-names span:nth-child(29) { font-size: 1.20em; opacity: .18; } /* riscv64 */
-.hero-names span:nth-child(30) { font-size: 1.10em; opacity: .18; } /* arm64 */
-.hero-names span:nth-child(31) { font-size: 1.40em; opacity: .17; } /* sparc64 */
-.hero-names span:nth-child(32) { font-size: 1.00em; opacity: .18; } /* s390x */
-.hero-names span:nth-child(33) { font-size: 1.25em; opacity: .18; } /* loongarch64 */
-.hero-names span:nth-child(34) { font-size: 1.15em; opacity: .18; } /* ppc64le */
-.hero-names span:nth-child(35) { font-size: 1.05em; opacity: .18; } /* amd64 */
-.hero-names span:nth-child(36) { font-size: 1.30em; opacity: .17; } /* powerpc64 */
-.hero-names span:nth-child(37) { font-size: 0.95em; opacity: .18; } /* i386 */
-.hero-names span:nth-child(38) { font-size: 1.05em; opacity: .18; } /* armv7 */
+.hero-names span:nth-child(28) { font-size: 1.35em; opacity: .18; } /* x86_64 */
+.hero-names span:nth-child(29) { font-size: 1.50em; opacity: .17; } /* aarch64 */
+.hero-names span:nth-child(30) { font-size: 1.20em; opacity: .18; } /* riscv64 */
+.hero-names span:nth-child(31) { font-size: 1.10em; opacity: .18; } /* arm64 */
+.hero-names span:nth-child(32) { font-size: 1.40em; opacity: .17; } /* sparc64 */
+.hero-names span:nth-child(33) { font-size: 1.00em; opacity: .18; } /* s390x */
+.hero-names span:nth-child(34) { font-size: 1.25em; opacity: .18; } /* loongarch64 */
+.hero-names span:nth-child(35) { font-size: 1.15em; opacity: .18; } /* ppc64le */
+.hero-names span:nth-child(36) { font-size: 1.05em; opacity: .18; } /* amd64 */
+.hero-names span:nth-child(37) { font-size: 1.30em; opacity: .17; } /* powerpc64 */
+.hero-names span:nth-child(38) { font-size: 0.95em; opacity: .18; } /* i386 */
+.hero-names span:nth-child(39) { font-size: 1.05em; opacity: .18; } /* armv7 */
 
 @media (max-width: 1000px) { .hero-names { font-size: 0.8rem; } }
 @media (max-width: 640px)  { .hero-names { font-size: 0.6rem; } }
@@ -716,6 +724,7 @@ code, kbd, samp, pre { font-family: var(--mono); }
    above and one line here -- nowhere else. */
 [data-os="freebsd"]     { --os-color: var(--os-freebsd); }
 [data-os="hardenedbsd"] { --os-color: var(--os-hardenedbsd); }
+[data-os="hyprbsd"]     { --os-color: var(--os-hyprbsd); }
 [data-os="opnsense"]    { --os-color: var(--os-opnsense); }
 [data-os="openbsd"]     { --os-color: var(--os-openbsd); }
 [data-os="netbsd"]      { --os-color: var(--os-netbsd); }

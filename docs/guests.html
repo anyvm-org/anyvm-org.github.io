@@ -72,6 +72,7 @@
   <ul>
     <li><a href="#freebsd">FreeBSD</a></li>
     <li><a href="#hardenedbsd">HardenedBSD</a></li>
+    <li><a href="#hyprbsd">HyprBSD</a></li>
     <li><a href="#openbsd">OpenBSD</a></li>
     <li><a href="#netbsd">NetBSD</a></li>
     <li><a href="#dragonflybsd">DragonFlyBSD</a></li>
@@ -223,6 +224,54 @@
       <span lang="zh"><strong>没有 14 这个版本。</strong>上游虽然还在发 14-STABLE
       安装镜像，但二进制软件包仓库已经下线，14 的客户机连 <code>pkg</code>
       都无法引导，所以只提供 15。</span>
+    </li>
+  </ul>
+
+  <h2 id="hyprbsd" data-fam="bsd">HyprBSD</h2>
+  <p class="meta">
+    <span>x86_64</span>
+    <span><a href="https://github.com/anyvm-org/hyprbsd-builder">hyprbsd-builder</a></span>
+  </p>
+  <p lang="en">
+    FreeBSD 15.1 with a preconfigured Hyprland desktop. Upstream builds amd64
+    only and publishes one installer ISO per release, and the image is put on
+    disk by HyprBSD's own unattended installer. Until the final 15.1 ISO is
+    published, <code>--release 15.1</code> is built from the 15.1-rc3 ISO; the
+    release keeps its name when the final ISO arrives.
+  </p>
+  <p lang="zh">
+    预装 Hyprland 桌面的 FreeBSD 15.1。上游只构建 amd64，每个版本只发布一个安装
+    ISO，镜像由 HyprBSD 自带的无人值守安装器装到磁盘上。正式版 15.1 ISO 发布之前，
+    <code>--release 15.1</code> 由 15.1-rc3 ISO 构建；正式版出来后版本名不变。
+  </p>
+  <ul>
+    <li>
+      <span lang="en"><strong>UEFI only.</strong> HyprBSD's installer writes an
+      EFI system partition and no BIOS boot code, so anyvm always boots this
+      guest with OVMF, the same way it boots FreeBSD.</span>
+      <span lang="zh"><strong>只能 UEFI 启动。</strong>HyprBSD 的安装器只写 EFI
+      系统分区，不写 BIOS 引导代码，所以 anyvm 总是用 OVMF 启动它，和 FreeBSD
+      一样。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>Boots to a text console.</strong> The Hyprland
+      desktop is installed but SDDM is off: its Hyprland greeter needs a
+      VirGL-capable virtio-gpu, which anyvm's display does not provide, so left
+      on it only shows a black screen. <code>service sddm onestart</code> starts
+      it on demand.</span>
+      <span lang="zh"><strong>启动到文本控制台。</strong>Hyprland 桌面已经装好，但
+      SDDM 默认关闭：它的 Hyprland 登录界面需要支持 VirGL 的 virtio-gpu，anyvm
+      的显示设备不提供，开着只会黑屏。需要时可以用
+      <code>service sddm onestart</code> 手动启动。</span>
+    </li>
+    <li>
+      <span lang="en"><strong>All five sync backends work.</strong> rsync ships
+      with HyprBSD and fusefs-sshfs is pre-installed; nfs, scp and tar need
+      nothing extra. HyprBSD's default-deny <code>pf</code> firewall is turned
+      off so that port forwards reach the guest.</span>
+      <span lang="zh"><strong>五种同步后端都可用。</strong>rsync 是 HyprBSD
+      自带的，fusefs-sshfs 已预装，nfs、scp、tar 不需要额外安装。HyprBSD
+      默认拒绝入站的 <code>pf</code> 防火墙已关闭，这样端口转发才能到达客户机。</span>
     </li>
   </ul>
 
